@@ -1,6 +1,6 @@
 require 'minitest'
 require 'minitest/autorun'
-require '../lib/parser'
+require './lib/parser'
 #require './fixtures/little_csv'
 
 class ParserTest < Minitest::Test
@@ -16,7 +16,7 @@ class ParserTest < Minitest::Test
 
   def test_it_parses_csv_file
     parsy = Parser.new
-    result = parsy.parse('./fixtures/little_csv.csv')
+    result = parsy.parse('./test/fixtures/little_csv.csv')
     expected = [{:name=>"colorado", 2006=>0.33677}, {:name=>"colorado", 2005=>0.27807}, {:name=>"colorado", 2004=>0.24014}, {:name=>"colorado", 2008=>0.5357}, {:name=>"colorado", 2009=>0.598}, {:name=>"colorado", 2010=>0.64019}, {:name=>"colorado", 2011=>0.672}, {:name=>"colorado", 2012=>0.695}, {:name=>"colorado", 2013=>0.70263}, {:name=>"colorado", 2014=>0.74118}]
     assert_equal expected, result
   end
