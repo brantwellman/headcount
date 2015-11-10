@@ -14,7 +14,7 @@ class Parser
   end
 
   def convert_array_to_data_hash(array)
-    Hash[:name => array[0].downcase, :year => array[1].to_i, :enrollment => array[3].to_f]
+    Hash[:name => array[0].upcase, :year => array[1].to_i, :enrollment => array[3].to_f]
   end
 
   def split_line_to_data_array(line)
