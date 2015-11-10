@@ -24,3 +24,12 @@ end
 
 # parser = Parser.new
 # parser.parse("./data/Kindergartners in full-day program.csv")
+
+
+# CSV.read(path, headers: true) do |row|
+#   row_data = {district: row["Locationi"],
+    #   years: row["Timeframe"],
+    #   income: row["Data"]
+    # }
+    # @records << MHI.new
+# end
