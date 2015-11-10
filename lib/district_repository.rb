@@ -21,7 +21,8 @@ class DistrictRepository
   def create_districts(some_data_structure)
     # iterate through data structure
     # identify unique district names
-      # create district with that name
+      # create district instance with that name
+      # shovels district instance into @districs
   end
 
   # Case insensitive. input is string. Output is District object
