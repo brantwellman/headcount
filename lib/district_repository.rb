@@ -1,3 +1,6 @@
+require "./lib/parser"
+require "./lib/district"
+
 class DistrictRepository
   attr_accessor :districts
 
@@ -28,8 +31,14 @@ class DistrictRepository
   # Case insensitive. Input - String fragment. Output either [] or array with matches
   def find_all_matching(str_fragment)
     @districts.select { |district| district.name.include?(str_fragment.upcase)}
-
-    # []
   end
-
 end
+#
+# dr = DistrictRepository.new
+# dr.load_data({
+#   :enrollment => {
+#     :kindergarten => "./data/Kindergartners in full-day program.csv"
+#   }
+# })
+# puts dr.find_by_name("ACADEMY 20")
+# p dr.districts
