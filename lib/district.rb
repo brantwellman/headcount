@@ -1,9 +1,7 @@
 class District
-  attr_reader :name, :enrollment, :year
+  attr_reader :name
 
   def initialize(hash_line)
-    @name = hash_line[:name].upcase
-    @year = hash_line[:year]
-    @enrollment = hash_line[:enrollment]
+    @name = hash_line[:name]
   end
 end
