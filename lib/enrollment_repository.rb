@@ -1,6 +1,6 @@
 require 'pry'
 require './lib/enrollment'
-require './lib/parser'
+require './lib/enrollment_parser'
 
 class EnrollmentRepository
   attr_accessor :enrollments
@@ -12,7 +12,7 @@ class EnrollmentRepository
   # Input is nested hash. No Output. Generates Enrollment Objects
   def load_data(hash)
     file = hash.map{ |key, value| value.map{ |key, value| value}}.flatten[0]
-    parser = EnrollmentPareser.new
+    parser = EnrollmentParser.new
     district_enrollment_data_over_time = parser.parse(file)
     create_enrollment(district_enrollment_data_over_time)
   end
@@ -29,3 +29,12 @@ class EnrollmentRepository
   end
 
 end
+
+er = EnrollmentRepository.new
+er.load_data({
+  :enrollment => {
+    :kindergarten => "./data/Kindergartners in full-day program.csv"
+  }
+})
+# puts dr.find_by_name("ACADEMY 20")
+# p dr.districts
