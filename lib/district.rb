@@ -7,4 +7,4 @@ class District
     @enrollment_percent = hash_line[enrollment]
   end
 end
-{:name => "Colorado", :year => 1999, :enrollment => 0.5867}
+#{:name => "Colorado", :year => 1999, :enrollment => 0.5867}
