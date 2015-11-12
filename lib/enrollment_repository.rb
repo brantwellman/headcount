@@ -3,7 +3,7 @@ require './lib/enrollment'
 require './lib/enrollment_parser'
 
 class EnrollmentRepository
-  attr_accessor :enrollments
+  attr_reader :enrollments
 
   def initialize
     @enrollments = []
@@ -11,7 +11,7 @@ class EnrollmentRepository
 
   # Input is nested hash. No Output. Generates Enrollment Objects
   def load_data(hash)
-    parser = EnrollmentPareser.new
+    parser = EnrollmentParser.new
     file = hash[:enrollment][:kindergarten]
     district_enrollment_data_over_time = parser.parse(file)
     create_enrollment(district_enrollment_data_over_time)
@@ -21,6 +21,10 @@ class EnrollmentRepository
     district_enrollment_array.each do |hash_line|
       @enrollments << Enrollment.new(hash_line)
     end
+  end
+
+  def add_records(records)
+    @enrollments += records
   end
 
  # Case insensitive. Input is string. Output is Enrollment object

@@ -61,5 +61,4 @@ class EnrollmentRepositoryTest < Minitest::Test
     assert_equal expected, e_repo.find_by_name("colorado").name
   end
 
-
 end
