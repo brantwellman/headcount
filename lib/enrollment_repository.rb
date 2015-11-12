@@ -11,8 +11,8 @@ class EnrollmentRepository
 
   # Input is nested hash. No Output. Generates Enrollment Objects
   def load_data(hash)
-    file = hash.map{ |key, value| value.map{ |key, value| value}}.flatten[0]
-    parser = EnrollmentParser.new
+    parser = EnrollmentPareser.new
+    file = hash[:enrollment][:kindergarten]
     district_enrollment_data_over_time = parser.parse(file)
     create_enrollment(district_enrollment_data_over_time)
   end
