@@ -8,16 +8,18 @@ class HeadcountAnalyst
     @de_repo = district_repo
   end
 
-  def gather_enrollment_average_for_district(district)
-    enrollment_data_for_district = de_repo.find_by_name(district).enrollment.kindergarten_participation.values
-    average = enrollment_data_for_district.inject(:+)/enrollment_data_for_district.size
+  def enrollment_average(district)
+    enrollment_data = de_repo.find_by_name(district.upcase).enrollment.kindergarten_participation.values
+    average = enrollment_data.inject(:+)/enrollment_data.size
   end
 
 
-  def kindergarten_participation_rate_variation(district, comparison)
-    district_average = gather_enrollment_average_for_district(district)
-    comp_average = gather_enrollment_average_for_district(comparison)
-    district_average/comp_average
+  def kindergarten_participation_rate_variation(district, hash_comparison)
+    comparison = hash_comparison.values[0].upcase
+    district_average = enrollment_average(district.upcase)
+    comp_average = enrollment_average(comparison)
+    rate_variation = district_average/comp_average
+    rate_variation.round(3)
   end
 
 
