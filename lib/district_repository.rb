@@ -1,26 +1,40 @@
 require "./lib/parser"
 require "./lib/district"
+require './lib/enrollment_repository'
 
 class DistrictRepository
-  attr_accessor :districts
+  attr_accessor :districts, :enrollment_repository
 
   def initialize
     @districts = []
+    @enrollment_repository = EnrollmentRepository.new
   end
 
-  # Input is nested hash (2 layers). No Output. Generates District Objects
   def load_data(hash)
-    parser = Parser.new
-    file = hash.map{ |key, value| value.map{ |key, value| value}}.flatten[0]
-    district_enrollment_data = parser.parse(file)
-    create_districts(district_enrollment_data)
+    @enrollment_repository.load_data(hash)
+    load_repos({:enrollment => @enrollment_repository})
   end
 
-  # Input is district_enrollment_data from parser. No Output. Creates District objects from array
-  def create_districts(district_enrollment_data)
-    district_enrollment_data.each do |hash|
-      @districts << District.new(hash)
+  def load_parsed_data(district_enrollment_array)
+    @enrollment_repository.create_enrollment(district_enrollment_array)
+    load_repos({:enrollment => @enrollment_repository})
+  end
+
+  def load_repos(repos)
+    @enrollment_repository = repos[:enrollment]
+    create_districts_from_repositories
+  end
+
+  def create_districts_from_repositories
+    district_names = enrollment_repository.enrollments.map do |enrollment|
+      enrollment.name
+    end.uniq
+    districts = district_names.map do |name|
+      district = District.new({name: name})
+      district.enrollment = enrollment_repository.find_by_name(district.name)
+      district
     end
+    @districts = districts
   end
 
   # Case insensitive. input is string. Output is District object
