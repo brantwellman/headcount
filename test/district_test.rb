@@ -61,7 +61,7 @@ class DistrictTest < Minitest::Test
     e1 = Enrollment.new({
       :name => "ACADEMY 20",
       :kindergarten_participation => {
-        2010 => 0.3915,
+        2010 => 0.392,
         2011 => 0.35356,
         2012 => 0.2677
       }
@@ -69,7 +69,7 @@ class DistrictTest < Minitest::Test
     e2 = Enrollment.new({
       :name => "Colorado",
       :kindergarten_participation => {
-        2010 => 0.3915,
+        2010 => 0.392,
         2011 => 0.35356,
         2012 => 0.2677
       }
