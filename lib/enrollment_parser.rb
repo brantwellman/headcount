@@ -11,7 +11,7 @@ class EnrollmentParser
   def parse(file)
     handle = CSV.open(file, {:headers => true, header_converters: :symbol })
     handle.each do |row|
-      fancy_row = {:name => row[:location], :kindergarten_participation => {row[:timeframe] => row[:data]}}
+      fancy_row = {:name => row[:location].upcase, :kindergarten_participation => {row[:timeframe] => row[:data]}}
       @formatted_rows << fancy_row
     end
     format_nested_hashes
@@ -33,3 +33,6 @@ class EnrollmentParser
   end
 
 end
+
+# x = EnrollmentParser.new
+# puts x.parse(("./test/fixtures/two_districts.csv"))
