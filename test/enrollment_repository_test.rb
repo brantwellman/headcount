@@ -61,4 +61,18 @@ class EnrollmentRepositoryTest < Minitest::Test
     assert_equal expected, e_repo.find_by_name("colorado").name
   end
 
+  def test_it_splits_file_hash_into_key_file_array
+    e_repo = EnrollmentRepository.new
+    hash = {
+    :enrollment => {
+    :kindergarten => "./data/Kindergartners in full-day program.csv",
+    :high_school_graduation => "./data/High school graduation rates.csv"
+  }
+}
+    expected = [[:kindergarten, "./data/Kindergartners in full-day program.csv"],
+               [:high_school_graduation, "./data/High school graduation rates.csv"]]
+
+    assert_equal expected, e_repo.peel_hash_to_key_file(hash)
+  end
+
 end
