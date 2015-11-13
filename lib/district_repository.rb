@@ -5,12 +5,13 @@ require './lib/enrollment_repository'
 class DistrictRepository
   attr_accessor :districts, :enrollment_repository
 
-  def initialize
+  def initialize(e_repo = nil)
     @districts = []
-    @enrollment_repository = EnrollmentRepository.new
+    @enrollment_repository = e_repo
   end
 
   def load_data(hash)
+    @enrollment_repository = EnrollmentRepository.new(self)
     @enrollment_repository.load_data(hash)
     load_repos({:enrollment => @enrollment_repository})
   end
@@ -48,7 +49,13 @@ class DistrictRepository
   end
 end
 #
-
+dr = DistrictRepository.new
+dr.load_data({
+  :enrollment => {
+    :kindergarten => "./data/Kindergartners in full-day program.csv"
+  }
+})
+p district = dr.find_by_name("ACADEMY 20")
 # p dr.districts[50].enrollment.name
  # district = dr.find_by_name("Academy 20")
 # p district.enrollment.kindergarten_participation_by_year

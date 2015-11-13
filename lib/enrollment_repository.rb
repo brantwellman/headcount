@@ -1,12 +1,14 @@
 require 'pry'
 require './lib/enrollment'
 require './lib/enrollment_parser'
+require './lib/district_repository'
 
 class EnrollmentRepository
-  attr_reader :enrollments
+  attr_reader :enrollments, :district_repository
 
-  def initialize
+  def initialize(d_repo=nil)
     @enrollments = []
+    @district_repository = d_repo
   end
 
   # Input is nested hash. No Output. Generates Enrollment Objects
@@ -20,6 +22,17 @@ class EnrollmentRepository
   def create_enrollment(district_enrollment_array)
     district_enrollment_array.each do |hash_line|
       @enrollments << Enrollment.new(hash_line)
+    end
+    district_repository_responsibility
+  end
+
+  def district_repository_responsibility
+
+    if @district_repository == nil
+        binding.pry
+      @district_repository = DistrictRepository.new(self)
+      binding.pry
+      @district_repository.load_repos(@enrollments)
     end
   end
 
