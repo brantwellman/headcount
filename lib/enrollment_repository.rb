@@ -38,7 +38,7 @@ class EnrollmentRepository
       if self.find_by_name(hash_line[:name])
         # then append to that enrollment - don't create new one
         # enrollment object - find key and set value to be equal to the instance varialbe of the enrollment object
-        self.find_by_name(hash_line[:name])
+        self.find_by_name(hash_line[:name]). =
       # else
       @enrollments << Enrollment.new(hash_line)
       # end
