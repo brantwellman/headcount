@@ -75,4 +75,23 @@ class EnrollmentRepositoryTest < Minitest::Test
     assert_equal expected, e_repo.peel_hash_to_key_file(hash)
   end
 
+  def test_it_merges_files_of_array_lines
+    er =  EnrollmentRepository.new
+    parsed_files = [[{:name=>"ACADEMY 20", :highschool=>{2007=>0.392, 2006=>0.354, 2005=>0.267, 2004=>0.302, 2008=>0.385}},
+  {:name=>"Colorado", :highschool=>{2007=>0.392, 2006=>0.354, 2005=>0.267, 2004=>0.302, 2008=>0.385}}],
+ [{:name=>"ACADEMY 20", :kindergarten=>{2007=>0.392, 2006=>0.354, 2005=>0.267, 2004=>0.302, 2008=>0.385}},
+  {:name=>"Colorado", :kindergarten=>{2007=>0.392, 2006=>0.354, 2005=>0.267, 2004=>0.302, 2008=>0.385}}]]
+    expected = [{
+                 :name=>"Colorado",
+                 :highschool=>{2007=>0.392, 2006=>0.354, 2005=>0.267, 2004=>0.302, 2008=>0.385},
+                 :kindergarten=>{2007=>0.392, 2006=>0.354, 2005=>0.267, 2004=>0.302, 2008=>0.385}},
+                 {
+                 :name => "Acadamey 20",
+                 :highschool=>{2007=>0.392, 2006=>0.354, 2005=>0.267, 2004=>0.302, 2008=>0.385},
+                 :kindergarten=>{2007=>0.392, 2006=>0.354, 2005=>0.267, 2004=>0.302, 2008=>0.385}
+                 }]
+
+    assert_equal expected, er.merged_files(parsed_files)
+  end
+
 end
