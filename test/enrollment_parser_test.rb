@@ -72,7 +72,15 @@ class EnrollmentParserTest < Minitest::Test
     {:name=>"ACADEMY 20", :kindergarten=>{2007=>0.392, 2006=>0.354, 2005=>0.267, 2004=>0.302, 2008=>0.385}}]
     result = ep.parse(:kindergarten, "./test/fixtures/two_districts.csv")
     assert_equal result, expected
-    end
+  end
+
+
+  def test_parse_works_with_larger_CSV_and_more_many_more_lines
+    ep = EnrollmentParser.new
+    expected = 181
+    result = ep.parse(:kindergarten, "./data/Kindergartners in full-day program.csv").length
+    assert_equal result, expected
+  end
 
 
 end
