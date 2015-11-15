@@ -75,6 +75,27 @@ class EnrollmentRepositoryTest < Minitest::Test
     assert_equal expected, e_repo.peel_hash_to_key_file(hash)
   end
 
+  def test_it_creates_an_enrollment_from_a_hashline
+    e_repo = EnrollmentRepository.new
+    hash_line = {:name => "ACADEMY 20", :kindergarten => {2010 => 0.3915, 2011 => 0.35356, 2012 => 0.2677}}
+    expected = 1
+    e_repo.create_enrollment(hash_line)
+    assert_equal expected, e_repo.enrollments.count
+  end
+
+  def test_it_combines_data_onto_an_already_existing_enrollment
+    e_repo = EnrollmentRepository.new
+    hash_line1 = {:name => "COLORADO", :kindergarten => {2010 => 0.3915, 2011 => 0.35356, 2012 => 0.2677}}
+    e_repo.create_enrollment(hash_line1)
+    hash_line2 = {:name => "COLORADO", :high_school_graduation => {2010 => 0.3915, 2011 => 0.35356, 2012 => 0.2677}}
+    e_repo.create_enrollment(hash_line2)
+
+    expected1 = {2010 => 0.3915, 2011 => 0.35356, 2012 => 0.2677}
+    expected2 = {2010 => 0.3915, 2011 => 0.35356, 2012 => 0.2677}
+    assert_equal expected1, e_repo.enrollments[0].kindergarten
+    assert_equal expected2, e_repo.enrollments[0].high_school_graduation
+  end
+
  #  def test_it_merges_files_of_array_lines
  #    er =  EnrollmentRepository.new
  #    parsed_files = [[{:name=>"ACADEMY 20",

@@ -30,15 +30,11 @@ class EnrollmentRepository
   end
 
   def create_enrollment(hash_line)
-      # binding.pry
     if find_by_name(hash_line[:name])
-
       find_by_name(hash_line[:name]).high_school_graduation = hash_line[:high_school_graduation]
     else
       @enrollments << Enrollment.new(hash_line)
-      # binding.pry
     end
-    # binding.pry
   end
 
   def add_records(records)
