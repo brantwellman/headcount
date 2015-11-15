@@ -1,4 +1,3 @@
-require "./lib/parser"
 require "./lib/district"
 require './lib/enrollment_repository'
 
