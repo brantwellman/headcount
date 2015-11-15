@@ -67,8 +67,8 @@ class HeadcountAnalystTest < Minitest::Test
   end
 
   def test_it_computes_comparison_value_from_two_complex_averages_kind_enrollment
-    expected = 0.565
-    assert_equal expected, @ha.kindergarten_participation_rate_variation("Adams County 14", :against => "Colorado")
+    expected = 0.943
+    assert_equal expected, @ha.kindergarten_participation_rate_variation("AGATE 300", :against => "Colorado")
   end
 
   def test_it_finds_kindergarten_participation_by_district_with_bad_data
@@ -138,4 +138,32 @@ class HeadcountAnalystTest < Minitest::Test
     expected = 1.195
     assert_equal expected, @ha.high_school_graduation_rate_variation("ACADEMY 20", "Colorado")
   end
+
+  def test_it_returns_correlation_value_for_hs_grad_rates_and_kind_part_rates
+    expected = 1.969
+    assert_equal expected, @ha.kindergarten_participation_against_high_school_graduation("Agate 300")
+  end
+
+  def test_it_returns_false_for_hs_kinder_part_correlation_between_values
+    refute @ha.kindergarten_participation_against_high_school_graduation_correlation_window(for: "AGATE 300")
+  end
+
+  def test_it_returns_true_for_hs_kinder_part_correlation_between_values
+    assert @ha.kindergarten_participation_against_high_school_graduation_correlation_window(for: "ACADEMY 20")
+  end
+
+  def test_it_returns_false_if_more_than_70percent_districts_show_correlation
+    refute @ha.statewide_correlation_hs_kinder_across_districts
+  end
+
+  def test_it_returns_false_if_more_than_70percent_of_subset_of_districts_show_correlation
+    districts_array_hash = {:across => ["AGATE 300", "ACADEMY 20", "BOULDER VALLEY RE 2"]}
+    refute @ha.subset_of_districs_hs_kinder_across_districts(districts_array_hash)
+  end
+
+  def test_it_returns_true_if_more_than_70percent_of_subset_of_districts_show_correlation
+    districts_array_hash = {:across => ["PAWNEE RE-12", "ACADEMY 20", "BOULDER VALLEY RE 2"]}
+    assert @ha.subset_of_districs_hs_kinder_across_districts(districts_array_hash)
+  end
+
 end

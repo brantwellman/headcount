@@ -1,5 +1,6 @@
-require './lib/district'    # ~> LoadError: cannot load such file -- ./lib/district
+require './lib/district'
 require './lib/enrollment'
+require './lib/district_repository'
 require 'pry'
 
 class HeadcountAnalyst
@@ -38,10 +39,9 @@ class HeadcountAnalyst
   end
 
   def kindergarten_participation_against_high_school_graduation(district)
-    kinder_rate_var = kindergarten_participation_rate_variation(district, :against => "Colorado") # = kinder variation
+    kinder_rate_var = kindergarten_participation_rate_variation(district, :against => "Colorado")
     hs_rate_var = high_school_graduation_rate_variation(district, "Colorado")
-    kinder_rate_var / hs_rate_var
-    # kinder variation/ hs grad variation
+    (kinder_rate_var / hs_rate_var).round(3)
   end
 
 
@@ -53,17 +53,67 @@ class HeadcountAnalyst
   end
 
   def hs_graduation_average(district)
+    # binding.pry
     hs_grad_data = de_repo.find_by_name(district).enrollment.high_school_graduation.values
     hs_grad_data.inject(:+)/hs_grad_data.size
   end
 
+
+  def kindergarten_participation_correlates_with_high_school_graduation(hash_comparison)
+    #   if key is :across,
+    if hash_comparison.has_key?(:across)
+    #     call method for districts contained in array
+      subset_of_districs_hs_kinder_across_districts(hash_comparison)
+    #   elsif key is :for and value is "Colorado"
+    elsif hash_comparison.has_key?(:for) && hash_comparison[:for] == "COLORADO"
+        #  call method comparing districts vs colorado
+      statewide_correlation_hs_kinder_across_districts
+      # elsif key is :for and value is something else
+    elsif hash_comparison.has_key?(:for)
+      #   call method for individual district
+      kindergarten_participation_against_high_school_graduation_correlation_window(hash_comparison)
+    end
+  end
+
+  def kindergarten_participation_against_high_school_graduation_correlation_window(hash_district)
+    district = hash_district[:for] #.values
+    k_vs_hs = kindergarten_participation_against_high_school_graduation(district)
+    (0.6 <= k_vs_hs && k_vs_hs <= 1.5) ? true : false
+  end
+
+  def statewide_correlation_hs_kinder_across_districts
+    districts_corellations = @de_repo.enrollment_repository.enrollments.map do |enrollment|
+        kindergarten_participation_against_high_school_graduation_correlation_window(for: enrollment.name)
+    end
+    districts_corellations.shift
+    true_count = districts_corellations.count(true)
+    (true_count / districts_corellations.count) > 0.7 ? true : false
+  end
+
+  def subset_of_districs_hs_kinder_across_districts(districts_array_hash)
+    districts = districts_array_hash[:across]
+    districts_corellations = districts.map do |district|
+      kindergarten_participation_against_high_school_graduation_correlation_window(for: district)
+    end
+    districts_corellations
+    true_count = districts_corellations.count(true)
+    (true_count / districts_corellations.count) > 0.7 ? true : false
+  end
 end
 
-  # ha.kindergarten_participation_by_year_for_district('ACADEMY 20')
-
-# ~> LoadError
-# ~> cannot load such file -- ./lib/district
-# ~>
-# ~> /Users/lenny/.rvm/rubies/ruby-2.2.1/lib/ruby/site_ruby/2.2.0/rubygems/core_ext/kernel_require.rb:54:in `require'
-# ~> /Users/lenny/.rvm/rubies/ruby-2.2.1/lib/ruby/site_ruby/2.2.0/rubygems/core_ext/kernel_require.rb:54:in `require'
-# ~> /Users/lenny/turing/1module/projects/headcount/lib/headcount_analyst.rb:1:in `<main>'
+dr = DistrictRepository.new
+dr.load_data({
+  :enrollment => {
+    :kindergarten => "./data/Kindergartners in full-day program.csv",
+    :high_school_graduation => "./data/High school graduation rates.csv"
+  }
+})
+#
+ha = HeadcountAnalyst.new(dr)
+hash_comparison = {for: "ACADEMY 20"}
+# hash_comparison = {:across => ['ACADEMY 20', 'AGATE 300', 'ADAMS COUNTY 14']}
+# districts = {:across =>["Colorado", "Agate 300"]}
+# ha.subset_of_districs_hs_kinder_across_districts(districts)
+#  p ha.statewide_correlation_hs_kinder_across_districts
+# true_count = districts_corellations.count(false)
+p ha.kindergarten_participation_correlates_with_high_school_graduation(hash_comparison)
