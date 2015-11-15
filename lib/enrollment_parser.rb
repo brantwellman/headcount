@@ -29,5 +29,5 @@ class EnrollmentParser
 
 end
 
-x = EnrollmentParser.new
-puts x.parse(:kindergarten, "./test/fixtures/two_districts.csv")
+# x = EnrollmentParser.new
+# puts x.parse(:kindergarten, "./test/fixtures/two_districts.csv")
