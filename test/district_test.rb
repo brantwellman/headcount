@@ -1,6 +1,7 @@
 require 'minitest'
 require 'minitest/autorun'
 require './lib/district'
+require './lib/district_repository'
 
 
 class DistrictTest < Minitest::Test
@@ -17,7 +18,7 @@ class DistrictTest < Minitest::Test
     e_repo = EnrollmentRepository.new
     e1 = Enrollment.new({
       :name => "ACADEMY 20",
-      :kindergarten_participation => {
+      :kindergarten => {
         2010 => 0.3915,
         2011 => 0.35356,
         2012 => 0.2677
@@ -32,23 +33,23 @@ class DistrictTest < Minitest::Test
   def test_it_has_access_to_enrollment_in_collection_of_2
     d_repo = DistrictRepository.new
     e_repo = EnrollmentRepository.new
-    e1 = Enrollment.new({
+    h1 = Enrollment.new({
       :name => "ACADEMY 20",
-      :kindergarten_participation => {
+      :kindergarten => {
         2010 => 0.3915,
         2011 => 0.35356,
         2012 => 0.2677
       }
     })
-    e2 = Enrollment.new({
-      :name => "Colorado",
-      :kindergarten_participation => {
+    h2 = Enrollment.new({
+      :name => "COLORADO",
+      :kindergarten => {
         2010 => 0.3915,
         2011 => 0.35356,
         2012 => 0.2677
       }
     })
-    e_repo.add_records([e1, e2])
+    e_repo.add_records([h1, h2])
     d_repo.load_repos({:enrollment => e_repo})
 
     assert_equal "ACADEMY 20", d_repo.districts[0].enrollment.name
@@ -60,15 +61,15 @@ class DistrictTest < Minitest::Test
     e_repo = EnrollmentRepository.new
     e1 = Enrollment.new({
       :name => "ACADEMY 20",
-      :kindergarten_participation => {
+      :kindergarten => {
         2010 => 0.392,
         2011 => 0.35356,
         2012 => 0.2677
       }
     })
     e2 = Enrollment.new({
-      :name => "Colorado",
-      :kindergarten_participation => {
+      :name => "COLORADO",
+      :kindergarten => {
         2010 => 0.392,
         2011 => 0.35356,
         2012 => 0.2677

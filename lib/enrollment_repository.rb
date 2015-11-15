@@ -26,25 +26,19 @@ class EnrollmentRepository
   def create_enrollments(district_enrollment_array)
     district_enrollment_array.each do |hash_line|
       create_enrollment(hash_line)
-      # @enrollments << Enrollment.new(hash_line)
     end
   end
 
   def create_enrollment(hash_line)
-      # if enrollment matching name in hashline does not exist
+      # binding.pry
     if find_by_name(hash_line[:name])
-    # add data matching your key from hashline to matching instance varialbe on pre existing
-      #instance variable that matches key of incoming hashline = hashline[:key that matches
+
       find_by_name(hash_line[:name]).high_school_graduation = hash_line[:high_school_graduation]
-      #  instance that is not name on enrollment object]
     else
       @enrollments << Enrollment.new(hash_line)
+      # binding.pry
     end
-
-  #   if enrollment matching name in hashline does not exist
-  #     then created new enrollment
-  #   else
-  #       add data matching your key from hashline to matching instance varialbe on pre existing enrollment
+    # binding.pry
   end
 
   def add_records(records)
@@ -58,43 +52,21 @@ class EnrollmentRepository
 
 end
 
-      # if enrollments.find_by_name(name) === hashline name
-      # if find_by_name(hash_line[:name])
-      #   # then append to that enrollment - don't create new one
-      #   # enrollment object - find key and set value to be equal to the instance varialbe of the enrollment object
-      #   find_by_name(hash_line[:name]). =
-      # # else
 
-
-
-  # [[:kindergarten, "./data/Kindergartners in full-day program.csv"],
-  #            [:high_school_graduation, "./data/High school graduation rates.csv"]]
-
-
-
-# loaded_data.group_by { |hash| hash[:name] }.map { |dist_name, dist_hashes| dist_hashes.reduce(:merge)}
-
-
-
-
-
-
-
-
-er = EnrollmentRepository.new
-er.load_data({
-  :enrollment => {
-    :kindergarten => "./data/Kindergartners in full-day program.csv",
-    :high_school_graduation => "./data/High school graduation rates.csv"
-  }
-})
-enrollment = er.find_by_name("Colorado")
-# # puts enrollment.kindergarten_participation_by_year
-# # puts enrollment.kindergarten_participation_in_year(2010)
-# # puts dr.find_by_name("ACADEMY 20")
-# # p dr.districts
-p er.enrollments
-p er.enrollments.count
+# er = EnrollmentRepository.new
+# er.load_data({
+#   :enrollment => {
+#     :kindergarten => "./data/Kindergartners in full-day program.csv",
+#     :high_school_graduation => "./data/High school graduation rates.csv"
+#   }
+# })
+# enrollment = er.find_by_name("Colorado")
+# # # puts enrollment.kindergarten_participation_by_year
+# # # puts enrollment.kindergarten_participation_in_year(2010)
+# # # puts dr.find_by_name("ACADEMY 20")
+# # # p dr.districts
+# p er.enrollments
+# p er.enrollments.count
 
 
 

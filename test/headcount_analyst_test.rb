@@ -12,7 +12,7 @@ class HeadcountAnalystTest < Minitest::Test
     e_repo = EnrollmentRepository.new
     e1 = Enrollment.new({
       :name => "ACADEMY 20",
-      :kindergarten_participation => {
+      :kindergarten => {
         2010 => 0.392,
         2011 => 0.353,
         2012 => 0.267
@@ -31,15 +31,15 @@ class HeadcountAnalystTest < Minitest::Test
     e_repo = EnrollmentRepository.new
     e1 = Enrollment.new({
       :name => "ACADEMY 20",
-      :kindergarten_participation => {
+      :kindergarten => {
         2010 => 0.392,
         2011 => 0.353,
         2012 => 0.267
       }
     })
     e2 = Enrollment.new({
-      :name => "Colorado",
-      :kindergarten_participation => {
+      :name => "COLORADO",
+      :kindergarten => {
         2010 => 0.392,
         2011 => 0.35356,
         2012 => 0.2677
@@ -58,15 +58,15 @@ class HeadcountAnalystTest < Minitest::Test
     e_repo = EnrollmentRepository.new
     e1 = Enrollment.new({
       :name => "ACADEMY 20",
-      :kindergarten_participation => {
+      :kindergarten => {
         2010 => 1.0,
         2011 => 1.0,
         2012 => 1.0
       }
     })
     e2 = Enrollment.new({
-      :name => "Colorado",
-      :kindergarten_participation => {
+      :name => "COLORADO",
+      :kindergarten => {
         2010 => 2.0,
         2011 => 2.0,
         2012 => 2.0
@@ -84,16 +84,16 @@ class HeadcountAnalystTest < Minitest::Test
     d_repo = DistrictRepository.new
     e_repo = EnrollmentRepository.new
     e1 = Enrollment.new({
-      :name => "Adams 20",
-      :kindergarten_participation => {
+      :name => "ADAMS 20",
+      :kindergarten => {
         2010 => 0.567,
         2011 => 0.675,
         2012 => 0.876
       }
     })
     e2 = Enrollment.new({
-      :name => "Colorado",
-      :kindergarten_participation => {
+      :name => "COLORADO",
+      :kindergarten => {
         2010 => 0.9,
         2011 => 0.0,
         2012 => 0.456
@@ -111,16 +111,16 @@ class HeadcountAnalystTest < Minitest::Test
     d_repo = DistrictRepository.new
     e_repo = EnrollmentRepository.new
     e1 = Enrollment.new({
-      :name => "Adams 20",
-      :kindergarten_participation => {
+      :name => "ADAMS 20",
+      :kindergarten => {
         2010 => 0.567,
         2011 => 0.675,
         2012 => 0.876
       }
     })
     e2 = Enrollment.new({
-      :name => "Colorado",
-      :kindergarten_participation => {
+      :name => "COLORADO",
+      :kindergarten => {
         2010 => 0.9,
         2011 => 0.0,
         2012 => 0.456
@@ -145,7 +145,7 @@ class HeadcountAnalystTest < Minitest::Test
     e_repo = EnrollmentRepository.new
     e1 = Enrollment.new({
       :name => "ADAMS 20",
-      :kindergarten_participation => {
+      :kindergarten => {
         2010 => 0.567,
         2011 => 0.675,
         2012 => 0.876
@@ -153,7 +153,7 @@ class HeadcountAnalystTest < Minitest::Test
     })
     e2 = Enrollment.new({
       :name => "COLORADO",
-      :kindergarten_participation => {
+      :kindergarten => {
         2010 => 0.9,
         2011 => 0.345,
         2012 => 0.456

@@ -10,7 +10,7 @@ class HeadcountAnalyst
   end
 
   def enrollment_average(district)
-    enrollment_data = de_repo.find_by_name(district.upcase).enrollment.kindergarten_participation.values
+    enrollment_data = de_repo.find_by_name(district.upcase).enrollment.kindergarten.values
     average = enrollment_data.inject(:+)/enrollment_data.size
   end
 
@@ -24,7 +24,7 @@ class HeadcountAnalyst
   end
 
   def find_kindergarten_participation_by_year_for_district(district)
-     de_repo.find_by_name(district).enrollment.kindergarten_participation
+     de_repo.find_by_name(district).enrollment.kindergarten
   end
 
   def kindergarten_participation_rate_variation_trend(district, hash_comparison)

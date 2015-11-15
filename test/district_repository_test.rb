@@ -95,7 +95,7 @@ class DistrictRepositoryTest < Minitest::Test
       :year=>2012,
       :enrollment=>0.695
       }, {
-      :name=>"ZORG", 
+      :name=>"ZORG",
       :year=>2012,
       :enrollment=>0.695
       }]
@@ -117,7 +117,7 @@ class DistrictRepositoryTest < Minitest::Test
       }
     })
     e2 = Enrollment.new({
-      :name => "Colorado",
+      :name => "COLORADO",
       :kindergarten_participation => {
         2010 => 0.3915,
         2011 => 0.35356,
@@ -125,7 +125,7 @@ class DistrictRepositoryTest < Minitest::Test
       }
     })
     e3 = Enrollment.new({
-      :name => "Colorado",
+      :name => "COLORADO",
       :kindergarten_participation => {
         2010 => 0.3915,
         2011 => 0.35356,
