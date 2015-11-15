@@ -58,7 +58,6 @@ class HeadcountAnalyst
     hs_grad_data.inject(:+)/hs_grad_data.size
   end
 
-
   def kindergarten_participation_correlates_with_high_school_graduation(hash_comparison)
     #   if key is :across,
     if hash_comparison.has_key?(:across)
@@ -101,19 +100,19 @@ class HeadcountAnalyst
   end
 end
 
-dr = DistrictRepository.new
-dr.load_data({
-  :enrollment => {
-    :kindergarten => "./data/Kindergartners in full-day program.csv",
-    :high_school_graduation => "./data/High school graduation rates.csv"
-  }
-})
-#
-ha = HeadcountAnalyst.new(dr)
-hash_comparison = {for: "ACADEMY 20"}
-# hash_comparison = {:across => ['ACADEMY 20', 'AGATE 300', 'ADAMS COUNTY 14']}
-# districts = {:across =>["Colorado", "Agate 300"]}
-# ha.subset_of_districs_hs_kinder_across_districts(districts)
-#  p ha.statewide_correlation_hs_kinder_across_districts
-# true_count = districts_corellations.count(false)
-p ha.kindergarten_participation_correlates_with_high_school_graduation(hash_comparison)
+# dr = DistrictRepository.new
+# dr.load_data({
+#   :enrollment => {
+#     :kindergarten => "./data/Kindergartners in full-day program.csv",
+#     :high_school_graduation => "./data/High school graduation rates.csv"
+#   }
+# })
+# #
+# ha = HeadcountAnalyst.new(dr)
+# hash_comparison = {for: "ACADEMY 20"}
+# # hash_comparison = {:across => ['ACADEMY 20', 'AGATE 300', 'ADAMS COUNTY 14']}
+# # districts = {:across =>["Colorado", "Agate 300"]}
+# # ha.subset_of_districs_hs_kinder_across_districts(districts)
+# #  p ha.statewide_correlation_hs_kinder_across_districts
+# # true_count = districts_corellations.count(false)
+# p ha.kindergarten_participation_correlates_with_high_school_graduation(hash_comparison)

@@ -29,5 +29,4 @@ class Enrollment
       high_school_graduation[year]
     end
   end
-
 end

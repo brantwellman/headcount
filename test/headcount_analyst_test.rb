@@ -166,4 +166,24 @@ class HeadcountAnalystTest < Minitest::Test
     assert @ha.subset_of_districs_hs_kinder_across_districts(districts_array_hash)
   end
 
+  def test_feature_participation_feature_key_across
+    districts_array_hash = {:across => ["PAWNEE RE-12", "ACADEMY 20", "BOULDER VALLEY RE 2"]}
+
+    assert @ha.kindergarten_participation_correlates_with_high_school_graduation(districts_array_hash)
+  end
+
+  def test_feature_participation_feature_key_for_and_includes_colorado
+    districts_array_hash = {:for => "COLORADO"}
+    refute @ha.kindergarten_participation_correlates_with_high_school_graduation(districts_array_hash)
+  end
+
+  def test_feature_participation_feature_true_key_for_and_not_colorado
+    districts_array_hash = {:for => "ACADEMY 20"}
+    assert @ha.kindergarten_participation_correlates_with_high_school_graduation(districts_array_hash)
+  end
+
+  def test_feature_participation_feature_false_key_for_and_not_colorado
+    districts_array_hash = {:for => "AGATE 300"}
+    refute @ha.kindergarten_participation_correlates_with_high_school_graduation(districts_array_hash)
+  end
 end

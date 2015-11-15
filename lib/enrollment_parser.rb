@@ -12,7 +12,6 @@ class EnrollmentParser
   end
 
   def group_to_nested_hash(group, key)
-
     nested_hash = nil
     group.each do |hash|
       nested_hash ||= hash

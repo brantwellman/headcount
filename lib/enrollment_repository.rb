@@ -49,43 +49,18 @@ class EnrollmentRepository
 end
 
 
-er = EnrollmentRepository.new
-er.load_data({
-  :enrollment => {
-    :kindergarten => "./data/Kindergartners in full-day program.csv",
-    :high_school_graduation => "./data/High school graduation rates.csv"
-  }
-})
- enrollment = er.find_by_name("Colorado")
-p enrollment.graduation_rate_by_year
+# er = EnrollmentRepository.new
+# er.load_data({
+#   :enrollment => {
+#     :kindergarten => "./data/Kindergartners in full-day program.csv",
+#     :high_school_graduation => "./data/High school graduation rates.csv"
+#   }
+# })
+#  enrollment = er.find_by_name("Colorado")
+# p enrollment.graduation_rate_by_year
 # # # puts enrollment.kindergarten_participation_by_year
 # # # puts enrollment.kindergarten_participation_in_year(2010)
 # # # puts dr.find_by_name("ACADEMY 20")
 # # # p dr.districts
 # p er.enrollments
 # p er.enrollments.count
-
-
-
-
-
-#
-# parsed_files = load_files.map do |key, file|
-#   parser.parse(key, file)
-# end
-# parsed_files
-# merged_files(parsed_files)
-# district_enrollment_data_over_time = merge_files(parsed_files)
-# create_enrollment(district_enrollment_data_over_time)
-#   binding.pry
-
-# def merged_files(files)
-#     grouped = parsed_files.flatten.group_by {|hash| hash[:name]}
-#     x = Hash.new
-#     merged = grouped.each do |k, v|
-#       v.each do |hash|
-#         x.merge!(hash)
-#       end
-#       x
-#     end
-# end

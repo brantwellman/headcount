@@ -74,13 +74,10 @@ class EnrollmentParserTest < Minitest::Test
     assert_equal result, expected
   end
 
-
   def test_parse_works_with_larger_CSV_and_more_many_more_lines
     ep = EnrollmentParser.new
     expected = 181
     result = ep.parse(:kindergarten, "./data/Kindergartners in full-day program.csv").length
     assert_equal result, expected
   end
-
-
 end

@@ -72,5 +72,4 @@ class EnrollmentTest < Minitest::Test
 
     assert_equal expected, enroll.graduation_rate_in_year(2888)
   end
-
 end

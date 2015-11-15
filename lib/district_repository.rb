@@ -17,12 +17,10 @@ class DistrictRepository
   def load_parsed_data(district_enrollment_array)
     @enrollment_repository.create_enrollments(district_enrollment_array)
     load_repos({:enrollment => @enrollment_repository})
-    # binding.pry
   end
-#
+
   def load_repos(repos)
     @enrollment_repository = repos[:enrollment]
-    # binding.pry
     create_districts_from_repositories
   end
 
@@ -30,15 +28,12 @@ class DistrictRepository
     district_names = enrollment_repository.enrollments.map do |enrollment|
       enrollment.name
     end.uniq
-    # binding.pry
     districts = district_names.map do |name|
       district = District.new({name: name})
       district.enrollment = enrollment_repository.find_by_name(district.name)
       district
-      # binding.pry
     end
     @districts = districts
-    # binding.pry
   end
 
   # Case insensitive. input is string. Output is District object
@@ -52,13 +47,13 @@ class DistrictRepository
   end
 end
 #
-dr = DistrictRepository.new
-dr.load_data({
-  :enrollment => {
-    :kindergarten => "./data/Kindergartners in full-day program.csv",
-    :high_school_graduation => "./data/High school graduation rates.csv"
-  }
-})
+# dr = DistrictRepository.new
+# dr.load_data({
+#   :enrollment => {
+#     :kindergarten => "./data/Kindergartners in full-day program.csv",
+#     :high_school_graduation => "./data/High school graduation rates.csv"
+#   }
+# })
 # p enrollment = dr.find_by_name("ACADEMY 20")
 # p dr.districts[50].enrollment.name
  # district = dr.find_by_name("Academy 20")
