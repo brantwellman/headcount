@@ -10,7 +10,6 @@ class Enrollment
 
   # Returns a hash with years as keys and truncated 3 digit float representing percentage for all years in dataset
   def kindergarten_participation_by_year
-    # kindergarten.inject({}) {|h, (k, v)| h[k] = v; h}
     kindergarten
   end
 

@@ -7,9 +7,17 @@ require 'pry'
 
 class HeadcountAnalystTest < Minitest::Test
 
+  def setup
+    @d_repo = DistrictRepository.new
+    @ha = HeadcountAnalyst.new(@d_repo)
+    @d_repo.load_data({ :enrollment => {
+                        :kindergarten => "./test/fixtures/kinder_enrollment_fixture.csv",
+                        :high_school_graduation => "./test/fixtures/hs_grad_rates_fixture.csv" }})
+  end
+
   def test_that_it_computes_enrollment_average_from_lcase_district
-    d_repo = DistrictRepository.new
-    e_repo = EnrollmentRepository.new
+    dr = DistrictRepository.new
+    er = EnrollmentRepository.new
     e1 = Enrollment.new({
       :name => "ACADEMY 20",
       :kindergarten => {
@@ -18,17 +26,17 @@ class HeadcountAnalystTest < Minitest::Test
         2012 => 0.267
       }
     })
-    e_repo.add_records([e1])
-    d_repo.load_repos({:enrollment => e_repo})
-    ha = HeadcountAnalyst.new(d_repo)
+    er.add_records([e1])
+    dr.load_repos({:enrollment => er})
+    hda = HeadcountAnalyst.new(dr)
     expected=(0.392 + 0.353 + 0.267)/3
 
-    assert_equal expected, ha.enrollment_average("Academy 20")
+    assert_equal expected, hda.enrollment_average("Academy 20")
   end
 
   def test_that_it_computes_enrollment_average_from_upcase_district
-    d_repo = DistrictRepository.new
-    e_repo = EnrollmentRepository.new
+    dr = DistrictRepository.new
+    er = EnrollmentRepository.new
     e1 = Enrollment.new({
       :name => "ACADEMY 20",
       :kindergarten => {
@@ -45,130 +53,89 @@ class HeadcountAnalystTest < Minitest::Test
         2012 => 0.2677
       }
     })
-    e_repo.add_records([e1, e2])
-    d_repo.load_repos({:enrollment => e_repo})
-    ha = HeadcountAnalyst.new(d_repo)
+    er.add_records([e1, e2])
+    dr.load_repos({:enrollment => er})
+    hda = HeadcountAnalyst.new(dr)
     expected=(0.392 + 0.353 + 0.267)/3
 
-    assert_equal expected, ha.enrollment_average("ACADEMY 20")
+    assert_equal expected, hda.enrollment_average("ACADEMY 20")
   end
 
-  def test_it_computes_comparison_value_from_two_basic_averages
+  def test_it_computes_comparison_value_from_two_basic_averages_kind_enrollment
+    expected = 0.766
+    assert_equal expected, @ha.kindergarten_participation_rate_variation("Academy 20", :against => "Colorado")
+  end
+
+  def test_it_computes_comparison_value_from_two_complex_averages_kind_enrollment
+    expected = 0.565
+    assert_equal expected, @ha.kindergarten_participation_rate_variation("Adams County 14", :against => "Colorado")
+  end
+
+  def test_it_finds_kindergarten_participation_by_district_with_bad_data
+    expected = {2007=>1.0, 2006=>0.0}
+    assert_equal expected, @ha.find_kindergarten_participation_by_year_for_district("Agate 300")
+  end
+
+  def test_it_variation_between_years_of_enrollment_info
+    expected = {2007=>0.992, 2006=>1.05, 2005=>0.96, 2004=>1.258, 2008=>0.718, 2009=>0.652, 2010=>0.681, 2011=>0.728, 2012=>0.689, 2013=>0.694, 2014=>0.661}
+    assert_equal expected, @ha.kindergarten_participation_rate_variation_trend('ACADEMY 20', :against => 'COLORADO')
+  end
+
+  def test_that_it_computes_hs_grade_average_from_lcase_district
     d_repo = DistrictRepository.new
     e_repo = EnrollmentRepository.new
     e1 = Enrollment.new({
       :name => "ACADEMY 20",
       :kindergarten => {
-        2010 => 1.0,
-        2011 => 1.0,
-        2012 => 1.0
+        2010 => 0.392,
+        2011 => 0.353,
+        2012 => 0.267
+      },
+      :high_school_graduation => {
+        2010 => 0.399,
+        2011 => 0.323,
+        2012 => 0.967
       }
-    })
-    e2 = Enrollment.new({
-      :name => "COLORADO",
-      :kindergarten => {
-        2010 => 2.0,
-        2011 => 2.0,
-        2012 => 2.0
-      }
-    })
-    e_repo.add_records([e1, e2])
+      })
+    e_repo.add_records([e1])
     d_repo.load_repos({:enrollment => e_repo})
     ha = HeadcountAnalyst.new(d_repo)
-    expected = 0.5
+    expected = (0.399 + 0.323 + 0.967)/3
 
-    assert_equal expected, ha.kindergarten_participation_rate_variation("ACADEMY 20", :against => "Colorado")
+    assert_equal expected, ha.hs_graduation_average("Academy 20")
   end
 
-  def test_it_computes_comparison_value_from_two_complex_averages
+  def test_that_it_computes_hs_grade_average_from_upcase_district
     d_repo = DistrictRepository.new
     e_repo = EnrollmentRepository.new
     e1 = Enrollment.new({
-      :name => "ADAMS 20",
-      :kindergarten => {
-        2010 => 0.567,
-        2011 => 0.675,
-        2012 => 0.876
-      }
-    })
-    e2 = Enrollment.new({
       :name => "COLORADO",
       :kindergarten => {
-        2010 => 0.9,
-        2011 => 0.0,
-        2012 => 0.456
+        2010 => 0.392,
+        2011 => 0.353,
+        2012 => 0.267
+      },
+      :high_school_graduation => {
+        2010 => 0.399,
+        2011 => 0.323,
+        2012 => 0.967
       }
-    })
-    e_repo.add_records([e1, e2])
+      })
+    e_repo.add_records([e1])
     d_repo.load_repos({:enrollment => e_repo})
     ha = HeadcountAnalyst.new(d_repo)
-    expected = 1.562
+    expected = (0.399 + 0.323 + 0.967)/3
 
-    assert_equal expected, ha.kindergarten_participation_rate_variation("Adams 20", :against => "Colorado")
+    assert_equal expected, ha.hs_graduation_average("COLORADO")
   end
 
-  def test_it_finds_kindergarten_participation_by_district
-    d_repo = DistrictRepository.new
-    e_repo = EnrollmentRepository.new
-    e1 = Enrollment.new({
-      :name => "ADAMS 20",
-      :kindergarten => {
-        2010 => 0.567,
-        2011 => 0.675,
-        2012 => 0.876
-      }
-    })
-    e2 = Enrollment.new({
-      :name => "COLORADO",
-      :kindergarten => {
-        2010 => 0.9,
-        2011 => 0.0,
-        2012 => 0.456
-      }
-    })
-    e_repo.add_records([e1, e2])
-    d_repo.load_repos({:enrollment => e_repo})
-    ha = HeadcountAnalyst.new(d_repo)
-
-    expected = {
-      2010 => 0.567,
-      2011 => 0.675,
-      2012 => 0.876
-    }
-
-
-    assert_equal expected, ha.find_kindergarten_participation_by_year_for_district("Adams 20")
+  def test_it_computes_comparison_value_from_two_basic_averages_hs_grad_rate
+    expected = 1.195
+    assert_equal expected, @ha.high_school_graduation_rate_variation("ACADEMY 20", "Colorado")
   end
 
-  def test_it_variation_between_years_of_enrollment_info
-    d_repo = DistrictRepository.new
-    e_repo = EnrollmentRepository.new
-    e1 = Enrollment.new({
-      :name => "ADAMS 20",
-      :kindergarten => {
-        2010 => 0.567,
-        2011 => 0.675,
-        2012 => 0.876
-      }
-    })
-    e2 = Enrollment.new({
-      :name => "COLORADO",
-      :kindergarten => {
-        2010 => 0.9,
-        2011 => 0.345,
-        2012 => 0.456
-      }
-    })
-    e_repo.add_records([e1, e2])
-    d_repo.load_repos({:enrollment => e_repo})
-    ha = HeadcountAnalyst.new(d_repo)
-
-    expected = {
-      2010 => 0.63,
-      2011 => 1.957,
-      2012 => 1.921
-    }
-
-    assert_equal expected, ha.kindergarten_participation_rate_variation_trend('ADAMS 20', :against => 'COLORADO')
+  def test_it_computes_comparison_value_from_two_complex_averages_hs_grad_rate
+    expected = 1.195
+    assert_equal expected, @ha.high_school_graduation_rate_variation("ACADEMY 20", "Colorado")
   end
 end

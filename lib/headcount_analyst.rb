@@ -14,7 +14,6 @@ class HeadcountAnalyst
     average = enrollment_data.inject(:+)/enrollment_data.size
   end
 
-
   def kindergarten_participation_rate_variation(district, hash_comparison)
     comparison = hash_comparison.values[0].upcase
     district_average = enrollment_average(district.upcase)
@@ -33,15 +32,30 @@ class HeadcountAnalyst
     comparison_participation = find_kindergarten_participation_by_year_for_district(comparison)
     result = {}
     district_participation.keys.map do | year|
-      #binding.pry
       result[year] = (district_participation[year] / comparison_participation[year]).round(3)
     end
     result
   end
 
+  def kindergarten_participation_against_high_school_graduation(district)
+    kinder_rate_var = kindergarten_participation_rate_variation(district, :against => "Colorado") # = kinder variation
+    hs_rate_var = high_school_graduation_rate_variation(district, "Colorado")
+    kinder_rate_var / hs_rate_var
+    # kinder variation/ hs grad variation
+  end
 
 
+  def high_school_graduation_rate_variation(district, comparison)
+    district_average = hs_graduation_average(district.upcase)
+    comp_average = hs_graduation_average(comparison.upcase)
+    rate_variation = district_average/comp_average
+    rate_variation.round(3)
+  end
 
+  def hs_graduation_average(district)
+    hs_grad_data = de_repo.find_by_name(district).enrollment.high_school_graduation.values
+    hs_grad_data.inject(:+)/hs_grad_data.size
+  end
 
 end
 
