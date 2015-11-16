@@ -43,7 +43,7 @@ class StatewideTestParser
 
 end
 
-parsey = StatewideTestParser.new
-# puts parsey.parse(:third_grade, "./test/fixtures/3rd_grade_students_scoring_proficient_or_above_on_the_CSAP_TCAP_fixture.csv")
-# puts parsey.parse(:third_grade,"./data/3rd grade students scoring proficient or above on the CSAP_TCAP.csv")
-puts parsey.parse(:math, "./data/Average proficiency on the CSAP_TCAP by race_ethnicity_ Math.csv")
+# parsey = StatewideTestParser.new
+# # puts parsey.parse(:third_grade, "./test/fixtures/3rd_grade_students_scoring_proficient_or_above_on_the_CSAP_TCAP_fixture.csv")
+# # puts parsey.parse(:third_grade,"./data/3rd grade students scoring proficient or above on the CSAP_TCAP.csv")
+# puts parsey.parse(:math, "./data/Average proficiency on the CSAP_TCAP by race_ethnicity_ Math.csv")
