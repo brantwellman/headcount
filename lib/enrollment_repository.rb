@@ -45,7 +45,6 @@ class EnrollmentRepository
   def find_by_name(district)
     @enrollments.find {|enrollment| enrollment.name == district.upcase }
   end
-
 end
 
 
