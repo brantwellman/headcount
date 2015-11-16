@@ -4,19 +4,33 @@ require './lib/statewidetest'
 
 
 class StatewideTestRepository
-  attr_reader :statewide_tests
+  attr_reader :statewide_tests, :key
 
   def initialize
     @statewide_tests = []
   end
 
-  def create_statewide_test(hash_line)
-    if find_by_name(hash_line[:name])
-      find_by_name(hash_line[:name]).data.merge#(?hash_line)
-    else
-      @statewide_tests << StatewideTest.new(hash_line)
+  def load_data(hash)
+    parser = StatewideTestParser.new
+    load_files = peel_hash_to_key_file(hash)
+    load_files.each do |key, file|
+      @key = key
+      district_statewidetest_data_over_time = parser.parse(key, file)
+      create_enrollments(district_statewidetest_data_over_time)
     end
   end
+
+  def peel_hash_to_key_file(hash)
+    hash.values[0].to_a
+  end
+
+  # def create_statewide_test(hash_line)
+  #   if find_by_name(hash_line[:name])
+  #     find_by_name(hash_line[:name]).send()
+  #   else
+  #     @statewide_tests << StatewideTest.new(hash_line)
+  #   end
+  # end
 
   def find_by_name(test_name)
      @statewide_tests.find {|statewidetest| statewidetest.name == district.upcase }
@@ -34,20 +48,8 @@ end
 
 
 
-#
-# # Input is nested hash. No Output. Generates Enrollment Objects
-# def load_data(hash)
-#   parser = EnrollmentParser.new
-#   load_files = peel_hash_to_key_file(hash)
-#   load_files.each do |key, file|
-#     district_enrollment_data_over_time = parser.parse(key, file)
-#     create_enrollments(district_enrollment_data_over_time)
-#   end
-# end
-#
-# def peel_hash_to_key_file(hash)
-#   hash.values[0].to_a
-# end
+
+
 #
 # def create_enrollments(district_enrollment_array)
 #   district_enrollment_array.each do |hash_line|

@@ -27,6 +27,26 @@ class StatewideTest
   # def proficient_for_subject_by_race_in_year(subject, race, year)
   #
   # end
+
+  def set_third_grade(value)
+    @third_grade = value
+  end
+
+  def set_eighth_grade(value)
+    @eighth_grade = value
+  end
+
+  def set_math(value)
+    @math = value
+  end
+
+  def set_reading(value)
+    @reading = value
+  end
+
+  def set_writing(value)
+    @writing = value
+  end
 end
 
 

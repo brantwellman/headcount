@@ -43,7 +43,7 @@ class StatewideTestTest < Minitest::Test
     assert_equal expected, statey.eighth_grade
   end
 
-  # def test_it_stores_an_math_hash
+  # def test_it_stores_a_math_hash
   #   statey = StatewideTest.new(@data_line)
   #   expected = {
   #
