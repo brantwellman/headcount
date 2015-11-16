@@ -16,7 +16,7 @@ class StatewideTestRepository
     load_files.each do |key, file|
       @key = key
       district_statewidetest_data_over_time = parser.parse(key, file)
-      create_enrollments(district_statewidetest_data_over_time)
+      create_statwide_tests(district_statewidetest_data_over_time)
     end
   end
 
@@ -24,13 +24,13 @@ class StatewideTestRepository
     hash.values[0].to_a
   end
 
-  # def create_statewide_test(hash_line)
-  #   if find_by_name(hash_line[:name])
-  #     find_by_name(hash_line[:name]).send()
-  #   else
-  #     @statewide_tests << StatewideTest.new(hash_line)
-  #   end
-  # end
+  def create_statewide_tests(hash_line)
+    if find_by_name(hash_line[:name])
+      find_by_name(hash_line[:name]).send()
+    else
+      @statewide_tests << StatewideTest.new(hash_line)
+    end
+  end
 
   def find_by_name(test_name)
      @statewide_tests.find {|statewidetest| statewidetest.name == district.upcase }
