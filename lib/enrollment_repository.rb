@@ -4,6 +4,7 @@ require './lib/enrollment_parser'
 
 class EnrollmentRepository
   attr_reader :enrollments
+  attr_accessor :key
 
   def initialize
     @enrollments = []
@@ -14,6 +15,8 @@ class EnrollmentRepository
     parser = EnrollmentParser.new
     load_files = peel_hash_to_key_file(hash)
     load_files.each do |key, file|
+      @key = key
+      # binding.pry
       district_enrollment_data_over_time = parser.parse(key, file)
       create_enrollments(district_enrollment_data_over_time)
     end
@@ -30,8 +33,9 @@ class EnrollmentRepository
   end
 
   def create_enrollment(hash_line)
+    method_name = ("set_" + @key.to_s).to_sym
     if find_by_name(hash_line[:name])
-      find_by_name(hash_line[:name]).high_school_graduation = hash_line[:high_school_graduation]
+      find_by_name(hash_line[:name]).send(method_name, hash_line[@key])
     else
       @enrollments << Enrollment.new(hash_line)
     end
@@ -54,11 +58,11 @@ end
 #     :high_school_graduation => "./data/High school graduation rates.csv"
 #   }
 # })
-#  enrollment = er.find_by_name("Colorado")
-# p enrollment.graduation_rate_by_year
-# # # puts enrollment.kindergarten_participation_by_year
-# # # puts enrollment.kindergarten_participation_in_year(2010)
-# # # puts dr.find_by_name("ACADEMY 20")
-# # # p dr.districts
-# p er.enrollments
-# p er.enrollments.count
+# #  enrollment = er.find_by_name("Colorado")
+# # p enrollment.graduation_rate_by_year
+# # # # puts enrollment.kindergarten_participation_by_year
+# # # # puts enrollment.kindergarten_participation_in_year(2010)
+# # # # puts dr.find_by_name("ACADEMY 20")
+# # # # p dr.districts
+p er.enrollments
+p er.enrollments.count

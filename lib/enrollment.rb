@@ -29,4 +29,12 @@ class Enrollment
       high_school_graduation[year]
     end
   end
+
+  def set_kindergarten(value)
+    @kindergarten = value
+  end
+
+  def set_high_school_graduation(value)
+    @high_school_graduation = value
+  end
 end

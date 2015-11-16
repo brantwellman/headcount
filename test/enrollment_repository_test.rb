@@ -4,6 +4,7 @@ require './lib/enrollment_repository'
 
 class EnrollmentRepositoryTest < Minitest::Test
 
+  attr_accessor :key
   def test_it_initializes_with_an_empty_enrollments_array
     e_repo = EnrollmentRepository.new
     expected =  []
@@ -83,16 +84,4 @@ class EnrollmentRepositoryTest < Minitest::Test
     assert_equal expected, e_repo.enrollments.count
   end
 
-  def test_it_combines_data_onto_an_already_existing_enrollment
-    e_repo = EnrollmentRepository.new
-    hash_line1 = {:name => "COLORADO", :kindergarten => {2010 => 0.3915, 2011 => 0.35356, 2012 => 0.2677}}
-    e_repo.create_enrollment(hash_line1)
-    hash_line2 = {:name => "COLORADO", :high_school_graduation => {2010 => 0.3915, 2011 => 0.35356, 2012 => 0.2677}}
-    e_repo.create_enrollment(hash_line2)
-
-    expected1 = {2010 => 0.3915, 2011 => 0.35356, 2012 => 0.2677}
-    expected2 = {2010 => 0.3915, 2011 => 0.35356, 2012 => 0.2677}
-    assert_equal expected1, e_repo.enrollments[0].kindergarten
-    assert_equal expected2, e_repo.enrollments[0].high_school_graduation
-  end
 end
