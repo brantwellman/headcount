@@ -2,7 +2,6 @@ require 'pry'
 require './lib/statewidetest'
 # require './lib/statewidetest_parser'
 
-
 class StatewideTestRepository
   attr_reader :statewide_tests, :key
 
@@ -25,11 +24,16 @@ class StatewideTestRepository
   end
 
   def create_statewide_tests(hash_line)
+    method_name = ("set_" + @key.to_s).to_sym
     if find_by_name(hash_line[:name])
-      find_by_name(hash_line[:name]).send()
+      find_by_name(hash_line[:name]).send(method_name, hash_line[@key])
     else
       @statewide_tests << StatewideTest.new(hash_line)
     end
+  end
+
+  def add_records(records)
+    @statewide_tests += records
   end
 
   def find_by_name(test_name)
@@ -38,40 +42,25 @@ class StatewideTestRepository
   end
 end
 
-
-# name = "ACADEMY 20"
-# data = {:third_grade => {big data hash}, :eighth_grade => {big data hash}}
-
-
-
-
-
-
-
-
-
-#
-# def create_enrollments(district_enrollment_array)
-#   district_enrollment_array.each do |hash_line|
-#     create_enrollment(hash_line)
-#   end
-# end
-#
-# def create_enrollment(hash_line)
-#   if find_by_name(hash_line[:name])
-#     find_by_name(hash_line[:name]).high_school_graduation = hash_line[:high_school_graduation]
-#   else
-#     @enrollments << Enrollment.new(hash_line)
-#   end
-# end
-#
-# def add_records(records)
-#   @enrollments += records
-# end
-#
-# # Case insensitive. Input is string. Output is Enrollment object
-# def find_by_name(district)
-#   @enrollments.find {|enrollment| enrollment.name == district.upcase }
-# end
-#
-# end
+# str = StatewideTestRepository.new
+# str.load_data(hash)
+# ({
+#   :statewide_testing => {
+#     :third_grade => "./data/3rd grade students scoring proficient or above on the CSAP_TCAP.csv",
+#     :eigth_grade => "./data/8th grade students scoring proficient or above on the CSAP_TCAP.csv",
+#     :math => "./data/Average proficiency on the CSAP_TCAP by race_ethnicity_ Math.csv",
+#     :reading => "./data/Average proficiency on the CSAP_TCAP by race_ethnicity_ Reading.csv",
+#     :writing => "./data/Average proficiency on the CSAP_TCAP by race_ethnicity_ Writing.csv"
+#   }
+# })
+# str.load_data({
+#   :statewide_testing => {
+#     :third_grade => "./data/3rd grade students scoring proficient or above on the CSAP_TCAP.csv",
+#     :eigth_grade => "./data/8th grade students scoring proficient or above on the CSAP_TCAP.csv",
+#     :math => "./data/Average proficiency on the CSAP_TCAP by race_ethnicity_ Math.csv",
+#     :reading => "./data/Average proficiency on the CSAP_TCAP by race_ethnicity_ Reading.csv",
+#     :writing => "./data/Average proficiency on the CSAP_TCAP by race_ethnicity_ Writing.csv"
+#   }
+# })
+# p str = str.find_by_name("ACADEMY 20")
+# p str.statewide_tests
