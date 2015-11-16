@@ -8,6 +8,7 @@ class StatewideTestParser
     handle = CSV.open(file, {:headers => true, header_converters: :symbol })
     handle.each do |row|
       fancy_row = {:name => row[:location].upcase, key => {row[:timeframe].to_i => {row[file_converter[key]] => convert_na(row[:data])}}}
+      # binding.pry
       formatted_rows << fancy_row
     end
     format_nested_hashes(key, formatted_rows)
@@ -43,7 +44,7 @@ class StatewideTestParser
 
 end
 
-parsey = StatewideTestParser.new
-# puts parsey.parse(:third_grade, "./test/fixtures/3rd_grade_students_scoring_proficient_or_above_on_the_CSAP_TCAP_fixture.csv")
+# parsey = StatewideTestParser.new
+#  puts parsey.parse(:third_grade, "./test/fixtures/3rd_grade_students_scoring_proficient_or_above_on_the_CSAP_TCAP_fixture.csv")
 # puts parsey.parse(:third_grade,"./data/3rd grade students scoring proficient or above on the CSAP_TCAP.csv")
-puts parsey.parse(:math, "./data/Average proficiency on the CSAP_TCAP by race_ethnicity_ Math.csv")
+#puts parsey.parse(:math, "./data/Average proficiency on the CSAP_TCAP by race_ethnicity_ Math.csv")
