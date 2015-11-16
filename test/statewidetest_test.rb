@@ -5,29 +5,71 @@ require './lib/statewidetest'
 class StatewideTestTest < Minitest::Test
 
   def setup
-    @data_line = {:name => "COLORADO"}
+    @data_line = {:name => "COLORADO", :third_grade => {
+      2012 => {:math => 0.830, :reading => 0.870, :writing => 0.655},
+      2013 => {:math => 0.855, :reading => 0.859, :writing => 0.668},
+      2014 => {:math => 0.834, :reading => 0.831, :writing => 0.639}
+   },
+   :eighth_grade => {
+      2008 => {:math => 0.857, :reading => 0.866, :writing => 0.671},
+      2009 => {:math => 0.824, :reading => 0.862, :writing => 0.706},
+      2010 => {:math => 0.849, :reading => 0.864, :writing => 0.662}
+      }
+    }
   end
 
   def test_it_initializes_with_a_name
     statey = StatewideTest.new(@data_line)
-
     assert_equal "COLORADO", statey.name
   end
 
-  def test_it_initializes_with_an_empty_data_hash
+  def test_it_stores_a_third_grade_hash
     statey = StatewideTest.new(@data_line)
-    expected = {}
-    assert_equal expected, statey.data
+    expected = {
+      2012 => {:math => 0.830, :reading => 0.870, :writing => 0.655},
+      2013 => {:math => 0.855, :reading => 0.859, :writing => 0.668},
+      2014 => {:math => 0.834, :reading => 0.831, :writing => 0.639}
+   }
+    assert_equal expected, statey.third_grade
   end
+
+  def test_it_stores_an_eigth_grade_hash
+    statey = StatewideTest.new(@data_line)
+    expected = {
+      2008 => {:math => 0.857, :reading => 0.866, :writing => 0.671},
+      2009 => {:math => 0.824, :reading => 0.862, :writing => 0.706},
+      2010 => {:math => 0.849, :reading => 0.864, :writing => 0.662}
+      }
+    assert_equal expected, statey.eighth_grade
+  end
+
+  # def test_it_stores_an_math_hash
+  #   statey = StatewideTest.new(@data_line)
+  #   expected = {
+  #
+  #     }
+  #   assert_equal expected, statey.math
+  # end
+  #
+  # def test_it_stores_an_reading_hash
+  #   statey = StatewideTest.new(@data_line)
+  #   expected = {
+  #
+  #     }
+  #   assert_equal expected, statey.reading
+  # end
+  #
+  # def test_it_stores_an_writing_hash
+  #   statey = StatewideTest.new(@data_line)
+  #   expected = {
+  #
+  #     }
+  #   assert_equal expected, statey.writing
+  # end
 end
 
 #
-#   def test_it_initializes_with_a_kindergarten_participation_hash
-#     enroll = Enrollment.new({:name => "COLORADO", :kindergarten => {2010 => 0.3915, 2011 => 0.35356, 2012 => 0.2677}})
-#     expected = {2010 => 0.3915, 2011 => 0.35356, 2012 => 0.2677}
-#
-#     assert_equal expected, enroll.kindergarten
-#   end
+
 #
 #   def test_it_returns_the_enrollment_participation_by_year_with_rounded_floats
 #     enroll = Enrollment.new({:name => "COLORADO", :kindergarten => {2010 => 0.392, 2011 => 0.354, 2012 => 0.268}})

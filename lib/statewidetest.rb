@@ -1,11 +1,15 @@
 class StatewideTest
   attr_reader :name
   attr_accessor :data
-  # attr_accessor :third_grade, :eigth_grade
+  attr_accessor :third_grade, :eighth_grade, :math, :reading, :writing
 
   def initialize(data_hash)
     @name = data_hash[:name]
-    @data = {}
+    @third_grade = data_hash[:third_grade]
+    @eighth_grade = data_hash[:eighth_grade]
+    @math = data_hash[:math]
+    @reading = data_hash[:reading]
+    @writing = data_hash[:writing]
   end
 
   # def proficient_by_grade(grade)
