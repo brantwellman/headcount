@@ -61,8 +61,8 @@ end
 # #  enrollment = er.find_by_name("Colorado")
 # # p enrollment.graduation_rate_by_year
 # # # # puts enrollment.kindergarten_participation_by_year
-# # # # puts enrollment.kindergarten_participation_in_year(2010)
-# # # # puts dr.find_by_name("ACADEMY 20")
-# # # # p dr.districts
-p er.enrollments
-p er.enrollments.count
+# # # # # puts enrollment.kindergarten_participation_in_year(2010)
+# # # # # puts dr.find_by_name("ACADEMY 20")
+# # # # # p dr.districts
+# p er.enrollments
+# p er.enrollments.count
