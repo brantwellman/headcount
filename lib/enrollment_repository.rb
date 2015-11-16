@@ -47,8 +47,6 @@ class EnrollmentRepository
   end
 end
 
-
-
 # er = EnrollmentRepository.new
 # er.load_data({
 #   :enrollment => {
