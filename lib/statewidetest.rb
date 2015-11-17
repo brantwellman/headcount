@@ -12,9 +12,9 @@ class StatewideTest
     @writing = data_hash[:writing]
   end
 
-  # def proficient_by_grade(grade)
-  #
-  # end
+  def proficient_by_grade(grade)
+
+  end
   #
   # def proficient_by_race_or_ethnicity(race)
   #

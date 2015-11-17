@@ -50,6 +50,9 @@ class StatewideTestRepositoryTest < Minitest::Test
     assert_equal expected, str.find_by_name("colorado").name
   end
 
+  def test_it_returns_proficiency_by_grade
+    
+  end
 end
 
 
