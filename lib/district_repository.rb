@@ -47,16 +47,16 @@ class DistrictRepository
   end
 end
 #
-# dr = DistrictRepository.new
-# dr.load_data({
-#   :enrollment => {
-#     :kindergarten => "./data/Kindergartners in full-day program.csv",
-#     :high_school_graduation => "./data/High school graduation rates.csv"
-#   }
-# })
+dr = DistrictRepository.new
+dr.load_data({
+  :enrollment => {
+    :kindergarten => "./data/Kindergartners in full-day program.csv",
+    :high_school_graduation => "./data/High school graduation rates.csv"
+  }
+})
 # p enrollment = dr.find_by_name("ACADEMY 20")
 # p dr.districts[50].enrollment.name
- # district = dr.find_by_name("Academy 20")
+# p district = dr.find_by_name("Academy 20")
 # p district.enrollment.kindergarten_participation_by_year
 # p district.enrollment.kindergarten_participation_in_year(2010)
 # p dr.districts.count
