@@ -82,7 +82,20 @@ class StatewideTestParserTest < Minitest::Test
   def test_parse_takes_a_csv_file_and_returns_parsed_hashes
     sp = StatewideTestParser.new
     result = sp.parse(:third_grade, "./test/fixtures/3rd_grade_two_districts.csv")
-    expected = 'x'
-    assert_equal = expected, result
+    expected = [{:name=>"ACADEMY 20", :third_grade=>{2008=>{"Math"=>0.857, "Reading"=>0.866, "Writing"=>0.671},
+                                                     2009=>{"Math"=>0.824, "Reading"=>0.862, "Writing"=>0.706},
+                                                     2010=>{"Math"=>0.849, "Reading"=>0.864, "Writing"=>0.662},
+                                                     2011=>{"Math"=>0.819, "Reading"=>0.867, "Writing"=>0.678},
+                                                     2012=>{"Reading"=>0.87, "Math"=>0.83, "Writing"=>0.655},
+                                                     2013=>{"Math"=>0.855, "Reading"=>0.859, "Writing"=>0.668},
+                                                     2014=>{"Math"=>0.834, "Reading"=>0.831, "Writing"=>0.639}}},
+                {:name=>"ADAMS COUNTY 14", :third_grade=>{2008=>{"Math"=>0.56, "Reading"=>0.523, "Writing"=>0.426},
+                                                          2009=>{"Math"=>0.54, "Reading"=>0.562, "Writing"=>0.479},
+                                                          2010=>{"Math"=>0.469, "Reading"=>0.457, "Writing"=>0.312},
+                                                          2011=>{"Math"=>0.476, "Reading"=>0.571, "Writing"=>0.31},
+                                                          2012=>{"Reading"=>0.54, "Math"=>0.39, "Writing"=>0.287},
+                                                          2013=>{"Math"=>0.437, "Reading"=>0.548},
+                                                          2014=>{"Math"=>0.512, "Reading"=>0.476, "Writing"=>0.274}}}]
+    assert_equal expected, result
   end
 end

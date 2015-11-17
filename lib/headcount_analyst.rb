@@ -11,14 +11,19 @@ class HeadcountAnalyst
   end
 
   def enrollment_average(district)
-    enrollment_data = de_repo.find_by_name(district.upcase).enrollment.kindergarten.values
-    average = enrollment_data.inject(:+)/enrollment_data.size
+    enrollment_data = de_repo.find_by_name(district.upcase).enrollment.kindergarten.values.compact
+    return nil if enrollment_data.empty?
+    enrollment_data.inject(:+)/enrollment_data.length
+
   end
 
   def kindergarten_participation_rate_variation(district, hash_comparison)
     comparison = hash_comparison.values[0].upcase
     district_average = enrollment_average(district.upcase)
     comp_average = enrollment_average(comparison)
+    unless district_average && comp_average
+      return nil
+    end
     rate_variation = district_average/comp_average
     rate_variation.round(3)
   end
@@ -41,6 +46,7 @@ class HeadcountAnalyst
   def kindergarten_participation_against_high_school_graduation(district)
     kinder_rate_var = kindergarten_participation_rate_variation(district, :against => "Colorado")
     hs_rate_var = high_school_graduation_rate_variation(district, "Colorado")
+    return nil unless kinder_rate_var && hs_rate_var
     (kinder_rate_var / hs_rate_var).round(3)
   end
 
@@ -48,13 +54,15 @@ class HeadcountAnalyst
   def high_school_graduation_rate_variation(district, comparison)
     district_average = hs_graduation_average(district.upcase)
     comp_average = hs_graduation_average(comparison.upcase)
+    return nil unless district_average && comp_average
     rate_variation = district_average/comp_average
     rate_variation.round(3)
   end
 
   def hs_graduation_average(district)
-    # binding.pry
     hs_grad_data = de_repo.find_by_name(district).enrollment.high_school_graduation.values
+    hs_grad_data = hs_grad_data.compact
+    return nil if hs_grad_data.empty?
     hs_grad_data.inject(:+)/hs_grad_data.size
   end
 
@@ -77,6 +85,7 @@ class HeadcountAnalyst
   def kindergarten_participation_against_high_school_graduation_correlation_window(hash_district)
     district = hash_district[:for] #.values
     k_vs_hs = kindergarten_participation_against_high_school_graduation(district)
+    return nil unless k_vs_hs
     (0.6 <= k_vs_hs && k_vs_hs <= 1.5) ? true : false
   end
 
@@ -85,7 +94,7 @@ class HeadcountAnalyst
         kindergarten_participation_against_high_school_graduation_correlation_window(for: enrollment.name)
     end
     districts_corellations.shift
-    true_count = districts_corellations.count(true)
+    true_count = districts_corellations.count(true) # this array now contains true, false, and, nil
     (true_count / districts_corellations.count) > 0.7 ? true : false
   end
 
@@ -93,6 +102,7 @@ class HeadcountAnalyst
     districts = districts_array_hash[:across]
     districts_corellations = districts.map do |district|
       kindergarten_participation_against_high_school_graduation_correlation_window(for: district)
+      #binding.pry
     end
     districts_corellations
     true_count = districts_corellations.count(true)

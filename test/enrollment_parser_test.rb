@@ -68,10 +68,10 @@ class EnrollmentParserTest < Minitest::Test
 
   def test_parse_takes_a_csv_file_and_returns_parsed_hashes
     ep = EnrollmentParser.new
-    expected = [{:name=>"COLORADO", :kindergarten=>{2011=>0.672, 2012=>0.695, 2013=>0.703, 2014=>0.741}},
-    {:name=>"ACADEMY 20", :kindergarten=>{2007=>0.392, 2006=>0.354, 2005=>0.267, 2004=>0.302, 2008=>0.385}}]
+    expected = [{:name=>"COLORADO", :kindergarten=>{2011=>0.672, 2012=>0.695, 2013=>0.702, 2014=>0.741}},
+    {:name=>"ACADEMY 20", :kindergarten=>{2007=>0.391, 2006=>0.353, 2005=>0.267, 2004=>0.302, 2008=>0.384}}]
     result = ep.parse(:kindergarten, "./test/fixtures/two_districts.csv")
-    assert_equal result, expected
+    assert_equal expected, result
   end
 
   def test_parse_works_with_larger_CSV_and_more_many_more_lines
