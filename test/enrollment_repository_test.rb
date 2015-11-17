@@ -1,6 +1,6 @@
 require 'minitest'
 require 'minitest/autorun'
-require './lib/enrollment_repository'
+require_relative '../lib/enrollment_repository'
 
 class EnrollmentRepositoryTest < Minitest::Test
 

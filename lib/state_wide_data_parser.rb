@@ -10,7 +10,6 @@ class StateWideDataParser
       formatted_rows << fancy_row
     end
     format_nested_hashes(key, formatted_rows)
-    #puts formatted_rows.inspect
   end
 
   def group_to_nested_hash(group, key)

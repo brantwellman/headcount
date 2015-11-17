@@ -1,6 +1,6 @@
 require 'minitest'
 require 'minitest/autorun'
-require './lib/enrollment_parser'
+require_relative '../lib/enrollment_parser'
 
 class EnrollmentParserTest < Minitest::Test
 

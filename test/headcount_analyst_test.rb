@@ -1,8 +1,8 @@
 require 'minitest'
 require 'minitest/autorun'
-require './lib/headcount_analyst'
-require './lib/district_repository'
-require './lib/enrollment_repository'
+require_relative '../lib/headcount_analyst'
+require_relative '../lib/district_repository'
+require_relative '../lib/enrollment_repository'
 require 'pry'
 
 class HeadcountAnalystTest < Minitest::Test

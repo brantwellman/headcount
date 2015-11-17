@@ -1,6 +1,6 @@
 require 'minitest'
 require 'minitest/autorun'
-require './lib/statewidetest_parser'
+require_relative '../lib/statewidetest_parser'
 require 'pry'
 
 class StatewideTestParserTest < Minitest::Test

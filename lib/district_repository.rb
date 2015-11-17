@@ -1,5 +1,5 @@
-require "./lib/district"
-require './lib/enrollment_repository'
+require_relative "district"
+require_relative 'enrollment_repository'
 
 class DistrictRepository
   attr_accessor :districts, :enrollment_repository
@@ -46,18 +46,28 @@ class DistrictRepository
     @districts.select { |district| district.name.include?(str_fragment.upcase)}
   end
 end
-#
-dr = DistrictRepository.new
-dr.load_data({
-  :enrollment => {
-    :kindergarten => "./data/Kindergartners in full-day program.csv",
-    :high_school_graduation => "./data/High school graduation rates.csv"
-  }
-})
+
+# dr = DistrictRepository.new
+# dr.load_data({
+#   :enrollment => {
+#     :kindergarten => "./data/Kindergartners in full-day program.csv",
+#     :high_school_graduation => "./data/High school graduation rates.csv"
+#   }
+# })
 # p enrollment = dr.find_by_name("ACADEMY 20")
 # p dr.districts[50].enrollment.name
 # p district = dr.find_by_name("Academy 20")
 # p district.enrollment.kindergarten_participation_by_year
+
+# dr = DistrictRepository.new
+# dr.load_data({
+#   :enrollment => {
+#     :kindergarten => "./data/Kindergartners in full-day program.csv",
+#     :high_school_graduation => "./data/High school graduation rates.csv"
+#   }
+# })
+# district = dr.find_by_name("ACADEMY 20")
+# p dr.districts[50].enrollment.name
+# district.enrollment.kindergarten_participation_by_year
 # p district.enrollment.kindergarten_participation_in_year(2010)
 # p dr.districts.count
-#<District:0x007fe32491f5a0 @name="YUMA SCHOOL DISTRICT 1", @enrollment=#<Enrollment:0x007fe324944b98 @name="YUMA SCHOOL DISTRICT 1", @kindergarten_participation={"2007"=>"1", "2006"=>"1", "2005"=>"1", "2004"=>"0", "2008"=>"1", "2009"=>"1", "2010"=>"1", "2011"=>"1", "2012"=>"1", "2013"=>"1", "2014"=>"1"}>>]
