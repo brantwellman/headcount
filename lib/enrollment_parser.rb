@@ -6,7 +6,6 @@ class EnrollmentParser
     handle = CSV.open(file, {:headers => true, header_converters: :symbol })
     handle.each do |row|
       fancy_row = {:name => row[:location].upcase, key => {row[:timeframe].to_i => convert_na(row[:data])}}
-      #convert_na(fancy_row[key][row[:data]])
       formatted_rows << fancy_row
     end
     format_nested_hashes(key, formatted_rows)

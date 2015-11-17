@@ -66,6 +66,28 @@ class EnrollmentParserTest < Minitest::Test
    assert_equal result, expected
   end
 
+  def test_truncate_works_with_nums_containing_less_than_three_decimal_places
+    sp = EnrollmentParser.new
+    assert_equal 0.1, sp.truncate(0.1)
+    assert_equal 0.12, sp.truncate(0.12)
+    assert_equal  12.34, sp.truncate(12.34)
+  end
+
+  def test_truncate_works_with_nums_containing_three_or_more_decimal_places
+    sp = EnrollmentParser.new
+    assert_equal 0.123, sp.truncate(0.123)
+    assert_equal 0.123, sp.truncate(0.1234)
+    assert_equal  12.345, sp.truncate(12.34567)
+    assert_equal 345.999, sp.truncate(345.9999999)
+  end
+
+  def test_convert_na_handles_strings_of_1_and_0_to_floats
+    ep = EnrollmentParser.new
+    expected = [{:name=>"ACADEMY 20", :high_school_graduation=>{2013=>1.0, 2014=>1.0}}, {:name=>"AGATE 300", :high_school_graduation=>{2010=>0.0, 2011=>1.0}}]
+    result = ep.parse(:high_school_graduation, "./test/fixtures/hs_data_1s_and_0s.csv")
+    assert_equal expected, result
+  end
+
   def test_parse_takes_a_csv_file_and_returns_parsed_hashes
     ep = EnrollmentParser.new
     expected = [{:name=>"COLORADO", :kindergarten=>{2011=>0.672, 2012=>0.695, 2013=>0.702, 2014=>0.741}},
