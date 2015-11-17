@@ -25,7 +25,8 @@ class HeadcountAnalyst
       return nil
     end
     rate_variation = district_average/comp_average
-    rate_variation.round(3)
+    rate_variation
+    truncate(rate_variation)
   end
 
   def find_kindergarten_participation_by_year_for_district(district)
@@ -47,7 +48,7 @@ class HeadcountAnalyst
     kinder_rate_var = kindergarten_participation_rate_variation(district, :against => "Colorado")
     hs_rate_var = high_school_graduation_rate_variation(district, "Colorado")
     return nil unless kinder_rate_var && hs_rate_var
-    (kinder_rate_var / hs_rate_var).round(3)
+    truncate(kinder_rate_var / hs_rate_var)
   end
 
 
@@ -56,7 +57,7 @@ class HeadcountAnalyst
     comp_average = hs_graduation_average(comparison.upcase)
     return nil unless district_average && comp_average
     rate_variation = district_average/comp_average
-    rate_variation.round(3)
+    truncate(rate_variation)
   end
 
   def hs_graduation_average(district)
@@ -107,6 +108,10 @@ class HeadcountAnalyst
     districts_corellations
     true_count = districts_corellations.count(true)
     (true_count / districts_corellations.count) > 0.7 ? true : false
+  end
+
+  def truncate(float)
+    (float * 1000).floor / 1000.to_f
   end
 end
 

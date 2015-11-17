@@ -130,17 +130,12 @@ class HeadcountAnalystTest < Minitest::Test
   end
 
   def test_it_computes_comparison_value_from_two_basic_averages_hs_grad_rate
-    expected = 1.195
-    assert_equal expected, @ha.high_school_graduation_rate_variation("ACADEMY 20", "Colorado")
-  end
-
-  def test_it_computes_comparison_value_from_two_complex_averages_hs_grad_rate
-    expected = 1.195
+    expected = 1.194
     assert_equal expected, @ha.high_school_graduation_rate_variation("ACADEMY 20", "Colorado")
   end
 
   def test_it_returns_correlation_value_for_hs_grad_rates_and_kind_part_rates
-    expected = 3.937
+    expected = 3.945
     assert_equal expected, @ha.kindergarten_participation_against_high_school_graduation("Agate 300")
   end
 

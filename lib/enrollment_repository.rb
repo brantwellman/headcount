@@ -76,6 +76,5 @@ end
 # # # # puts enrollment.kindergarten_participation_in_year(2010)
 # # # # puts dr.find_by_name("ACADEMY 20")
 # p dr.districts
->>>>>>> e27409da86af64b7374f49bfb93f0a86dded1e2d
 # p er.enrollments
 # p er.enrollments.count
