@@ -1,6 +1,6 @@
 require 'minitest'
 require 'minitest/autorun'
-require './lib/statewidetest_repository'
+require_relative '../lib/statewidetest_repository'
 
 class StatewideTestRepositoryTest < Minitest::Test
 

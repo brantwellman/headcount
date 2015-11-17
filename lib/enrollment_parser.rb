@@ -1,5 +1,6 @@
 require 'csv'
 require 'pry'
+
 class EnrollmentParser
   def parse(key, file)
     formatted_rows = []

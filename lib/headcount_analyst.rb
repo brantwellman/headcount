@@ -1,6 +1,6 @@
-require './lib/district'
-require './lib/enrollment'
-require './lib/district_repository'
+require_relative 'district'
+require_relative 'enrollment'
+require_relative 'district_repository'
 require 'pry'
 
 class HeadcountAnalyst
@@ -107,12 +107,12 @@ end
 #     :high_school_graduation => "./data/High school graduation rates.csv"
 #   }
 # })
-# #
+#
 # ha = HeadcountAnalyst.new(dr)
 # hash_comparison = {for: "ACADEMY 20"}
 # # hash_comparison = {:across => ['ACADEMY 20', 'AGATE 300', 'ADAMS COUNTY 14']}
-# # districts = {:across =>["Colorado", "Agate 300"]}
-# # ha.subset_of_districs_hs_kinder_across_districts(districts)
-# #  p ha.statewide_correlation_hs_kinder_across_districts
+# districts = {:across =>["Colorado", "Agate 300"]}
+# ha.subset_of_districs_hs_kinder_across_districts(districts)
+#  p ha.statewide_correlation_hs_kinder_across_districts
 # # true_count = districts_corellations.count(false)
 # p ha.kindergarten_participation_correlates_with_high_school_graduation(hash_comparison)

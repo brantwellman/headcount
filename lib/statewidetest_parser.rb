@@ -1,7 +1,6 @@
 require 'csv'
 require 'pry'
 
-
 class StatewideTestParser
   def parse(key, file)
     formatted_rows = []
