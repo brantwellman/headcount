@@ -6,10 +6,22 @@ class EnrollmentParser
     formatted_rows = []
     handle = CSV.open(file, {:headers => true, header_converters: :symbol })
     handle.each do |row|
-      fancy_row = {:name => row[:location].upcase, key => {row[:timeframe].to_i => row[:data].to_f.round(3)}}
+      fancy_row = {:name => row[:location].upcase, key => {row[:timeframe].to_i => convert_na(row[:data])}}
       formatted_rows << fancy_row
     end
     format_nested_hashes(key, formatted_rows)
+  end
+
+  def truncate(float)
+    (float * 1000).floor / 1000.to_f
+  end
+
+  def convert_na(value)
+    if value == "0" || value == "1"
+      return value.to_f
+    end
+    float = value.to_f
+    value == float.to_s ? truncate(value.to_f) : nil
   end
 
   def group_to_nested_hash(group, key)

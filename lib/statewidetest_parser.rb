@@ -23,7 +23,7 @@ class StatewideTestParser
 
   def convert_na(value)
     float = value.to_f
-    value == float.to_s ? truncate(value.to_f) : "N/A"
+    value == float.to_s ? truncate(value.to_f) : nil
   end
 
   def group_to_nested_hash(group, key)
