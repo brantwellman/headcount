@@ -1,3 +1,4 @@
+require 'pry'
 class Enrollment
   attr_reader :name
   attr_accessor :high_school_graduation, :kindergarten
@@ -15,6 +16,7 @@ class Enrollment
 
   # Input is a year as integer. If no year found, return nil. Otherwise returns a truncated three-digit floating point number representing a percentage.
   def kindergarten_participation_in_year(year)
+    # binding.pry
     if kindergarten.keys.include?(year)
       kindergarten[year]
     end
@@ -38,3 +40,8 @@ class Enrollment
     @high_school_graduation = value
   end
 end
+
+# e = Enrollment.new({:name => "ACADEMY 20", :kindergarten_participation => {2010 => 0.3915, 2011 => 0.35356, 2012 => 0.2677}})
+# all_years = {2010 => 0.3915, 2011 => 0.35356, 2012 => 0.2677}
+# p 0.391, e.kindergarten_participation_in_year(2010)
+# p e.kindergarten_participation_in_year(2012)
