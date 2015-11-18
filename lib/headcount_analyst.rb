@@ -39,7 +39,7 @@ class HeadcountAnalyst
     comparison_participation = find_kindergarten_participation_by_year_for_district(comparison)
     result = {}
     district_participation.keys.map do | year|
-      result[year] = (district_participation[year] / comparison_participation[year]).round(3)
+      result[year] = truncate(district_participation[year] / comparison_participation[year])
     end
     result
   end
@@ -111,6 +111,7 @@ class HeadcountAnalyst
   end
 
   def truncate(float)
+    # binding.pry
     (float * 1000).floor / 1000.to_f
   end
 end

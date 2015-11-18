@@ -61,7 +61,7 @@ class DistrictTest < Minitest::Test
     e_repo = EnrollmentRepository.new
     e1 = Enrollment.new({
       :name => "ACADEMY 20",
-      :kindergarten => {
+      :kindergarten_participation => {
         2010 => 0.392,
         2011 => 0.35356,
         2012 => 0.2677
@@ -69,7 +69,7 @@ class DistrictTest < Minitest::Test
     })
     e2 = Enrollment.new({
       :name => "COLORADO",
-      :kindergarten => {
+      :kindergarten_participation => {
         2010 => 0.392,
         2011 => 0.35356,
         2012 => 0.2677
