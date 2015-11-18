@@ -38,6 +38,10 @@ class StatewideTestRepository
     end
   end
 
+  def statewide_testings
+    statewide_tests
+  end
+
   def add_records(records)
     @statewide_tests += records
   end

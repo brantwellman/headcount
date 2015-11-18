@@ -14,6 +14,7 @@ class EnrollmentRepository
   def load_data(hash)
     parser = EnrollmentParser.new
     load_files = peel_hash_to_key_file(hash)
+    # binding.pry
     load_files.each do |key, file|
       @key = key
       district_enrollment_data_over_time = parser.parse(key, file)
