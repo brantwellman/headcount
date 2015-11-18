@@ -11,12 +11,11 @@ class Enrollment
 
   # Returns a hash with years as keys and truncated 3 digit float representing percentage for all years in dataset
   def kindergarten_participation_by_year
-    kindergarten
-  #    = kindergarten.each_value do |value|
-  #      truncate(value)
-  #   binding.pry
-  # end
-  #   kindergarten
+    my_hash = {}
+    kindergarten.each do |k, v|
+      my_hash[k] = truncate(v)
+    end
+    my_hash
   end
 
   # Input is a year as integer. If no year found, return nil. Otherwise returns a truncated three-digit floating point number representing a percentage.
