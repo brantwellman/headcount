@@ -40,6 +40,12 @@ class StatewideTestRepositoryTest < Minitest::Test
     assert_equal nil, str.find_by_name("Zorg")
   end
 
+  def test_it_returns_statewide_instance_by_name
+    skip
+    assert_equal expected, str.find_by_name("Zorg")
+  end
+
+
   def test_it_returns_statewide_test_name_for_statewide_test_in_statewide_tests
     skip
     # need to figure out how to pass @key in to create new stw tests
@@ -48,6 +54,40 @@ class StatewideTestRepositoryTest < Minitest::Test
     expected = "COLORADO"
 
     assert_equal expected, str.find_by_name("colorado").name
+  end
+
+  def test_it_returns_an_array_with_two_arrays_nested_inside_it
+    skip
+  #   def peel_hash_to_key_file(hash)
+  #     hash.values[0].to_a
+  end
+
+  def test_it_create_an_instance_of_statewide_test_from_hash_line
+    skip
+  # def create_statewide_test(hash_line)
+  #   method_name = ("set_" + @key.to_s).to_sym
+  #   if find_by_name(hash_line[:name])
+  #     find_by_name(hash_line[:name]).send(method_name, hash_line[@key])
+  #   else
+  #     @statewide_tests << StatewideTest.new(hash_line)
+  #   end
+  # end
+  end
+
+  def test_it_creates_statewide_test_objects_from_an_array_of_hash_lines
+    skip
+    # def create_statewide_tests(district_statewide_test_array)
+    #   district_statewide_test_array.each do |hash_line|
+    #     create_statewide_test(hash_line)
+    #   end
+    # end
+  end
+
+  def test_it_appends_an_instance_of_statewide_test_to_statewide_tests_array
+    skip
+    def add_records(records)
+      @statewide_tests += records
+    end
   end
 
 end
