@@ -43,7 +43,7 @@ class StatewideTestRepository
   end
 
   def find_by_name(test_name)
-     @statewide_tests.find {|statewidetest| statewidetest.name == test_name.upcase }
+     @statewide_tests.find {|statetest| statetest.name == test_name.upcase }
   end
 end
 

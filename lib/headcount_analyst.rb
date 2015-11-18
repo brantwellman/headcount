@@ -11,14 +11,15 @@ class HeadcountAnalyst
   end
 
   def enrollment_average(district)
-    enrollment_data = de_repo.find_by_name(district.upcase).enrollment.kindergarten.values.compact
+    district = de_repo.find_by_name(district.upcase)
+    enrollment_data = district.enrollment.kindergarten.values.compact
     return nil if enrollment_data.empty?
     enrollment_data.inject(:+)/enrollment_data.length
 
   end
 
-  def kindergarten_participation_rate_variation(district, hash_comparison)
-    comparison = hash_comparison.values[0].upcase
+  def kinder_part_rate_variation(district, comparison)
+    comparison = comparison.values[0].upcase
     district_average = enrollment_average(district.upcase)
     comp_average = enrollment_average(comparison)
     unless district_average && comp_average
@@ -29,26 +30,26 @@ class HeadcountAnalyst
     truncate(rate_variation)
   end
 
-  def find_kindergarten_participation_by_year_for_district(district)
+  def find_kinder_part_by_year_for_district(district)
      de_repo.find_by_name(district).enrollment.kindergarten
   end
 
   def kindergarten_participation_rate_variation_trend(district, hash_comparison)
     comparison = hash_comparison.values[0].upcase
-    district_participation = find_kindergarten_participation_by_year_for_district(district)
-    comparison_participation = find_kindergarten_participation_by_year_for_district(comparison)
+    dist_part = find_kinder_part_by_year_for_district(district)
+    comparison_part = find_kinder_part_by_year_for_district(comparison)
     result = {}
-    district_participation.keys.map do | year|
-      result[year] = (district_participation[year] / comparison_participation[year]).round(3)
+    dist_part.keys.map do | year|
+      result[year] = (dist_part[year] / comparison_part[year]).round(3)
     end
     result
   end
 
   def kindergarten_participation_against_high_school_graduation(district)
-    kinder_rate_var = kindergarten_participation_rate_variation(district, :against => "Colorado")
+    kind_rate = kinder_part_rate_variation(district, :against => "Colorado")
     hs_rate_var = high_school_graduation_rate_variation(district, "Colorado")
-    return nil unless kinder_rate_var && hs_rate_var
-    truncate(kinder_rate_var / hs_rate_var)
+    return nil unless kind_rate && hs_rate_var
+    truncate(kind_rate / hs_rate_var)
   end
 
 
@@ -61,48 +62,46 @@ class HeadcountAnalyst
   end
 
   def hs_graduation_average(district)
-    hs_grad_data = de_repo.find_by_name(district).enrollment.high_school_graduation.values
+    district = de_repo.find_by_name(district)
+    hs_grad_data = district.enrollment.high_school_graduation.values
     hs_grad_data = hs_grad_data.compact
     return nil if hs_grad_data.empty?
     hs_grad_data.inject(:+)/hs_grad_data.size
   end
 
-  def kindergarten_participation_correlates_with_high_school_graduation(hash_comparison)
-    #   if key is :across,
-    if hash_comparison.has_key?(:across)
-    #     call method for districts contained in array
-      subset_of_districs_hs_kinder_across_districts(hash_comparison)
-    #   elsif key is :for and value is "Colorado"
-    elsif hash_comparison.has_key?(:for) && hash_comparison[:for] == "COLORADO"
-        #  call method comparing districts vs colorado
+  # required method call - long lenth
+  def kindergarten_participation_correlates_with_high_school_graduation(comparison)
+    if comparison.has_key?(:across)
+      subset_of_districs_hs_kinder_across_districts(comparison)
+    elsif comparison.has_key?(:for) && comparison[:for] == "COLORADO"
       statewide_correlation_hs_kinder_across_districts
-      # elsif key is :for and value is something else
-    elsif hash_comparison.has_key?(:for)
-      #   call method for individual district
-      kindergarten_participation_against_high_school_graduation_correlation_window(hash_comparison)
+    elsif comparison.has_key?(:for)
+      kinder_part_vs_high_school_grad_correlation_window(comparison)
     end
   end
 
-  def kindergarten_participation_against_high_school_graduation_correlation_window(hash_district)
-    district = hash_district[:for] #.values
+  def kinder_part_vs_high_school_grad_correlation_window(hash_district)
+    district = hash_district[:for]
+    # required method call - long lenq
     k_vs_hs = kindergarten_participation_against_high_school_graduation(district)
     return nil unless k_vs_hs
     (0.6 <= k_vs_hs && k_vs_hs <= 1.5) ? true : false
   end
 
   def statewide_correlation_hs_kinder_across_districts
-    districts_corellations = @de_repo.enrollment_repository.enrollments.map do |enrollment|
-        kindergarten_participation_against_high_school_graduation_correlation_window(for: enrollment.name)
+    enrollment_repo = @de_repo.enrollment_repository.enrollments
+    districts_corellations = enrollment_repo.map do |enrollment|
+        kinder_part_vs_high_school_grad_correlation_window(for: enrollment.name)
     end
     districts_corellations.shift
-    true_count = districts_corellations.count(true) # this array now contains true, false, and, nil
+    true_count = districts_corellations.count(true)
     (true_count / districts_corellations.count) > 0.7 ? true : false
   end
 
   def subset_of_districs_hs_kinder_across_districts(districts_array_hash)
     districts = districts_array_hash[:across]
     districts_corellations = districts.map do |district|
-      kindergarten_participation_against_high_school_graduation_correlation_window(for: district)
+      kinder_part_vs_high_school_grad_correlation_window(for: district)
       #binding.pry
     end
     districts_corellations

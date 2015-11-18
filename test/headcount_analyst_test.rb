@@ -63,17 +63,17 @@ class HeadcountAnalystTest < Minitest::Test
 
   def test_it_computes_comparison_value_from_two_basic_averages_kind_enrollment
     expected = 0.766
-    assert_equal expected, @ha.kindergarten_participation_rate_variation("Academy 20", :against => "Colorado")
+    assert_equal expected, @ha.kinder_part_rate_variation("Academy 20", :against => "Colorado")
   end
 
   def test_it_computes_comparison_value_from_two_complex_averages_kind_enrollment
     expected = 1.886
-    assert_equal expected, @ha.kindergarten_participation_rate_variation("AGATE 300", :against => "Colorado")
+    assert_equal expected, @ha.kinder_part_rate_variation("AGATE 300", :against => "Colorado")
   end
 
   def test_it_finds_kindergarten_participation_by_district_with_bad_data
     expected = {2007=>1.0, 2006=>nil}
-    assert_equal expected, @ha.find_kindergarten_participation_by_year_for_district("Agate 300")
+    assert_equal expected, @ha.find_kinder_part_by_year_for_district("Agate 300")
   end
 
   def test_it_variation_between_years_of_enrollment_info
@@ -140,11 +140,11 @@ class HeadcountAnalystTest < Minitest::Test
   end
 
   def test_it_returns_false_for_hs_kinder_part_correlation_between_values
-    refute @ha.kindergarten_participation_against_high_school_graduation_correlation_window(for: "AGATE 300")
+    refute @ha.kinder_part_vs_high_school_grad_correlation_window(for: "AGATE 300")
   end
 
   def test_it_returns_true_for_hs_kinder_part_correlation_between_values
-    assert @ha.kindergarten_participation_against_high_school_graduation_correlation_window(for: "ACADEMY 20")
+    assert @ha.kinder_part_vs_high_school_grad_correlation_window(for: "ACADEMY 20")
   end
 
   def test_it_returns_false_if_more_than_70percent_districts_show_correlation

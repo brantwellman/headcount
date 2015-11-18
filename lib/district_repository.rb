@@ -66,12 +66,10 @@ class DistrictRepository
     @districts = districts
   end
 
-  # Case insensitive. input is string. Output is District object
   def find_by_name(district_name)
     @districts.find {|district| district.name == district_name.upcase }
   end
 
-  # Case insensitive. Input - String fragment. Output either [] or array with matches
   def find_all_matching(str_fragment)
     @districts.select { |district| district.name.include?(str_fragment.upcase)}
   end

@@ -6,15 +6,24 @@ class StatewideTestParser
     formatted_rows = []
     handle = CSV.open(file, {:headers => true, header_converters: :symbol })
     handle.each do |row|
-      fancy_row = {:name => row[:location].upcase, key => {row[:timeframe].to_i => {row[file_converter[key]] => convert_na(row[:data])}}}
-      # binding.pry
+      fancy_row = {
+        :name => row[:location].upcase,
+        key => {
+          row[:timeframe].to_i => {
+            row[file_converter[key]] => convert_na(row[:data])}
+            }
+          }
       formatted_rows << fancy_row
     end
     format_nested_hashes(key, formatted_rows)
   end
 
   def file_converter
-    {:third_grade => :score, :eighth_grade => :score, :math => :race_ethnicity, :reading => :race_ethnicity, :writing => :race_ethnicity}
+    {:third_grade => :score,
+    :eighth_grade => :score,
+    :math => :race_ethnicity,
+    :reading => :race_ethnicity,
+    :writing => :race_ethnicity}
   end
 
   def truncate(float)
@@ -30,7 +39,7 @@ class StatewideTestParser
     nested_hash = nil
     group.each do |hash|
       nested_hash ||= hash
-      nested_hash[key] = nested_hash[key].merge(hash[key]){|k, x, y| x.merge(y) }
+      nested_hash[key] = nested_hash[key].merge(hash[key]){|k,x,y| x.merge(y) }
     end
      nested_hash
   end
