@@ -14,55 +14,55 @@ class EnrollmentParserTest < Minitest::Test
   end
 
   def test_group_to_nested_hash_takes_an_array_of_a_single_hash
-    group = [{:name=>"COLROADO", :kindergarten => {2011 =>0.672}}]
+    group = [{:name=>"COLROADO", :kindergarten_participation => {2011 =>0.672}}]
     ep = EnrollmentParser.new
-    expected = {:name=>"COLROADO", :kindergarten => {2011 =>0.672}}
-    result = ep.group_to_nested_hash(group, :kindergarten)
+    expected = {:name=>"COLROADO", :kindergarten_participation => {2011 =>0.672}}
+    result = ep.group_to_nested_hash(group, :kindergarten_participation)
     assert_equal result, expected
   end
 
   def test_group_to_nested_hash_takes_an_array_of_hashes_and_merges_them
-    group = [{:name=>"COLROADO", :kindergarten => {2011 =>0.672}},{:name=>"COLROADO", :kindergarten => {2012 =>0.695}}]
+    group = [{:name=>"COLROADO", :kindergarten_participation => {2011 =>0.672}},{:name=>"COLROADO", :kindergarten_participation => {2012 =>0.695}}]
     ep = EnrollmentParser.new
-    expected = {:name=>"COLROADO", :kindergarten => {2011 =>0.672, 2012 => 0.695}}
-    result = ep.group_to_nested_hash(group, :kindergarten)
+    expected = {:name=>"COLROADO", :kindergarten_participation => {2011 =>0.672, 2012 => 0.695}}
+    result = ep.group_to_nested_hash(group, :kindergarten_participation)
     assert_equal result, expected
   end
 
   def def_group_to_nested_hash_takes_a_larger_array_of_hashes test_group_to_nested_hash_takes_an_array_of_hashes_and_merges_them
-    group = [{:name=>"COLROADO", :kindergarten => {2011 =>0.672}},{:name=>"COLROADO", :kindergarten => {2012 =>0.601}},{:name=>"COLROADO", :kindergarten => {2013 =>0.602}},{:name=>"COLROADO", :kindergarten => {2014 =>0.603}},{:name=>"COLROADO", :kindergarten => {2015 =>0.695}}]
+    group = [{:name=>"COLROADO", :kindergarten_participation => {2011 =>0.672}},{:name=>"COLROADO", :kindergarten_participation => {2012 =>0.601}},{:name=>"COLROADO", :kindergarten_participation => {2013 =>0.602}},{:name=>"COLROADO", :kindergarten_participation => {2014 =>0.603}},{:name=>"COLROADO", :kindergarten_participation => {2015 =>0.695}}]
     ep = EnrollmentParser.new
-    expected = {:name=>"COLROADO", :kindergarten => {2011 =>0.672, 2012 => 0.695, 2013 =>0.602, 2014 => 0.603, 2015 => 0.695}}
-    result = ep.group_to_nested_hash(group, :kindergarten)
+    expected = {:name=>"COLROADO", :kindergarten_participation => {2011 =>0.672, 2012 => 0.695, 2013 =>0.602, 2014 => 0.603, 2015 => 0.695}}
+    result = ep.group_to_nested_hash(group, :kindergarten_participation)
     assert_equal result, expected
   end
 
   def test_format_nested_hashes_returns_for_one_group
-    formatted_rows = [{:name=>"COLORADO", :kindergarten=>{2011=>0.672}},
-    {:name=>"COLORADO", :kindergarten=>{2012=>0.695}},
-    {:name=>"COLORADO", :kindergarten=>{2013=>0.703}},
-    {:name=>"COLORADO", :kindergarten=>{2014=>0.741}}]
+    formatted_rows = [{:name=>"COLORADO", :kindergarten_participation=>{2011=>0.672}},
+    {:name=>"COLORADO", :kindergarten_participation=>{2012=>0.695}},
+    {:name=>"COLORADO", :kindergarten_participation=>{2013=>0.703}},
+    {:name=>"COLORADO", :kindergarten_participation=>{2014=>0.741}}]
     ep = EnrollmentParser.new
-    expected = [{:name=>"COLORADO", :kindergarten=>{2011=>0.672, 2012=>0.695, 2013=>0.703, 2014=>0.741}}]
-    result = ep.format_nested_hashes(:kindergarten, formatted_rows)
+    expected = [{:name=>"COLORADO", :kindergarten_participation=>{2011=>0.672, 2012=>0.695, 2013=>0.703, 2014=>0.741}}]
+    result = ep.format_nested_hashes(:kindergarten_participation, formatted_rows)
     assert_equal result, expected
   end
 
   def test_format_nested_hashes_returns_an_array_of_hashes_wherein_name_keys_match
-      formatted_rows = [{:name=>"COLORADO", :kindergarten=>{2011=>0.672}},
-   {:name=>"COLORADO", :kindergarten=>{2012=>0.695}},
-   {:name=>"COLORADO", :kindergarten=>{2013=>0.703}},
-   {:name=>"COLORADO", :kindergarten=>{2014=>0.741}},
-   {:name=>"ACADEMY 20", :kindergarten=>{2007=>0.392}},
-   {:name=>"ACADEMY 20", :kindergarten=>{2006=>0.354}},
-   {:name=>"ACADEMY 20", :kindergarten=>{2005=>0.267}},
-   {:name=>"ACADEMY 20", :kindergarten=>{2004=>0.302}},
-   {:name=>"ACADEMY 20", :kindergarten=>{2008=>0.385}}]
+      formatted_rows = [{:name=>"COLORADO", :kindergarten_participation=>{2011=>0.672}},
+   {:name=>"COLORADO", :kindergarten_participation=>{2012=>0.695}},
+   {:name=>"COLORADO", :kindergarten_participation=>{2013=>0.703}},
+   {:name=>"COLORADO", :kindergarten_participation=>{2014=>0.741}},
+   {:name=>"ACADEMY 20", :kindergarten_participation=>{2007=>0.392}},
+   {:name=>"ACADEMY 20", :kindergarten_participation=>{2006=>0.354}},
+   {:name=>"ACADEMY 20", :kindergarten_participation=>{2005=>0.267}},
+   {:name=>"ACADEMY 20", :kindergarten_participation=>{2004=>0.302}},
+   {:name=>"ACADEMY 20", :kindergarten_participation=>{2008=>0.385}}]
        ep = EnrollmentParser.new
-       ep.format_nested_hashes(:kindergarten, formatted_rows)
-       expected = [{:name=>"COLORADO", :kindergarten=>{2011=>0.672, 2012=>0.695, 2013=>0.703, 2014=>0.741}},
-   {:name=>"ACADEMY 20", :kindergarten=>{2007=>0.392, 2006=>0.354, 2005=>0.267, 2004=>0.302, 2008=>0.385}}]
-   result = ep.format_nested_hashes(:kindergarten, formatted_rows)
+       ep.format_nested_hashes(:kindergarten_participation, formatted_rows)
+       expected = [{:name=>"COLORADO", :kindergarten_participation=>{2011=>0.672, 2012=>0.695, 2013=>0.703, 2014=>0.741}},
+   {:name=>"ACADEMY 20", :kindergarten_participation=>{2007=>0.392, 2006=>0.354, 2005=>0.267, 2004=>0.302, 2008=>0.385}}]
+   result = ep.format_nested_hashes(:kindergarten_participation, formatted_rows)
    assert_equal result, expected
   end
 
