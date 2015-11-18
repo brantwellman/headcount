@@ -48,7 +48,6 @@ class StatewideTestRepository
 end
 
 str = StatewideTestRepository.new
-
 hash = ({
   :statewide_testing => {
     :third_grade => "./data/3rd grade students scoring proficient or above on the CSAP_TCAP.csv",
@@ -59,5 +58,5 @@ hash = ({
   }
 })
 str.load_data(hash)
-# p str.find_by_name("ACADEMY 20")
+p str.find_by_name("ACADEMY 20")
 # p str.statewide_tests

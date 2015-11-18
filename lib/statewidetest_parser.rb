@@ -7,15 +7,46 @@ class StatewideTestParser
     formatted_rows = []
     handle = CSV.open(file, {:headers => true, header_converters: :symbol })
     handle.each do |row|
-      fancy_row = {:name => row[:location].upcase, key => {row[:timeframe].to_i => {row[file_converter[key]] => convert_na(row[:data])}}}
-      # binding.pry
+      fancy_row = {:name => row[:location].upcase,
+                   key => {
+                     row[:timeframe].to_i => {
+                       convert_to_symbol(row[file_converter[key]]) => convert_na(row[:data])
+                       }
+                   }
+                  }
       formatted_rows << fancy_row
     end
     format_nested_hashes(key, formatted_rows)
   end
 
+  def convert_to_symbol(string)
+    key_converter[string]
+  end
+
+  def key_converter
+    {
+      'Asian' => :asian,
+      'Black' => :black,
+      'Hawaiian/Pacific Islander' => :pacific_islander,
+      'Hispanic' => :hispanic,
+      'Native American' => :native_american,
+      'Two or more' => :two_or_more,
+      'White '=> :white,
+      'All Students' => :all,
+      'Math' => :math,
+      'Reading' => :reading,
+      'Writing' => :writing
+    }
+  end
+
   def file_converter
-    {:third_grade => :score, :eighth_grade => :score, :math => :race_ethnicity, :reading => :race_ethnicity, :writing => :race_ethnicity}
+    {
+      :third_grade => :score,
+      :eighth_grade => :score,
+      :math => :race_ethnicity,
+      :reading => :race_ethnicity,
+      :writing => :race_ethnicity
+    }
   end
 
   def truncate(float)
