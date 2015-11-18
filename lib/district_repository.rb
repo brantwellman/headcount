@@ -1,6 +1,7 @@
 require_relative "district"
 require_relative 'enrollment_repository'
 require_relative 'statewidetest_repository'
+require 'pry'
 
 class DistrictRepository
   attr_accessor :districts, :enrollment_repository, :statewidetest_repository
@@ -67,6 +68,7 @@ end
 # p district = dr.find_by_name("ACADEMY 20")
 # statewide_test = district.statewide_test
 # p dr.districts.count
+# p statewide_test
 #
 # p enrollment = dr.find_by_name("ACADEMY 20")
 # p dr.districts[50].enrollment.name
