@@ -73,8 +73,8 @@ class HeadcountAnalyst
     #     call method for districts contained in array
       subset_of_districs_hs_kinder_across_districts(hash_comparison)
     #   elsif key is :for and value is "Colorado"
-  elsif hash_comparison.has_key?(:for) && hash_comparison[:for] == "COLORADO" ||
-    hash_comparison.has_key?(:for) && hash_comparison[:for] == "STATEWIDE"
+  elsif hash_comparison.has_key?(:for) && hash_comparison[:for] == "STATEWIDE" ||
+    hash_comparison.has_key?(:for) && hash_comparison[:for] == "COLORADO" ||
         #  call method comparing districts vs colorado
       statewide_correlation_hs_kinder_across_districts
       # elsif key is :for and value is something else

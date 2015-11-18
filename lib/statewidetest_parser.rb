@@ -22,6 +22,9 @@ class StatewideTestParser
   end
 
   def convert_na(value)
+    if value == "0" || value == "1"
+      return value.to_f
+    end
     float = value.to_f
     value == float.to_s ? truncate(value.to_f) : nil
   end
