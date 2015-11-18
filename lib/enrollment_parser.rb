@@ -13,7 +13,6 @@ class EnrollmentParser
     format_nested_hashes(key, formatted_rows)
   end
 
-# row[file_converter[key]]
   def file_converter
     {:kindergarten => :kindergarten_participation, :high_school_graduation => :high_school_graduation}
   end

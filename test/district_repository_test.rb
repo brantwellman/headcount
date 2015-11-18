@@ -105,7 +105,7 @@ class DistrictRepositoryTest < Minitest::Test
     assert_equal expected, d_repo.find_all_matching("ad").count
   end
 
-  def test_it_creates_districts_from_an_enrollment_repository
+  def test_it_creates_districts_from_an_enrollment_repository_with_kindergarten_participation
     d_repo = DistrictRepository.new
     e_repo = EnrollmentRepository.new
     e1 = Enrollment.new({
@@ -127,6 +127,39 @@ class DistrictRepositoryTest < Minitest::Test
     e3 = Enrollment.new({
       :name => "COLORADO",
       :kindergarten_participation => {
+        2010 => 0.3915,
+        2011 => 0.35356,
+        2012 => 0.2677
+      }
+    })
+    e_repo.add_records([e1, e2, e3])
+    d_repo.load_repos({:enrollment => e_repo})
+    expected = ["ACADEMY 20", "COLORADO"]
+    assert_equal expected, d_repo.districts.map(&:name)
+  end
+
+  def test_it_creates_districts_from_an_enrollment_repository_with_high_school_graduation
+    d_repo = DistrictRepository.new
+    e_repo = EnrollmentRepository.new
+    e1 = Enrollment.new({
+      :name => "ACADEMY 20",
+      :high_school_graduation => {
+        2010 => 0.3915,
+        2011 => 0.35356,
+        2012 => 0.2677
+      }
+    })
+    e2 = Enrollment.new({
+      :name => "COLORADO",
+      :high_school_graduation => {
+        2010 => 0.3915,
+        2011 => 0.35356,
+        2012 => 0.2677
+      }
+    })
+    e3 = Enrollment.new({
+      :name => "COLORADO",
+      :high_school_graduation => {
         2010 => 0.3915,
         2011 => 0.35356,
         2012 => 0.2677
