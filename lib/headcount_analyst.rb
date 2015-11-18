@@ -40,7 +40,7 @@ class HeadcountAnalyst
     comparison_part = find_kinder_part_by_year_for_district(comparison)
     result = {}
     dist_part.keys.map do | year|
-      result[year] = (dist_part[year] / comparison_part[year]).round(3)
+      result[year] = truncate(dist_part[year] / comparison_part[year])
     end
     result
   end
@@ -51,7 +51,6 @@ class HeadcountAnalyst
     return nil unless kind_rate && hs_rate_var
     truncate(kind_rate / hs_rate_var)
   end
-
 
   def high_school_graduation_rate_variation(district, comparison)
     district_average = hs_graduation_average(district.upcase)
@@ -73,7 +72,8 @@ class HeadcountAnalyst
   def kindergarten_participation_correlates_with_high_school_graduation(comparison)
     if comparison.has_key?(:across)
       subset_of_districs_hs_kinder_across_districts(comparison)
-    elsif comparison.has_key?(:for) && comparison[:for] == "COLORADO"
+  elsif comparison.has_key?(:for) && comparison[:for] == "STATEWIDE" ||
+    comparison.has_key?(:for) && comparison[:for] == "COLORADO" ||
       statewide_correlation_hs_kinder_across_districts
     elsif comparison.has_key?(:for)
       kinder_part_vs_high_school_grad_correlation_window(comparison)
@@ -110,6 +110,7 @@ class HeadcountAnalyst
   end
 
   def truncate(float)
+    # binding.pry
     (float * 1000).floor / 1000.to_f
   end
 end

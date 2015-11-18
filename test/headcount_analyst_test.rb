@@ -10,9 +10,11 @@ class HeadcountAnalystTest < Minitest::Test
   def setup
     @d_repo = DistrictRepository.new
     @ha = HeadcountAnalyst.new(@d_repo)
-    @d_repo.load_data({ :enrollment => {
-                        :kindergarten => "./test/fixtures/kinder_enrollment_fixture.csv",
-                        :high_school_graduation => "./test/fixtures/hs_grad_rates_fixture.csv" }})
+    @d_repo.load_data({
+      :enrollment => {
+      :kindergarten => "./test/fixtures/kinder_enrollment_fixture.csv",
+      :high_school_graduation => "./test/fixtures/hs_grad_rates_fixture.csv" }
+    })
   end
 
   def test_that_it_computes_enrollment_average_from_lcase_district
@@ -20,7 +22,7 @@ class HeadcountAnalystTest < Minitest::Test
     er = EnrollmentRepository.new
     e1 = Enrollment.new({
       :name => "ACADEMY 20",
-      :kindergarten => {
+      :kindergarten_participation => {
         2010 => 0.392,
         2011 => 0.353,
         2012 => 0.267
@@ -39,7 +41,7 @@ class HeadcountAnalystTest < Minitest::Test
     er = EnrollmentRepository.new
     e1 = Enrollment.new({
       :name => "ACADEMY 20",
-      :kindergarten => {
+      :kindergarten_participation => {
         2010 => 0.392,
         2011 => 0.353,
         2012 => 0.267
@@ -47,7 +49,7 @@ class HeadcountAnalystTest < Minitest::Test
     })
     e2 = Enrollment.new({
       :name => "COLORADO",
-      :kindergarten => {
+      :kindergarten_participation => {
         2010 => 0.392,
         2011 => 0.35356,
         2012 => 0.2677
@@ -67,7 +69,7 @@ class HeadcountAnalystTest < Minitest::Test
   end
 
   def test_it_computes_comparison_value_from_two_complex_averages_kind_enrollment
-    expected = 1.886
+    expected = 1.885
     assert_equal expected, @ha.kinder_part_rate_variation("AGATE 300", :against => "Colorado")
   end
 
@@ -77,7 +79,8 @@ class HeadcountAnalystTest < Minitest::Test
   end
 
   def test_it_variation_between_years_of_enrollment_info
-    expected = {2007=>0.992, 2006=>1.051, 2005=>0.96, 2004=>1.258, 2008=>0.718, 2009=>0.652, 2010=>0.681, 2011=>0.728, 2012=>0.688, 2013=>0.694, 2014=>0.661}
+    expected = {2007=>0.992, 2006=>1.05, 2005=>0.96, 2004=>1.257, 2008=>0.717, 2009=>0.652, 2010=>0.681, 2011=>0.727, 2012=>0.688, 2013=>0.694, 2014=>0.661}
+
     assert_equal expected, @ha.kindergarten_participation_rate_variation_trend('ACADEMY 20', :against => 'COLORADO')
   end
 
@@ -130,12 +133,12 @@ class HeadcountAnalystTest < Minitest::Test
   end
 
   def test_it_computes_comparison_value_from_two_basic_averages_hs_grad_rate
-    expected = 1.194
+    expected = 1.195
     assert_equal expected, @ha.high_school_graduation_rate_variation("ACADEMY 20", "Colorado")
   end
 
   def test_it_returns_correlation_value_for_hs_grad_rates_and_kind_part_rates
-    expected = 3.945
+    expected = 3.943
     assert_equal expected, @ha.kindergarten_participation_against_high_school_graduation("Agate 300")
   end
 

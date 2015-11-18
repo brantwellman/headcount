@@ -10,9 +10,10 @@ class StatewideTestParser
         :name => row[:location].upcase,
         key => {
           row[:timeframe].to_i => {
-            row[file_converter[key]] => convert_na(row[:data])}
-            }
+            row[file_converter[key]] => convert_na(row[:data])
           }
+        }
+      }
       formatted_rows << fancy_row
     end
     format_nested_hashes(key, formatted_rows)
@@ -31,6 +32,9 @@ class StatewideTestParser
   end
 
   def convert_na(value)
+    if value == "0" || value == "1"
+      return value.to_f
+    end
     float = value.to_f
     value == float.to_s ? truncate(value.to_f) : nil
   end

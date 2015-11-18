@@ -3,6 +3,7 @@ require 'pry'
 
 class EnrollmentParser
   def parse(key, file)
+    key = file_converter[key]
     formatted_rows = []
     handle = CSV.open(file, {:headers => true, header_converters: :symbol })
     handle.each do |row|
@@ -15,8 +16,9 @@ class EnrollmentParser
     format_nested_hashes(key, formatted_rows)
   end
 
-  def truncate(float)
-    (float * 1000).floor / 1000.to_f
+# row[file_converter[key]]
+  def file_converter
+    {:kindergarten => :kindergarten_participation, :high_school_graduation => :high_school_graduation}
   end
 
   def convert_na(value)
@@ -24,7 +26,7 @@ class EnrollmentParser
       return value.to_f
     end
     float = value.to_f
-    value == float.to_s ? truncate(value.to_f) : nil
+    value == float.to_s ? value.to_f : nil
   end
 
   def group_to_nested_hash(group, key)
@@ -33,6 +35,7 @@ class EnrollmentParser
       nested_hash ||= hash
       nested_hash[key] = nested_hash[key].merge(hash[key])
     end
+
      nested_hash
   end
 

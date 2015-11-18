@@ -5,18 +5,22 @@ class Enrollment
 
   def initialize(hash_line)
     @name = hash_line[:name]
-    @kindergarten = hash_line[:kindergarten]
+    @kindergarten = hash_line[:kindergarten_participation]
     @high_school_graduation = hash_line[:high_school_graduation]
   end
 
   def kindergarten_participation_by_year
-    kindergarten
+    my_hash = {}
+    kindergarten.each do |k, v|
+      my_hash[k] = truncate(v)
+    end
+    my_hash
   end
 
   def kindergarten_participation_in_year(year)
     # binding.pry
     if kindergarten.keys.include?(year)
-      kindergarten[year]
+      truncate(kindergarten[year])
     end
   end
 
@@ -36,6 +40,10 @@ class Enrollment
 
   def set_high_school_graduation(value)
     @high_school_graduation = value
+  end
+
+  def truncate(float)
+    (float * 1000).floor / 1000.to_f
   end
 end
 

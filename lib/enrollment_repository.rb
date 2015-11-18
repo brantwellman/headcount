@@ -33,7 +33,9 @@ class EnrollmentRepository
 
   def create_enrollment(hash_line)
     method_name = ("set_" + @key.to_s).to_sym
+
     if find_by_name(hash_line[:name])
+
       find_by_name(hash_line[:name]).send(method_name, hash_line[@key])
     else
       @enrollments << Enrollment.new(hash_line)
@@ -50,13 +52,13 @@ class EnrollmentRepository
   end
 end
 
-# er = EnrollmentRepository.new
-# er.load_data({
-#   :enrollment => {
-#     :kindergarten => "./data/Kindergartners in full-day program.csv",
-#     :high_school_graduation => "./data/High school graduation rates.csv"
-#   }
-# })
+er = EnrollmentRepository.new
+er.load_data({
+  :enrollment => {
+    :kindergarten => "./data/Kindergartners in full-day program.csv",
+    :high_school_graduation => "./data/High school graduation rates.csv"
+  }
+})
 # enrollment = er.find_by_name("Colorado")
 # p enrollment.graduation_rate_by_year
 # # # puts enrollment.kindergarten_participation_by_year
