@@ -20,44 +20,7 @@ class DistrictRepository
     })
   end
 
-  # def load_data(hash)
-  #   key_files = hash.to_a
-  #   key_files.each_with_index do |key_file, index|
-  #     if key_file[index][0] == :enrollment
-  #       # @enrollmnet_repository.load_data(hash)
-  #       # load_repos({:enrollmnet => @enrollment_repository})
-  #       enrollment_load(hash)
-  #     elsif key_file[index][0] == :statewide_testing
-  #       # @statewidetest_repository.load_data(hash)
-  #       # load_repos({:statewide_testing => @statewidetest_repository})
-  #       statewidetest_load(hash)
-  #     end
-  #   end
-  # end
-
-# create enrollment specific load data method
-# create statewidetesting specific load data method
-
-  def enrollment_load(hash)
-    @enrollment_repository.load_data(hash)
-    load_repos({:enrollment => @enrollment_repository})
-  end
-
-  def statewidetest_load(hash)
-    @statewidetest_repository.load_data(hash)
-    load_repos({:statewide_testing => @statewidetest_repository})
-  end
-
-  def load_parsed_data(district_enrollment_array)
-    @enrollment_repository.create_enrollments(district_enrollment_array)
-    load_repos({:enrollment => @enrollment_repository})
-  end
-
   def load_repos(repos)
-    # @enrollment_repository = repos[:enrollment]
-    # create_districts_from_repositories
-    # @statewidetest_repository = repos[:statewide_testing]
-    # add_to_districts_from_repositories
     repos.each do |key, repo|
       add_to_districts_from_repositories(key, repo)
     end
@@ -69,32 +32,18 @@ class DistrictRepository
       district = find_by_name(name)
       if district.nil?
         district = District.new({name: name})
+        district.send("set_" + key.to_s, repository.find_by_name(district.name))
+            @districts << district
+      else
+        district.send("set_" + key.to_s, repository.find_by_name(district.name))
       end
-      district.send("set_" + key.to_s, repository.find_by_name(district.name))
-      @districts << district
     end
   end
 
-
-
-  # def create_districts_from_repositories
-  #   district_names = enrollment_repository.enrollments.map do |enrollment|
-  #     enrollment.name
-  #   end.uniq
-  #   districts = district_names.map do |name|
-  #     district = District.new({name: name})
-  #     district.enrollment = enrollment_repository.find_by_name(district.name)
-  #     district
-  #   end
-  #   @districts = districts
-  # end
-
-  # Case insensitive. input is string. Output is District object
   def find_by_name(district_name)
     @districts.find {|district| district.name == district_name.upcase }
   end
 
-  # Case insensitive. Input - String fragment. Output either [] or array with matches
   def find_all_matching(str_fragment)
     @districts.select { |district| district.name.include?(str_fragment.upcase)}
   end

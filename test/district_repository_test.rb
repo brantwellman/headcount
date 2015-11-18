@@ -4,13 +4,13 @@ require_relative '../lib/district_repository'
 
 class DistrictRepositoryTest < Minitest::Test
 
-  # def test_it_initializes_with_an_empty_district_array
-  #   d_repo = DistrictRepository.new
-  #   expected =  []
-  #
-  #   assert_equal expected, d_repo.districts
-  # end
-  #
+  def test_it_initializes_with_an_empty_district_array
+    d_repo = DistrictRepository.new
+    expected =  []
+
+    assert_equal expected, d_repo.districts
+  end
+
   # def test_it_creates_one_district_from_the_parsed_data
   #   d_repo = DistrictRepository.new
   #   hash_lines = [{:name=>"COLORADO", :year=>2012, :enrollment=>0.695}]
@@ -19,7 +19,7 @@ class DistrictRepositoryTest < Minitest::Test
   #
   #   assert_equal expected, d_repo.districts.count
   # end
-  #
+
   # def test_it_can_retrieve_name_from_district_in_repository
   #   d_repo = DistrictRepository.new
   #   hash_lines = [{:name=>"COLORADO", :year=>2012, :enrollment=>0.695}]
@@ -104,7 +104,9 @@ class DistrictRepositoryTest < Minitest::Test
   #
   #   assert_equal expected, d_repo.find_all_matching("ad").count
   # end
-  #
+
+
+
   # def test_it_creates_districts_from_an_enrollment_repository
   #   d_repo = DistrictRepository.new
   #   e_repo = EnrollmentRepository.new
@@ -153,24 +155,25 @@ class DistrictRepositoryTest < Minitest::Test
         :writing => "./test/fixtures/writing.csv"
       }
     })
-# binding.pry
+    
     assert_equal 3, dr.districts.count
-    # dr.enrollment_repository
-    # dr.statewidetest_repository
-    # dr.find_by_name
-    # Need to test for district ob by name
-    # test has enrollment date
-    #   kindergarten
-    #   high_school
-    # test has statewidetest data
-      # third grade
-      # eighth grade
-      # math
-      # reading
-      # writing
-    # check that enrollment repo has objects
-    # test that statewide test repo has objects
-    # test that district collection has objects
   end
+
+  # dr.enrollment_repository
+  # dr.statewidetest_repository
+  # dr.find_by_name
+  # Need to test for district ob by name
+  # test has enrollment date
+  #   kindergarten
+  #   high_school
+  # test has statewidetest data
+  #   third grade
+  #   eighth grade
+  #   math
+  #   reading
+  #   writing
+  # check that enrollment repo has objects
+  # test that statewide test repo has objects
+  # test that district collection has objects
 
 end
