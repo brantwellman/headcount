@@ -4,249 +4,8 @@ require_relative '../lib/district_repository'
 
 class DistrictRepositoryTest < Minitest::Test
 
-  def test_it_initializes_with_an_empty_district_array
-    d_repo = DistrictRepository.new
-    expected =  []
-
-    assert_equal expected, d_repo.districts
-  end
-
-  # def test_it_creates_one_district_from_the_parsed_data
-  #   d_repo = DistrictRepository.new
-  #   hash_lines = [{:name=>"COLORADO", :year=>2012, :enrollment=>0.695}]
-  #   d_repo.load_parsed_data(hash_lines)
-  #   expected = 1
-  #
-  #   assert_equal expected, d_repo.districts.count
-  # end
-  #
-  # def test_it_can_retrieve_name_from_district_in_repository
-  #   d_repo = DistrictRepository.new
-  #   hash_lines = [{:name=>"COLORADO", :year=>2012, :enrollment=>0.695}]
-  #   d_repo.load_parsed_data(hash_lines)
-  #   expected = "COLORADO"
-  #
-  #   assert_equal expected, d_repo.districts[0].name
-  # end
-  #
-  # def test_it_creates_two_districts_into_repository
-  #   d_repo = DistrictRepository.new
-  #   hash_lines = [{:name=>"COLORADO", :year=>2012, :enrollment=>0.695}, {:name=>"ACADEMY 20", :year=>2008, :enrollment=>0.38456}]
-  #   d_repo.load_parsed_data(hash_lines)
-  #   expected = 2
-  #
-  #   assert_equal expected, d_repo.districts.count
-  # end
-  #
-  # def test_it_returns_nil_if_districts_is_empty
-  #   d_repo = DistrictRepository.new
-  #
-  #   assert_equal nil, d_repo.find_by_name("Zorg")
-  # end
-  #
-  # def test_it_returns_nil_if_district_doesnt_exist
-  #   d_repo = DistrictRepository.new
-  #   hash_lines = [{:name=>"COLORADO", :year=>2012, :enrollment=>0.695}, {:name=>"ACADEMY 20", :year=>2008, :enrollment=>0.38456}]
-  #   d_repo.load_parsed_data(hash_lines)
-  #
-  #   assert_equal nil, d_repo.find_by_name("Zorg")
-  # end
-  #
-  # def test_it_returns_district_name_for_district_in_districts_repo
-  #   d_repo = DistrictRepository.new
-  #   hash_lines = [{:name=>"COLORADO", :year=>2012, :enrollment=>0.695}]
-  #   d_repo.load_parsed_data(hash_lines)
-  #   expected = "COLORADO"
-  #
-  #   assert_equal expected, d_repo.find_by_name("colorado").name
-  # end
-  #
-  # def test_it_returns_empty_array_for_no_matches
-  #   d_repo = DistrictRepository.new
-  #
-  #   assert_equal [], d_repo.find_all_matching("co")
-  # end
-  #
-  # def test_it_returns_nil_if_district_doesnt_exist
-  #   d_repo = DistrictRepository.new
-  #   hash_lines = [{:name=>"COLORADO", :year=>2012, :enrollment=>0.695}, {:name=>"ACADEMY 20", :year=>2008, :enrollment=>0.38456}]
-  #   d_repo.load_parsed_data(hash_lines)
-  #
-  #   assert_equal [], d_repo.find_all_matching("Zorg")
-  # end
-  #
-  # def test_it_returns_district_name_for_district_in_districts_repo
-  #   d_repo = DistrictRepository.new
-  #   hash_lines = [{:name=>"COLORADO", :year=>2012, :enrollment=>0.695}]
-  #   d_repo.load_parsed_data(hash_lines)
-  #   expected = d_repo.districts[0].name
-  #
-  #   assert_equal expected, d_repo.find_all_matching("color")[0].name
-  #   assert_equal 1, d_repo.find_all_matching("color").count
-  # end
-  #
-  # def test_it_returns_district_names_for_multiple_matches_in_repo
-  #   d_repo = DistrictRepository.new
-  #   hash_lines = [{
-  #     :name=>"ACADEMY 10",
-  #     :year=>2012, :enrollment=>0.695
-  #     }, {
-  #     :name=>"ADAMS COUNTY",
-  #     :year=>2012,
-  #     :enrollment=>0.695
-  #     }, {
-  #     :name=>"ZORG",
-  #     :year=>2012,
-  #     :enrollment=>0.695
-  #     }]
-  #   d_repo.load_parsed_data(hash_lines)
-  #   expected = 2
-  #
-  #   assert_equal expected, d_repo.find_all_matching("ad").count
-  # end
-  #
-  # def test_it_creates_districts_from_an_enrollment_repository_with_kindergarten_participation
-  #   d_repo = DistrictRepository.new
-  #   e_repo = EnrollmentRepository.new
-  #   e1 = Enrollment.new({
-  #     :name => "ACADEMY 20",
-  #     :kindergarten_participation => {
-  #       2010 => 0.3915,
-  #       2011 => 0.35356,
-  #       2012 => 0.2677
-
-  # def test_it_creates_one_district_from_the_parsed_data
-  #   d_repo = DistrictRepository.new
-  #   hash_lines = [{:name=>"COLORADO", :year=>2012, :enrollment=>0.695}]
-  #   d_repo.load_parsed_data(hash_lines)
-  #   expected = 1
-  #
-  #   assert_equal expected, d_repo.districts.count
-  # end
-
-  # def test_it_can_retrieve_name_from_district_in_repository
-  #   d_repo = DistrictRepository.new
-  #   hash_lines = [{:name=>"COLORADO", :year=>2012, :enrollment=>0.695}]
-  #   d_repo.load_parsed_data(hash_lines)
-  #   expected = "COLORADO"
-  #
-  #   assert_equal expected, d_repo.districts[0].name
-  # end
-  #
-  # def test_it_creates_two_districts_into_repository
-  #   d_repo = DistrictRepository.new
-  #   hash_lines = [{:name=>"COLORADO", :year=>2012, :enrollment=>0.695}, {:name=>"ACADEMY 20", :year=>2008, :enrollment=>0.38456}]
-  #   d_repo.load_parsed_data(hash_lines)
-  #   expected = 2
-  #
-  #   assert_equal expected, d_repo.districts.count
-  # end
-  #
-  # def test_it_returns_nil_if_districts_is_empty
-  #   d_repo = DistrictRepository.new
-  #
-  #   assert_equal nil, d_repo.find_by_name("Zorg")
-  # end
-  #
-  # def test_it_returns_nil_if_district_doesnt_exist
-  #   d_repo = DistrictRepository.new
-  #   hash_lines = [{:name=>"COLORADO", :year=>2012, :enrollment=>0.695}, {:name=>"ACADEMY 20", :year=>2008, :enrollment=>0.38456}]
-  #   d_repo.load_parsed_data(hash_lines)
-  #
-  #   assert_equal nil, d_repo.find_by_name("Zorg")
-  # end
-  #
-  # def test_it_returns_district_name_for_district_in_districts_repo
-  #   d_repo = DistrictRepository.new
-  #   hash_lines = [{:name=>"COLORADO", :year=>2012, :enrollment=>0.695}]
-  #   d_repo.load_parsed_data(hash_lines)
-  #   expected = "COLORADO"
-  #
-  #   assert_equal expected, d_repo.find_by_name("colorado").name
-  # end
-  #
-  # def test_it_returns_empty_array_for_no_matches
-  #   d_repo = DistrictRepository.new
-  #
-  #   assert_equal [], d_repo.find_all_matching("co")
-  # end
-  #
-  # def test_it_returns_nil_if_district_doesnt_exist
-  #   d_repo = DistrictRepository.new
-  #   hash_lines = [{:name=>"COLORADO", :year=>2012, :enrollment=>0.695}, {:name=>"ACADEMY 20", :year=>2008, :enrollment=>0.38456}]
-  #   d_repo.load_parsed_data(hash_lines)
-  #
-  #   assert_equal [], d_repo.find_all_matching("Zorg")
-  # end
-  #
-  # def test_it_returns_district_name_for_district_in_districts_repo
-  #   d_repo = DistrictRepository.new
-  #   hash_lines = [{:name=>"COLORADO", :year=>2012, :enrollment=>0.695}]
-  #   d_repo.load_parsed_data(hash_lines)
-  #   expected = d_repo.districts[0].name
-  #
-  #   assert_equal expected, d_repo.find_all_matching("color")[0].name
-  #   assert_equal 1, d_repo.find_all_matching("color").count
-  # end
-  #
-  # def test_it_returns_district_names_for_multiple_matches_in_repo
-  #   d_repo = DistrictRepository.new
-  #   hash_lines = [{
-  #     :name=>"ACADEMY 10",
-  #     :year=>2012, :enrollment=>0.695
-  #     }, {
-  #     :name=>"ADAMS COUNTY",
-  #     :year=>2012,
-  #     :enrollment=>0.695
-  #     }, {
-  #     :name=>"ZORG",
-  #     :year=>2012,
-  #     :enrollment=>0.695
-  #     }]
-  #   d_repo.load_parsed_data(hash_lines)
-  #   expected = 2
-  #
-  #   assert_equal expected, d_repo.find_all_matching("ad").count
-  # end
-
-
-
-  # def test_it_creates_districts_from_an_enrollment_repository
-  #   d_repo = DistrictRepository.new
-  #   e_repo = EnrollmentRepository.new
-  #   e1 = Enrollment.new({
-  #     :name => "ACADEMY 20",
-  #     :kindergarten_participation => {
-  #       2010 => 0.3915,
-  #       2011 => 0.35356,
-  #       2012 => 0.2677
-  #     }
-  #   })
-  #   e2 = Enrollment.new({
-  #     :name => "COLORADO",
-  #     :kindergarten_participation => {
-  #       2010 => 0.3915,
-  #       2011 => 0.35356,
-  #       2012 => 0.2677
-  #     }
-  #   })
-  #   e3 = Enrollment.new({
-  #     :name => "COLORADO",
-  #     :kindergarten_participation => {
-  #       2010 => 0.3915,
-  #       2011 => 0.35356,
-  #       2012 => 0.2677
-  #     }
-  #   })
-  #   e_repo.add_records([e1, e2, e3])
-  #   d_repo.load_repos({:enrollment => e_repo})
-  #   expected = ["ACADEMY 20", "COLORADO"]
-  #   assert_equal expected, d_repo.districts.map(&:name)
-  # end
-
-  def test_its_loads_repositories
-    dr = DistrictRepository.new
-    dr.load_data({
+  def setup
+    @input_hash = {
       :enrollment => {
         :kindergarten => "./test/fixtures/kinder_one_district.csv",
         :high_school_graduation => "./test/fixtures/high_school_one_district.csv",
@@ -258,44 +17,119 @@ class DistrictRepositoryTest < Minitest::Test
         :reading => "./test/fixtures/reading.csv",
         :writing => "./test/fixtures/writing.csv"
       }
-    })
+    }
+  end
+
+  def test_it_initializes_with_an_empty_districts_array
+    d_repo = DistrictRepository.new
+    expected =  []
+
+    assert_equal expected, d_repo.districts
+  end
+
+  def test_it_initializes_with_an_empty_enrollment_repository
+    d_repo = DistrictRepository.new
+    result = d_repo.enrollment_repository.enrollments
+
+    assert_equal [], result
+  end
+
+  def test_it_initializes_with_an_empty_sw_repository
+    d_repo = DistrictRepository.new
+    result = d_repo.statewidetest_repository.statewide_tests
+
+    assert_equal [], result
+  end
+
+  def test_its_loads_repositories
+    dr = DistrictRepository.new
+    dr.load_data(@input_hash)
 
     assert_equal 3, dr.districts.count
   end
 
+  def test_it_creates_enrollment_objects_through_load_data
+    dr = DistrictRepository.new
+    dr.load_data(@input_hash)
+    result = dr.enrollment_repository.enrollments.count
 
-  def test_it_creates_districts_from_an_enrollment_repository_with_high_school_graduation
-    d_repo = DistrictRepository.new
-    e_repo = EnrollmentRepository.new
-    e1 = Enrollment.new({
-      :name => "ACADEMY 20",
-      :high_school_graduation => {
-        2010 => 0.3915,
-        2011 => 0.35356,
-        2012 => 0.2677
-      }
-    })
-    e2 = Enrollment.new({
-      :name => "COLORADO",
-      :high_school_graduation => {
-        2010 => 0.3915,
-        2011 => 0.35356,
-        2012 => 0.2677
-      }
-    })
-    e3 = Enrollment.new({
-      :name => "COLORADO",
-      :high_school_graduation => {
-        2010 => 0.3915,
-        2011 => 0.35356,
-        2012 => 0.2677
-      }
-    })
-    e_repo.add_records([e1, e2, e3])
-    d_repo.load_repos({:enrollment => e_repo})
-    expected = ["ACADEMY 20", "COLORADO"]
-    assert_equal expected, d_repo.districts.map(&:name)
+    assert_equal  2, result
   end
+
+  def test_it_creates_statewide_test_objects_through_load_data
+    dr = DistrictRepository.new
+    dr.load_data(@input_hash)
+    result = dr.statewidetest_repository.statewide_tests.count
+
+    assert_equal  2, result
+  end
+
+  def test_it_has_access_to_enrollment_repo_objects_after_data_load_kinder_data
+    dr = DistrictRepository.new
+    dr.load_data(@input_hash)
+    result = dr.enrollment_repository.find_by_name("ACADEMY 20")
+    result1 = result.name
+    result2 = result.kindergarten_participation_by_year
+    expected1 = "ACADEMY 20"
+    expected2 = {2007=>0.391, 2006=>0.353, 2005=>0.267, 2004=>0.302, 2008=>0.384, 2009=>0.39, 2010=>0.436, 2011=>0.489, 2012=>0.478, 2013=>0.487, 2014=>0.49}
+
+    assert_equal expected1, result1
+    assert_equal expected2, result2
+  end
+
+  def test_it_has_access_to_enrollment_repo_objects_after_data_load_high_school_data
+    dr = DistrictRepository.new
+    dr.load_data(@input_hash)
+    result = dr.enrollment_repository.find_by_name("ADAMS COUNTY 14")
+    result1 = result.name
+    result2 = result.graduation_rate_by_year
+    expected1 = "ADAMS COUNTY 14"
+    expected2 = {2010=>0.57, 2011=>0.608, 2012=>0.63372, 2013=>0.59351, 2014=>0.659}
+
+    assert_equal expected1, result1
+    assert_equal expected2, result2
+  end
+
+  def test_it_has_access_to_statewide_testing_objects_after_data_load
+    dr = DistrictRepository.new
+    dr.load_data(@input_hash)
+    result = dr.statewidetest_repository.find_by_name("ACADEMY 20")
+    result1 = result.class
+    result2 = result.name
+    expected1 = StatewideTest
+    expected2 = "ACADEMY 20"
+
+    assert_equal expected1, result1
+    assert_equal expected2, result2
+  end
+
+  def test_it_finds_by_name
+    dr = DistrictRepository.new
+    dr.load_data(@input_hash)
+    result = dr.find_by_name("ACADEMY 20")
+
+    assert_equal District, result.class
+    assert_equal "ACADEMY 20", result.name
+  end
+
+  def test_it_returns_an_array_with_one_matching_district_name
+    dr = DistrictRepository.new
+    dr.load_data(@input_hash)
+    result = dr.find_all_matching("ACA")[0].name
+    expected = "ACADEMY 20"
+
+    assert_equal expected, result
+  end
+
+  def test_it_returns_an_array_with_multiple_matches
+    dr = DistrictRepository.new
+    dr.load_data(@input_hash)
+    result = dr.find_all_matching("A").map {|district| district.name}
+    expected = ["ACADEMY 20", "ADAMS COUNTY 14", "AGATE 300"]
+
+    assert_equal expected, result
+  end
+
 
   # dr.enrollment_repository
   # dr.statewidetest_repository

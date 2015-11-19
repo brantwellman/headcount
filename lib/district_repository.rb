@@ -1,6 +1,7 @@
 require_relative "district"
 require_relative 'enrollment_repository'
 require_relative 'statewidetest_repository'
+require 'pry'
 
 class DistrictRepository
   attr_accessor :districts, :enrollment_repository, :statewidetest_repository
@@ -65,16 +66,18 @@ dr.load_data({
   }
 })
 
-# p district = dr.find_by_name("ACADEMY 20")
+p district = dr.find_by_name("ACADEMY 20")
 # statewide_test = district.statewide_test
 p dr.districts.count
+# p dr.districts.count
+# p statewide_test
 # p enrollment = dr.find_by_name("ACADEMY 20")
 # p dr.districts[50].enrollment.name
 # p district = dr.find_by_name("Academy 20")
 # p district.enrollment.kindergarten_participation_by_year
 # p dr.districts
 
-p dr.find_by_name("ACADEMY 20")
+# p dr.find_by_name("ACADEMY 20")
 # district = dr.find_by_name("GUNNISON WATERSHED RE1J")
 # p dr.districts[50].enrollment.name
 # district.enrollment.kindergarten_participation_by_year
