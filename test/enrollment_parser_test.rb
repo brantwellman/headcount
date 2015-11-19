@@ -66,7 +66,7 @@ class EnrollmentParserTest < Minitest::Test
    assert_equal result, expected
   end
 
-  def test_convert_na_handles_strings_of_1_and_0_to_floats
+  def test_convert_nil_handles_strings_of_1_and_0_to_floats
     ep = EnrollmentParser.new
     expected = [{:name=>"ACADEMY 20", :high_school_graduation=>{2013=>1.0, 2014=>1.0}}, {:name=>"AGATE 300", :high_school_graduation=>{2010=>0.0, 2011=>1.0}}]
     result = ep.parse(:high_school_graduation, "./test/fixtures/hs_data_1s_and_0s.csv")

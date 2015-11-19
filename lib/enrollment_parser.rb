@@ -9,7 +9,7 @@ class EnrollmentParser
     handle.each do |row|
       fancy_row = {
         :name => row[:location].upcase,
-        key => {row[:timeframe].to_i => convert_na(row[:data])}
+        key => {row[:timeframe].to_i => convert_nil(row[:data])}
       }
       formatted_rows << fancy_row
     end
@@ -20,7 +20,7 @@ class EnrollmentParser
     {:kindergarten => :kindergarten_participation, :high_school_graduation => :high_school_graduation}
   end
 
-  def convert_na(value)
+  def convert_nil(value)
     if value == "0" || value == "1"
       return value.to_f
     end

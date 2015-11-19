@@ -9,7 +9,7 @@ class StatewideTestParser
       fancy_row = {:name => row[:location].upcase,
                    key => {
                      row[:timeframe].to_i => {
-                       convert_to_symbol(row[file_converter[key]]) => convert_na(row[:data])
+                       convert_to_symbol(row[file_converter[key]]) => convert_nil(row[:data])
                        }
                    }
                   }
@@ -52,7 +52,7 @@ class StatewideTestParser
     (float * 1000).floor / 1000.to_f
   end
 
-  def convert_na(value)
+  def convert_nil(value)
     if value == "0" || value == "1"
       return value.to_f
     end
