@@ -28,6 +28,14 @@ class StatewideTestParserTest < Minitest::Test
     assert_equal expected5, sp.file_converter[:writing]
   end
 
+  def test_it_converts_string_keys_into_symbols
+    sp = StatewideTestParser.new
+    sp.key_converter.keys.each_with_index do |key, i|
+      assert_equal sp.key_converter[key], sp.key_converter.values[i]
+    end
+
+  end
+
   def test_convert_nil_returns_float_values
     sp = StatewideTestParser.new
 
