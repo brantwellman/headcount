@@ -72,9 +72,9 @@ class HeadcountAnalyst
   def kindergarten_participation_correlates_with_high_school_graduation(comparison)
     if comparison.has_key?(:across)
       subset_of_districs_hs_kinder_across_districts(comparison)
-  elsif comparison.has_key?(:for) && comparison[:for] == "STATEWIDE" ||
-    comparison.has_key?(:for) && comparison[:for] == "COLORADO" ||
-      statewide_correlation_hs_kinder_across_districts
+    elsif comparison.has_key?(:for) && comparison[:for] == "STATEWIDE" ||
+      comparison.has_key?(:for) && comparison[:for] == "COLORADO" ||
+        statewide_correlation_hs_kinder_across_districts
     elsif comparison.has_key?(:for)
       kinder_part_vs_high_school_grad_correlation_window(comparison)
     end
@@ -91,7 +91,7 @@ class HeadcountAnalyst
   def statewide_correlation_hs_kinder_across_districts
     enrollment_repo = @de_repo.enrollment_repository.enrollments
     districts_corellations = enrollment_repo.map do |enrollment|
-        kinder_part_vs_high_school_grad_correlation_window(for: enrollment.name)
+      kinder_part_vs_high_school_grad_correlation_window(for: enrollment.name)
     end
     districts_corellations.shift
     true_count = districts_corellations.count(true)

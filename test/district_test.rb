@@ -13,16 +13,27 @@ class DistrictTest < Minitest::Test
     assert_equal expected, district.name
   end
 
+  # def build_enrollment
+  #   Enrollment.new({
+  #     :name => "ACADEMY 20",
+  #     :kindergarten => {
+  #       2010 => 0.3915,
+  #       2011 => 0.35356,
+  #       2012 => 0.2677
+  #   }
+  # })
+  # end
+
   def test_it_has_access_to_enrollment_in_collection_of_1_kindergarten
     d_repo = DistrictRepository.new
     e_repo = EnrollmentRepository.new
     e1 = Enrollment.new({
-      :name => "ACADEMY 20",
-      :kindergarten => {
-        2010 => 0.3915,
-        2011 => 0.35356,
-        2012 => 0.2677
-      }
+        :name => "ACADEMY 20",
+        :kindergarten => {
+          2010 => 0.3915,
+          2011 => 0.35356,
+          2012 => 0.2677
+        }
     })
     e_repo.add_records([e1])
     d_repo.load_repos({:enrollment => e_repo})
