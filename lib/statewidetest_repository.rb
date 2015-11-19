@@ -43,40 +43,11 @@ class StatewideTestRepository
   end
 
 #################### to be removed prior to submission
-  def add_records(records)
-    @statewide_tests += records
-  end
+  # def add_records(records)
+  #   @statewide_tests += records
+  # end
 
   def find_by_name(test_name)
      @statewide_tests.find {|statetest| statetest.name == test_name.upcase }
   end
 end
-
-
-# str = StatewideTestRepository.new
-# hash = ({
-#   :statewide_testing => {
-#     :third_grade => "./data/3rd grade students scoring proficient or above on the CSAP_TCAP.csv",
-#     :eighth_grade => "./data/8th grade students scoring proficient or above on the CSAP_TCAP.csv",
-#     :math => "./data/Average proficiency on the CSAP_TCAP by race_ethnicity_ Math.csv",
-#     :reading => "./data/Average proficiency on the CSAP_TCAP by race_ethnicity_ Reading.csv",
-#     :writing => "./data/Average proficiency on the CSAP_TCAP by race_ethnicity_ Writing.csv"
-#   }
-# })
-# str.load_data(hash)
-# p str.find_by_name("ACADEMY 20")
-
-# str = StatewideTestRepository.new
-# hash = ({
-#   :statewide_testing => {
-#     :third_grade => "./data/3rd grade students scoring proficient or above on the CSAP_TCAP.csv",
-#     :eighth_grade => "./data/8th grade students scoring proficient or above on the CSAP_TCAP.csv",
-#     :math => "./data/Average proficiency on the CSAP_TCAP by race_ethnicity_ Math.csv",
-#     :reading => "./data/Average proficiency on the CSAP_TCAP by race_ethnicity_ Reading.csv",
-#     :writing => "./data/Average proficiency on the CSAP_TCAP by race_ethnicity_ Writing.csv"
-#   }
-# })
-# str.load_data(hash)
-# p str.find_by_name("ACADEMY 20")
-
-# p str.statewide_tests

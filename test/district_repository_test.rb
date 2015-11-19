@@ -130,23 +130,4 @@ class DistrictRepositoryTest < Minitest::Test
     assert_equal expected, result
   end
 
-
-  # dr.enrollment_repository
-  # dr.statewidetest_repository
-  # dr.find_by_name
-  # Need to test for district ob by name
-  # test has enrollment date
-  #   kindergarten
-  #   high_school
-  # test has statewidetest data
-  #   third grade
-  #   eighth grade
-  #   math
-  #   reading
-  #   writing
-  # check that enrollment repo has objects
-  # test that statewide test repo has objects
-  # test that district collection has objects
-
-
 end

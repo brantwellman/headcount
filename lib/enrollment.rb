@@ -49,8 +49,3 @@ class Enrollment
     (float * 1000).floor / 1000.to_f
   end
 end
-
-# e = Enrollment.new({:name => "ACADEMY 20", :kindergarten_participation => {2010 => 0.3915, 2011 => 0.35356, 2012 => 0.2677}})
-# all_years = {2010 => 0.3915, 2011 => 0.35356, 2012 => 0.2677}
-# p 0.391, e.kindergarten_participation_in_year(2010)
-# p e.kindergarten_participation_in_year(2012)

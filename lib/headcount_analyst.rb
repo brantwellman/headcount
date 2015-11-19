@@ -102,7 +102,6 @@ class HeadcountAnalyst
     districts = districts_array_hash[:across]
     districts_corellations = districts.map do |district|
       kinder_part_vs_high_school_grad_correlation_window(for: district)
-      #binding.pry
     end
     districts_corellations
     true_count = districts_corellations.count(true)
@@ -110,24 +109,6 @@ class HeadcountAnalyst
   end
 
   def truncate(float)
-    # binding.pry
     (float * 1000).floor / 1000.to_f
   end
 end
-
-# dr = DistrictRepository.new
-# dr.load_data({
-#   :enrollment => {
-#     :kindergarten => "./data/Kindergartners in full-day program.csv",
-#     :high_school_graduation => "./data/High school graduation rates.csv"
-#   }
-# })
-#
-# ha = HeadcountAnalyst.new(dr)
-# hash_comparison = {for: "ACADEMY 20"}
-# # hash_comparison = {:across => ['ACADEMY 20', 'AGATE 300', 'ADAMS COUNTY 14']}
-# districts = {:across =>["Colorado", "Agate 300"]}
-# ha.subset_of_districs_hs_kinder_across_districts(districts)
-#  p ha.statewide_correlation_hs_kinder_across_districts
-# # true_count = districts_corellations.count(false)
-# p ha.kindergarten_participation_correlates_with_high_school_graduation(hash_comparison)
