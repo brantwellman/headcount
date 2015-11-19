@@ -9,7 +9,7 @@ class StatewideTestTest < Minitest::Test
       :name => "COLORADO",
       :third_grade => {
         2012 => {:math => 0.830, :reading => 0.870, :writing => 0.655},
-        2013 => {:math => 0.855, :reading => 0.859, :writing => 0.668},
+        2013 => {:math => 0.855, :reading => 0.859, :writing => 0.6689},
         2014 => {:math => 0.834, :reading => 0.831, :writing => 0.639}
       },
       :eighth_grade => {
@@ -62,7 +62,7 @@ class StatewideTestTest < Minitest::Test
     statey = StatewideTest.new(@data_line)
     expected = {
       2012 => {:math => 0.830, :reading => 0.870, :writing => 0.655},
-      2013 => {:math => 0.855, :reading => 0.859, :writing => 0.668},
+      2013 => {:math => 0.855, :reading => 0.859, :writing => 0.6689},
       2014 => {:math => 0.834, :reading => 0.831, :writing => 0.639}
       }
     assert_equal expected, statey.third_grade
@@ -126,7 +126,7 @@ class StatewideTestTest < Minitest::Test
     statey = StatewideTest.new(@data_line)
     expected = {
       2012 => {:math => 0.830, :reading => 0.870, :writing => 0.655},
-      2013 => {:math => 0.855, :reading => 0.859, :writing => 0.668},
+      2013 => {:math => 0.855, :reading => 0.859, :writing => 0.6689},
       2014 => {:math => 0.834, :reading => 0.831, :writing => 0.639}
       }
 
@@ -182,12 +182,33 @@ class StatewideTestTest < Minitest::Test
               }
     assert_equal expected, statey.proficient_by_race_or_ethnicity(:white)
   end
+
+  def test_it_raises_UnknownDataError_for_invalid_subject_parameter_subject_grade_year
+    statey = StatewideTest.new(@data_line)
+
+    assert_raises(UnknownDataError) { statey.proficient_for_subject_by_grade_in_year(:science, 3, 2010) }
+  end
+
+  def test_it_raises_UnknownDataError_for_invalid_subject_parameter_subject_grade_year
+    statey = StatewideTest.new(@data_line)
+
+    assert_raises(UnknownDataError) { statey.proficient_for_subject_by_grade_in_year(:math, 1, 2010) }
+  end
+
+  def test_it_raises_UnknownDataError_for_invalid_subject_parameter_subject_grade_year
+    statey = StatewideTest.new(@data_line)
+
+    assert_raises(UnknownDataError) { statey.proficient_for_subject_by_grade_in_year(:math, 3, 8888) }
+  end
+
+  def test_it_returns_a_truncated_value_for_subject_grade_year
+    statey = StatewideTest.new(@data_line)
+    expected = 0.668
+
+    assert_equal expected, statey.proficient_for_subject_by_grade_in_year(:writing, 3, 2013)
+  end
 end
 
-
-
-
-#
 #   def test_it_returns_the_enrollment_participation_by_year_with_rounded_floats
 #     enroll = Enrollment.new({:name => "COLORADO", :kindergarten => {2010 => 0.392, 2011 => 0.354, 2012 => 0.268}})
 #     expected = {2010 => 0.392, 2011 => 0.354, 2012 => 0.268}

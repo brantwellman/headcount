@@ -29,6 +29,13 @@ class StatewideTest
     }
   end
 
+  def grade_symbol_converter
+    {
+      3 => :third_grade,
+      8 => :eighth_grade
+    }
+  end
+
   def proficient_for_subject_by_race_in_year(subject, race, year)
     val_races = [:asian, :black, :pacific_islander, :hispanic, :native_american, :two_or_more, :white]
     raise UnknownDataError.new("Not a valid subject") if ![:math, :reading, :writing].include?(subject)
@@ -49,9 +56,13 @@ class StatewideTest
     converted_hash
   end
 
-  # def proficient_for_subject_by_grade_in_year(subject, grade, year)
-  #
-  # end
+  def proficient_for_subject_by_grade_in_year(subject, grade, year)
+    raise UnknownDataError.new("Not a valid subject") if ![:math, :reading, :writing].include?(subject)
+    raise UnknownDataError.new("Not a valid grade") if ![3, 8].include?(grade)
+    raise UnknownDataError.new("Not a valid year") if !(2011..2014).cover?(year)
+    grade_sym = grade_symbol_converter[grade]
+    truncate(send(grade_sym)[year][subject])
+  end
 
   def set_third_grade(value)
     @third_grade = value
