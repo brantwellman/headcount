@@ -117,12 +117,44 @@ class HeadcountAnalyst
     hash_minus_nils = go_into_hash_and_eliminate_nils(data_hash)
 #   make sure there are two or more years left
 #     else throw error
-    raise InsufficientDataError.new("Not enought data")unless count_key_value_pairs(hash_minus_nils)
+    raise InsufficientDataError.new("Not enought data") unless count_key_value_pairs(hash_minus_nils)
 
 
 #   get growth value
+    district_growth_values(hash_minus_nils)
 #   grab district name
 #   need array of arrays containing dist name, value
+  end
+
+# iterate through every district in de_repo
+  def collection_of_districts_and_growth(data_hash)
+    districts = @de_repo.districts.reject do |district|
+      district.statewide_test.nil?
+    end
+
+
+
+    all_districts_growth = districts.map do |district|
+      # binding.pry
+      district_growth_for_subject(district.name, data_hash)
+    end
+    binding.pry
+    all_districts_growth
+  end
+
+  def district_growth_for_subject(name, data_hash)
+    array = [name]
+    # binding.pry
+    no_nils = go_into_hash_and_eliminate_nils(name, data_hash)
+    # binding.pry
+    if !count_key_value_pairs(no_nils)
+      array << nil
+      # binding.pry
+    else
+      array << district_growth_values(no_nils, data_hash)
+      # binding.pry
+    end
+    array
   end
 
   def go_into_hash_and_eliminate_nils(name, data_hash)
@@ -136,6 +168,17 @@ class HeadcountAnalyst
   def count_key_value_pairs(hash_without_nils)
     hash_without_nils.length >= 2
   end
+
+  def district_growth_values(hash_without_nils, data_hash)
+    year1 = hash_without_nils.keys.min
+    year_last = hash_without_nils.keys.max
+    min_val = hash_without_nils[year1][data_hash[:subject]]
+    max_val = hash_without_nils[year_last][data_hash[:subject]]
+    (max_val - min_val) / (year_last - year1)
+  end
+
+  # ((proficiency at year3) - (proficiency at year1)) / (year3 - year1).
+
 
   # :third_grade => {
   #   2012 => {:math => 0.830, :reading => 0.870, :writing => 0.655},

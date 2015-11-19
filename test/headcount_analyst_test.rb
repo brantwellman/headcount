@@ -196,6 +196,16 @@ class HeadcountAnalystTest < Minitest::Test
 
   def test_it_removes_nils_from_grade_data
     expected = 0
-    assert_equal expected, @ha.go_into_hash_and_eliminate_nils("ACADEMY 20", grade: 3, subject: :math)
+    assert_equal expected, @ha.go_into_hash_and_eliminate_nils("ACADEMY 20", {grade: 3, subject: :math})
+  end
+
+  def test_it_creates_growth_district_array
+    expected = 0
+    assert_equal expected, @ha.district_growth_for_subject("ACADEMY 20", {grade: 3, subject: :math})
+  end
+
+  def test_it_creates_array_with_all_districts_and_growths
+    expected = 0
+    assert_equal expected, @ha.collection_of_districts_and_growth({grade: 3, subject: :math})
   end
 end
