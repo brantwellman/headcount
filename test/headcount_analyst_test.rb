@@ -190,22 +190,138 @@ class HeadcountAnalystTest < Minitest::Test
     refute @ha.kindergarten_participation_correlates_with_high_school_graduation(districts_array_hash)
   end
 
+
+
+  def test_it_sorts_array_collection_by_growth
+    districts_growth = [["COLORADO", 0.0030000000000000027], ["ACADEMY 20", -0.03300000000000003], ["ADAMS COUNTY 14", -0.008000000000000007]]
+    expected = [["ACADEMY 20", -0.03300000000000003], ["ADAMS COUNTY 14", -0.008000000000000007], ["COLORADO", 0.0030000000000000027]]
+    assert_equal expected, @ha.sort_all_districts_growth_collection(districts_growth)
+  end
+
+  def test_is_throws_error_if_unknown_grade_is_provided
+    assert_raises(UnknownDataError) { @ha.top_statewide_test_year_over_year_growth(grade: 9, subject: :math) }
+  end
+
   def test_it_throws_error_if_grade_key_is_not_included_for_growth_rates
-    assert_raises(UnknownDataError) { @ha.top_statewide_test_year_over_year_growth(subject: :math) }
+    assert_raises(InsufficientInformationError) { @ha.top_statewide_test_year_over_year_growth(subject: :math) }
+  end
+
+  def test_returns_true_for_hash_with_greater_than_2_key_value_pairs
+    no_nils_hash = {
+      2008 => {
+        :math => 0.857,
+        :reading => 0.866,
+        :writing => 0.671
+      },
+      2009 => {
+        :math => 0.824,
+        :reading => 0.862,
+        :writing => 0.706
+      },
+      2010 => {
+        :math => 0.877,
+        :reading => 0.862,
+        :writing => 0.706
+        }
+      }
+    assert @ha.count_key_value_pairs(no_nils_hash)
+  end
+
+  def test_returns_true_for_hash_with_2_key_value_pairs
+    no_nils_hash = {
+      2008 => {
+        :math => 0.857,
+        :reading => 0.866,
+        :writing => 0.671
+      },
+      2009 => {
+        :math => 0.824,
+        :reading => 0.862,
+        :writing => 0.706
+      }
+    }
+    assert @ha.count_key_value_pairs(no_nils_hash)
+  end
+
+  def test_returns_false_for_hash_with_less_than_2_key_value_pairs
+    no_nils_hash = {
+      2008 => {
+        :math => 0.857,
+        :reading => 0.866,
+        :writing => 0.671
+      }
+    }
+    refute @ha.count_key_value_pairs(no_nils_hash)
   end
 
   def test_it_removes_nils_from_grade_data
-    expected = 0
+    expected = {
+      2008 => {
+        :math => 0.857,
+        :reading => 0.866,
+        :writing => 0.671
+      },
+      2009 => {
+        :math => 0.824,
+        :reading => 0.862,
+        :writing => 0.706
+        }
+      }
     assert_equal expected, @ha.go_into_hash_and_eliminate_nils("ACADEMY 20", {grade: 3, subject: :math})
   end
 
+  def test_it_returns_value_from_grade_subject_converter
+    expected = {
+      3 => {
+        2008 => {
+          :math => 0.857,
+          :reading => 0.866,
+          :writing => 0.671
+          },
+        2009 => {
+          :math => 0.824,
+          :reading => 0.862,
+          :writing => 0.706
+          },
+        2010 => {
+          :math => nil,
+          :reading => 0.864,
+          :writing => 0.662
+          },
+        2011 => {
+          :math => nil
+          }
+        },
+        8 => nil}
+
+    assert_equal expected, @ha.grade_subject_converter("ACADEMY 20")
+  end
+
+  def test_it_returns_a_growth_value_for_district
+    hash_without_nils = {
+      2008 => {
+        :math => 0.857,
+        :reading => 0.866,
+        :writing => 0.671
+      },
+      2009 => {
+        :math => 0.824,
+        :reading => 0.862,
+        :writing => 0.706
+        }
+      }
+    data_hash = { grade: 3, subject: :math }
+    expected = -0.03300000000000003
+    assert_equal expected, @ha.district_growth_values(hash_without_nils, data_hash)
+  end
+
   def test_it_creates_growth_district_array
-    expected = 0
+    expected = ["ACADEMY 20", -0.03300000000000003]
     assert_equal expected, @ha.district_growth_for_subject("ACADEMY 20", {grade: 3, subject: :math})
   end
 
   def test_it_creates_array_with_all_districts_and_growths
-    expected = 0
+    expected = [["COLORADO", 0.0030000000000000027], ["ACADEMY 20", -0.03300000000000003], ["ADAMS COUNTY 14", -0.008000000000000007]]
     assert_equal expected, @ha.collection_of_districts_and_growth({grade: 3, subject: :math})
   end
 end

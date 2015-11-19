@@ -1,3 +1,3 @@
-class InsufficientDataError < StandardError
+class InsufficientInformationError < StandardError
 
 end

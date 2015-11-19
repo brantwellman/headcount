@@ -111,64 +111,68 @@ class HeadcountAnalyst
   end
 
   def top_statewide_test_year_over_year_growth(data_hash)
-#   throw error ################### not passing yet
-    raise InsufficientDataError.new("Need a grade to proceed") if data_hash.has_key?(:grade)
-#   dive in, get rid of nils in hash(es)
-    hash_minus_nils = go_into_hash_and_eliminate_nils(data_hash)
-#   make sure there are two or more years left
-#     else throw error
-    raise InsufficientDataError.new("Not enought data") unless count_key_value_pairs(hash_minus_nils)
-
-
-#   get growth value
-    district_growth_values(hash_minus_nils)
-#   grab district name
-#   need array of arrays containing dist name, value
+    raise InsufficientInformationError.new("A grade must be provided to answer this question") if !data_hash.has_key?(:grade)
+    raise UnknownDataError.new("#{data_hash[:grade]} is not a known grade") if ![3, 8].include?(data_hash[:grade])
+#   call collection_of_districts_and_growth
+    all_districts_and_growth = collection_of_districts_and_growth(data_hash)
+    # sort all_districts_and_growth by second element
+    sorted_dists_growth = sort_all_districts_growth_collection(all_districts_and_growth)
+    # truncate return values
+    # if weighting
+    #   do something
+    # elsif top
+    #   do something
+    elsif data_hash.has_key?(:grade) && data_hash.has_key?(:subject) && !data_hash.has_key?(:top)
+            #     ha.top_statewide_test_year_over_year_growth(grade: 3, subject: :math)
+            # => ['the top district name', 0.123]
+            max_growth = sorted_dists_growth[-1]
+            max_growth = [max_growth[0], truncate(max_growth[-1])
+    #  do something
+    # else (grade only)
+    #  do something
+    # end
   end
 
-# iterate through every district in de_repo
+# tested(1)
+  def sort_all_districts_growth_collection(districts_growth)
+    districts_growth.sort_by {|district_growth| district_growth[1] }
+  end
+
+# tested(1)
+# iterate through every district in de_repo and collect districts and their growth
   def collection_of_districts_and_growth(data_hash)
     districts = @de_repo.districts.reject do |district|
       district.statewide_test.nil?
     end
-
-
-
     all_districts_growth = districts.map do |district|
-      # binding.pry
       district_growth_for_subject(district.name, data_hash)
     end
-    binding.pry
     all_districts_growth
   end
-
+# tested(1)
   def district_growth_for_subject(name, data_hash)
     array = [name]
-    # binding.pry
     no_nils = go_into_hash_and_eliminate_nils(name, data_hash)
-    # binding.pry
     if !count_key_value_pairs(no_nils)
       array << nil
-      # binding.pry
     else
       array << district_growth_values(no_nils, data_hash)
-      # binding.pry
     end
     array
   end
-
+# tested(1)
   def go_into_hash_and_eliminate_nils(name, data_hash)
     grade_hash = grade_subject_converter(name)[data_hash[:grade]]
     minus_nils = grade_hash.reject do |year, sub_data|
       sub_data[data_hash[:subject]].nil?
       end
-      minus_nils
+    minus_nils
   end
-
+# test (3)
   def count_key_value_pairs(hash_without_nils)
     hash_without_nils.length >= 2
   end
-
+# test (1)
   def district_growth_values(hash_without_nils, data_hash)
     year1 = hash_without_nils.keys.min
     year_last = hash_without_nils.keys.max
@@ -176,9 +180,6 @@ class HeadcountAnalyst
     max_val = hash_without_nils[year_last][data_hash[:subject]]
     (max_val - min_val) / (year_last - year1)
   end
-
-  # ((proficiency at year3) - (proficiency at year1)) / (year3 - year1).
-
 
   # :third_grade => {
   #   2012 => {:math => 0.830, :reading => 0.870, :writing => 0.655},
@@ -190,14 +191,14 @@ class HeadcountAnalyst
   #   2009 => {:math => 0.824, :reading => 0.862, :writing => 0.706},
   #   2010 => {:math => 0.849, :reading => 0.864, :writing => 0.662}
   # },
-
+# test(1)
   def grade_subject_converter(name)
     {
       3 => de_repo.find_by_name(name).statewide_test.third_grade,
       8 => de_repo.find_by_name(name).statewide_test.eighth_grade,
-      :math => @math,
-      :reading => @reading,
-      :writing => @writing
+      # :math => @math,
+      # :reading => @reading,
+      # :writing => @writing
     }
   end
 
