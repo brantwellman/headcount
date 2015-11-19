@@ -59,7 +59,7 @@ class StatewideTest
   def proficient_for_subject_by_grade_in_year(subject, grade, year)
     raise UnknownDataError.new("Not a valid subject") if ![:math, :reading, :writing].include?(subject)
     raise UnknownDataError.new("Not a valid grade") if ![3, 8].include?(grade)
-    raise UnknownDataError.new("Not a valid year") if !(2011..2014).cover?(year)
+    raise UnknownDataError.new("Not a valid year") if !(2008..2014).cover?(year)
     grade_sym = grade_symbol_converter[grade]
     truncate(send(grade_sym)[year][subject])
   end

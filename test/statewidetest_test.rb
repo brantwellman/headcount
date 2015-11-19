@@ -78,29 +78,54 @@ class StatewideTestTest < Minitest::Test
     assert_equal expected, statey.eighth_grade
   end
 
-  # def test_it_stores_a_math_hash
-  #   statey = StatewideTest.new(@data_line)
-  #   expected = {
-  #
-  #     }
-  #   assert_equal expected, statey.math
-  # end
-  #
-  # def test_it_stores_an_reading_hash
-  #   statey = StatewideTest.new(@data_line)
-  #   expected = {
-  #
-  #     }
-  #   assert_equal expected, statey.reading
-  # end
-  #
-  # def test_it_stores_an_writing_hash
-  #   statey = StatewideTest.new(@data_line)
-  #   expected = {
-  #
-  #     }
-  #   assert_equal expected, statey.writing
-  # end
+  def test_it_stores_a_math_hash
+    statey = StatewideTest.new(@data_line)
+    expected = {
+      2011 => {
+        :all => 0.68, :asian => 0.81689, :black => 0.424,
+        :pacific_islander => 0.568, :hispanic => 0.568, :native_american => 0.614,
+        :two_or_more => 0.677, :white => 0.9009},
+      2012 => {
+        :all => 0.689, :asian => 0.818, :black => 0.424,
+        :pacific_islander => 0.571, :hispanic => 0.572, :native_american => 0.571,
+        :two_or_more => 0.689, :white=>0.999
+        }
+
+      }
+    assert_equal expected, statey.math
+  end
+
+  def test_it_stores_an_reading_hash
+    statey = StatewideTest.new(@data_line)
+    expected = {
+      2011 => {
+        :all => 0.68, :asian => 0.81689, :black => 0.424,
+        :pacific_islander => 0.568, :hispanic => 0.568, :native_american => 0.614,
+        :two_or_more => 0.677, :white => 0.99},
+      2012 => {
+        :all => 0.689, :asian => 0.818, :black => 0.424,
+        :pacific_islander => 0.571, :hispanic => 0.572, :native_american => 0.571,
+        :two_or_more => 0.689, :white=>0.99
+        }
+      }
+    assert_equal expected, statey.reading
+  end
+
+  def test_it_stores_an_writing_hash
+    statey = StatewideTest.new(@data_line)
+    expected = {
+        2011 => {
+          :all => 0.68, :asian => 0.81689, :black => 0.424,
+          :pacific_islander => 0.568, :hispanic => 0.568, :native_american => 0.614,
+          :two_or_more => 0.677, :white => 0.9999},
+        2012 => {
+          :all => 0.689, :asian => 0.818, :black => 0.424,
+          :pacific_islander => 0.571, :hispanic => 0.572, :native_american => 0.571,
+          :two_or_more => 0.689, :white=>0.99999
+        }
+      }
+    assert_equal expected, statey.writing
+  end
 
   def test_it_converts_integer_to_instance_variable
     statey = StatewideTest.new(@data_line)
@@ -201,13 +226,69 @@ class StatewideTestTest < Minitest::Test
     assert_raises(UnknownDataError) { statey.proficient_for_subject_by_grade_in_year(:math, 3, 8888) }
   end
 
+
   def test_it_returns_a_truncated_value_for_subject_grade_year
     statey = StatewideTest.new(@data_line)
     expected = 0.668
 
     assert_equal expected, statey.proficient_for_subject_by_grade_in_year(:writing, 3, 2013)
   end
+
+  def test_it_returns_a_value_for_subject_grade_year
+    statey = StatewideTest.new(@data_line)
+    expected = 0.859
+
+    assert_equal expected, statey.proficient_for_subject_by_grade_in_year(:reading, 3, 2013)
+  end
+
+  def test_it_returns_a_value_for_subject_grade_year
+    statey = StatewideTest.new(@data_line)
+    expected1 = 0.855
+    expected2 = 0.862
+
+    assert_equal expected1, statey.proficient_for_subject_by_grade_in_year(:math, 3, 2013)
+    assert_equal expected2, statey.proficient_for_subject_by_grade_in_year(:reading, 8, 2009)
+  end
+
+  def test_proficient_for_subject_by_race_in_year
+    statey = StatewideTest.new(@data_line)
+    expected1 = 0.818
+    expected2 = 0.424
+    expected3 = 0.571
+
+    assert_equal expected1, statey.proficient_for_subject_by_race_in_year(:math, :asian, 2012)
+    assert_equal expected2, statey.proficient_for_subject_by_race_in_year(:math, :black, 2011)
+    assert_equal expected3, statey.proficient_for_subject_by_race_in_year(:writing, :native_american, 2012)
+  end
+
+  def test_proficient_by_race_or_ethnicity
+    statey = StatewideTest.new(@data_line)
+    expected1 = {2011=>{:math=>0.568, :reading=>0.568, :writing=>0.568}, 2012=>{:math=>0.572, :reading=>0.572, :writing=>0.572}}
+    expected2 = {2011=>{:math=>0.568, :reading=>0.568, :writing=>0.568}, 2012=>{:math=>0.571, :reading=>0.571, :writing=>0.571}}
+    result1 = statey.proficient_by_race_or_ethnicity(:hispanic)
+    result2 = statey.proficient_by_race_or_ethnicity(:pacific_islander)
+
+    assert_equal expected1, result1
+    assert_equal expected2, result2
+  end
+
+  def test_proficient_by_grade_returns
+    statey = StatewideTest.new(@data_line)
+    expected = {2012=>{:math=>0.83, :reading=>0.87, :writing=>0.655},
+                2013=>{:math=>0.855, :reading=>0.859, :writing=>0.6689},
+                2014=>{:math=>0.834, :reading=>0.831, :writing=>0.639}}
+
+    assert_equal expected, statey.proficient_by_grade(3)
+  end
+
 end
+
+#
+#     def test_it_returns_expected_values_for_proficiency_by_sub_race_year
+#       statey = StatewidTest.new(@data_line)
+#
+#       statey.proficient_for_subject_by_race_in_year(:math, 3, )
+# end
 
 #   def test_it_returns_the_enrollment_participation_by_year_with_rounded_floats
 #     enroll = Enrollment.new({:name => "COLORADO", :kindergarten => {2010 => 0.392, 2011 => 0.354, 2012 => 0.268}})
