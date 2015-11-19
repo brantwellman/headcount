@@ -1,6 +1,8 @@
 require_relative 'district'
 require_relative 'enrollment'
 require_relative 'district_repository'
+require_relative 'insufficient_information_error'
+require_relative 'unknown_data_error'
 require 'pry'
 
 class HeadcountAnalyst
@@ -102,15 +104,61 @@ class HeadcountAnalyst
     districts = districts_array_hash[:across]
     districts_corellations = districts.map do |district|
       kinder_part_vs_high_school_grad_correlation_window(for: district)
-      #binding.pry
     end
     districts_corellations
     true_count = districts_corellations.count(true)
     (true_count / districts_corellations.count) > 0.7 ? true : false
   end
 
+  def top_statewide_test_year_over_year_growth(data_hash)
+#   throw error ################### not passing yet
+    raise InsufficientDataError.new("Need a grade to proceed") if data_hash.has_key?(:grade)
+#   dive in, get rid of nils in hash(es)
+    hash_minus_nils = go_into_hash_and_eliminate_nils(data_hash)
+#   make sure there are two or more years left
+#     else throw error
+    raise InsufficientDataError.new("Not enought data")unless count_key_value_pairs(hash_minus_nils)
+
+
+#   get growth value
+#   grab district name
+#   need array of arrays containing dist name, value
+  end
+
+  def go_into_hash_and_eliminate_nils(name, data_hash)
+    grade_hash = grade_subject_converter(name)[data_hash[:grade]]
+    minus_nils = grade_hash.reject do |year, sub_data|
+      sub_data[data_hash[:subject]].nil?
+      end
+      minus_nils
+  end
+
+  def count_key_value_pairs(hash_without_nils)
+    hash_without_nils.length >= 2
+  end
+
+  # :third_grade => {
+  #   2012 => {:math => 0.830, :reading => 0.870, :writing => 0.655},
+  #   2013 => {:math => 0.855, :reading => 0.859, :writing => 0.6689},
+  #   2014 => {:math => 0.834, :reading => 0.831, :writing => 0.639}
+  # },
+  # :eighth_grade => {
+  #   2008 => {:math => 0.857, :reading => 0.866, :writing => 0.671},
+  #   2009 => {:math => 0.824, :reading => 0.862, :writing => 0.706},
+  #   2010 => {:math => 0.849, :reading => 0.864, :writing => 0.662}
+  # },
+
+  def grade_subject_converter(name)
+    {
+      3 => de_repo.find_by_name(name).statewide_test.third_grade,
+      8 => de_repo.find_by_name(name).statewide_test.eighth_grade,
+      :math => @math,
+      :reading => @reading,
+      :writing => @writing
+    }
+  end
+
   def truncate(float)
-    # binding.pry
     (float * 1000).floor / 1000.to_f
   end
 end

@@ -1,0 +1,11 @@
+Location,Score,TimeFrame,DataFormat,Data
+ACADEMY 20,Math,2008,Percent,0.857
+ACADEMY 20,Math,2009,Percent,0.824
+ACADEMY 20,Math,2010,Percent,LNE
+ACADEMY 20,Reading,2008,Percent,0.866
+ACADEMY 20,Reading,2009,Percent,0.862
+ACADEMY 20,Reading,2010,Percent,0.864
+ACADEMY 20,Writing,2008,Percent,0.671
+ACADEMY 20,Writing,2009,Percent,0.706
+ACADEMY 20,Writing,2010,Percent,0.662
+ACADEMY 20,Math,2011,Percent,NA

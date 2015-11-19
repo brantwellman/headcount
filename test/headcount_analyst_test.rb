@@ -3,6 +3,8 @@ require 'minitest/autorun'
 require_relative '../lib/headcount_analyst'
 require_relative '../lib/district_repository'
 require_relative '../lib/enrollment_repository'
+require_relative '../lib/insufficient_information_error'
+require_relative '../lib/unknown_data_error'
 require 'pry'
 
 class HeadcountAnalystTest < Minitest::Test
@@ -12,8 +14,11 @@ class HeadcountAnalystTest < Minitest::Test
     @ha = HeadcountAnalyst.new(@d_repo)
     @d_repo.load_data({
       :enrollment => {
-      :kindergarten => "./test/fixtures/kinder_enrollment_fixture.csv",
-      :high_school_graduation => "./test/fixtures/hs_grad_rates_fixture.csv" }
+        :kindergarten => "./test/fixtures/kinder_enrollment_fixture.csv",
+        :high_school_graduation => "./test/fixtures/hs_grad_rates_fixture.csv" },
+      :statewide_testing => {
+        :third_grade => "./test/fixtures/3rd_grade_nil_fixture.csv"
+      }
     })
   end
 
@@ -183,5 +188,14 @@ class HeadcountAnalystTest < Minitest::Test
   def test_feature_participation_feature_false_key_for_and_not_colorado
     districts_array_hash = {:for => "AGATE 300"}
     refute @ha.kindergarten_participation_correlates_with_high_school_graduation(districts_array_hash)
+  end
+
+  def test_it_throws_error_if_grade_key_is_not_included_for_growth_rates
+    assert_raises(UnknownDataError) { @ha.top_statewide_test_year_over_year_growth(subject: :math) }
+  end
+
+  def test_it_removes_nils_from_grade_data
+    expected = 0
+    assert_equal expected, @ha.go_into_hash_and_eliminate_nils("ACADEMY 20", grade: 3, subject: :math)
   end
 end

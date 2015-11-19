@@ -1,0 +1,3 @@
+class InsufficientDataError < StandardError
+
+end
