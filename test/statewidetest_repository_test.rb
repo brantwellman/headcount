@@ -56,8 +56,9 @@ class StatewideTestRepositoryTest < Minitest::Test
     assert_equal expected, str.find_by_name("colorado").name
   end
 
+
   def test_it_returns_an_array_with_two_arrays_nested_inside_it
-    skip
+
   #   def peel_hash_to_key_file(hash)
   #     hash.values[0].to_a
   end
@@ -88,6 +89,10 @@ class StatewideTestRepositoryTest < Minitest::Test
     def add_records(records)
       @statewide_tests += records
     end
+  end
+
+  def test_it_returns_proficiency_by_grade
+
   end
 
 end

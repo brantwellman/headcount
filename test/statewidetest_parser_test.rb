@@ -82,20 +82,20 @@ class StatewideTestParserTest < Minitest::Test
   def test_parse_takes_a_csv_file_and_returns_parsed_hashes
     sp = StatewideTestParser.new
     result = sp.parse(:third_grade, "./test/fixtures/3rd_grade_two_districts.csv")
-    expected = [{:name=>"ACADEMY 20", :third_grade=>{2008=>{"Math"=>0.857, "Reading"=>0.866, "Writing"=>0.671},
-                                                     2009=>{"Math"=>0.824, "Reading"=>0.862, "Writing"=>0.706},
-                                                     2010=>{"Math"=>0.849, "Reading"=>0.864, "Writing"=>0.662},
-                                                     2011=>{"Math"=>0.819, "Reading"=>0.867, "Writing"=>0.678},
-                                                     2012=>{"Reading"=>0.87, "Math"=>0.83, "Writing"=>0.655},
-                                                     2013=>{"Math"=>0.855, "Reading"=>0.859, "Writing"=>0.668},
-                                                     2014=>{"Math"=>0.834, "Reading"=>0.831, "Writing"=>0.639}}},
-                {:name=>"ADAMS COUNTY 14", :third_grade=>{2008=>{"Math"=>0.56, "Reading"=>0.523, "Writing"=>0.426},
-                                                          2009=>{"Math"=>0.54, "Reading"=>0.562, "Writing"=>0.479},
-                                                          2010=>{"Math"=>0.469, "Reading"=>0.457, "Writing"=>0.312},
-                                                          2011=>{"Math"=>0.476, "Reading"=>0.571, "Writing"=>0.31},
-                                                          2012=>{"Reading"=>0.54, "Math"=>0.39, "Writing"=>0.287},
-                                                          2013=>{"Math"=>0.437, "Reading"=>0.548},
-                                                          2014=>{"Math"=>0.512, "Reading"=>0.476, "Writing"=>0.274}}}]
+    expected = [{:name=>"ACADEMY 20", :third_grade=>{2008=>{:math=>0.857, :reading =>0.866, :writing=>0.671},
+                                                     2009=>{:math=>0.824, :reading =>0.862, :writing=>0.706},
+                                                     2010=>{:math=>0.849, :reading =>0.864, :writing=>0.662},
+                                                     2011=>{:math=>0.819, :reading =>0.867, :writing=>0.678},
+                                                     2012=>{:reading =>0.87, :math=>0.83, :writing=>0.655},
+                                                     2013=>{:math=>0.855, :reading =>0.859, :writing=>0.668},
+                                                     2014=>{:math=>0.834, :reading =>0.831, :writing=>0.639}}},
+                {:name=>"ADAMS COUNTY 14", :third_grade=>{2008=>{:math=>0.56, :reading =>0.523, :writing=>0.426},
+                                                          2009=>{:math=>0.54, :reading =>0.562, :writing=>0.479},
+                                                          2010=>{:math=>0.469, :reading =>0.457, :writing=>0.312},
+                                                          2011=>{:math=>0.476, :reading =>0.571, :writing=>0.31},
+                                                          2012=>{:reading =>0.54, :math=>0.39, :writing=>0.287},
+                                                          2013=>{:math=>0.437, :reading =>0.548},
+                                                          2014=>{:math=>0.512, :reading =>0.476, :writing=>0.274}}}]
     assert_equal expected, result
   end
 end
