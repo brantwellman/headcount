@@ -18,8 +18,39 @@ class StatewideTestTest < Minitest::Test
         2010 => {:math => 0.849, :reading => 0.864, :writing => 0.662}
       },
       :math => {
-        2011 => {:"all students"=>0.68, :asian=>0.81689, :black=>0.424, :"hawaiian/pacific islander"=>0.568, :hispanic=>0.568, :"native american"=>0.614, :"two or more"=>0.677, :white=>0.706}, 2012=>{:"all students"=>0.689, :asian=>0.818, :black=>0.424, :"hawaiian/pacific islander"=>0.571, :hispanic=>0.572, :"native american"=>0.571, :"two or more"=>0.689, :white=>0.713}
-      }}
+        2011 => {
+          :all => 0.68, :asian => 0.81689, :black => 0.424,
+          :pacific_islander => 0.568, :hispanic => 0.568, :native_american => 0.614,
+          :two_or_more => 0.677, :white => 0.9009},
+        2012 => {
+          :all => 0.689, :asian => 0.818, :black => 0.424,
+          :pacific_islander => 0.571, :hispanic => 0.572, :native_american => 0.571,
+          :two_or_more => 0.689, :white=>0.999
+        }
+      },
+      :reading => {
+        2011 => {
+          :all => 0.68, :asian => 0.81689, :black => 0.424,
+          :pacific_islander => 0.568, :hispanic => 0.568, :native_american => 0.614,
+          :two_or_more => 0.677, :white => 0.99},
+        2012 => {
+          :all => 0.689, :asian => 0.818, :black => 0.424,
+          :pacific_islander => 0.571, :hispanic => 0.572, :native_american => 0.571,
+          :two_or_more => 0.689, :white=>0.99
+        }
+      },
+      :writing => {
+        2011 => {
+          :all => 0.68, :asian => 0.81689, :black => 0.424,
+          :pacific_islander => 0.568, :hispanic => 0.568, :native_american => 0.614,
+          :two_or_more => 0.677, :white => 0.9999},
+        2012 => {
+          :all => 0.689, :asian => 0.818, :black => 0.424,
+          :pacific_islander => 0.571, :hispanic => 0.572, :native_american => 0.571,
+          :two_or_more => 0.689, :white=>0.99999
+        }
+      }
+    }
   end
 
   def test_it_initializes_with_a_name
@@ -113,7 +144,7 @@ class StatewideTestTest < Minitest::Test
     assert_equal expected, statey.proficient_by_grade(8)
   end
 
-  def test_it_raises_UnknownDataError_for_invalid_parameter
+  def test_it_raises_UnknownDataError_for_invalid_subject_parameter
     statey = StatewideTest.new(@data_line)
 
     assert_raises(UnknownDataError) { statey.proficient_for_subject_by_race_in_year(:science, :asian, 2010) }
@@ -124,8 +155,35 @@ class StatewideTestTest < Minitest::Test
     expected = 0.816
     assert_equal expected, statey.proficient_for_subject_by_race_in_year(:math, :asian, 2011)
   end
+
+  def test_it_raises_UnknownDataError_for_invalid_race_parameter
+    statey = StatewideTest.new(@data_line)
+
+    assert_raises(UnknownDataError) { statey.proficient_for_subject_by_race_in_year(:math, :eskimo, 2010) }
+  end
+
+  def test_it_raises_UnknownDataError_for_invalid_year_parameter
+    statey = StatewideTest.new(@data_line)
+
+    assert_raises(UnknownDataError) { statey.proficient_for_subject_by_race_in_year(:science, :asian, 1888) }
+  end
+
+  def test_it_raises_UnknownDataError_for_invalid_parameter
+    statey = StatewideTest.new(@data_line)
+
+    assert_raises(UnknownDataError) { statey.proficient_by_race_or_ethnicity(:eskimo) }
+  end
+
+  def test_it_retuns_a_hash_grouped_by_race_for_truncated_percentages_grouped_by_suject
+    statey = StatewideTest.new(@data_line)
+    expected = {
+              2011 => {math: 0.900, reading: 0.99, writing: 0.999},
+              2012 => {math: 0.999, reading: 0.99, writing: 0.999}
+              }
+    assert_equal expected, statey.proficient_by_race_or_ethnicity(:white)
+  end
 end
-# A call to this method with any invalid parameter (like subject of :history) should raise an UnknownDataError
+
 
 
 
