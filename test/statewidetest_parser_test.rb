@@ -13,6 +13,41 @@ class StatewideTestParserTest < Minitest::Test
     assert StatewideTestParser.new.is_a?(StatewideTestParser)
   end
 
+  def test_file_converter_returns_expected_values
+    sp = StatewideTestParser.new
+    expected1 = :score
+    expected2 = :score
+    expected3 = :race_ethnicity
+    expected4 = :race_ethnicity
+    expected5 = :race_ethnicity
+
+    assert_equal expected1, sp.file_converter[:third_grade]
+    assert_equal expected2, sp.file_converter[:eighth_grade]
+    assert_equal expected3, sp.file_converter[:math]
+    assert_equal expected4, sp.file_converter[:reading]
+    assert_equal expected5, sp.file_converter[:writing]
+  end
+
+  def test_convert_nil_returns_float_values
+    sp = StatewideTestParser.new
+
+    assert_equal 1, sp.convert_nil("1")
+    assert_equal 0, sp.convert_nil("0")
+    assert_equal 0.123, sp.convert_nil("0.123")
+    assert_equal 1.234, sp.convert_nil("1.234")
+    assert_equal 12.345, sp.convert_nil("12.345")
+  end
+
+  def test_convert_nil_returns_nil_for_not_float_values
+    sp = StatewideTestParser.new
+
+    assert_equal nil, sp.convert_nil("LEN")
+    assert_equal nil, sp.convert_nil("DIV#/0")
+    assert_equal nil, sp.convert_nil("XYZ")
+    assert_equal nil, sp.convert_nil("ZORG")
+  end
+
+
   def test_truncate_works_with_nums_containing_less_than_three_decimal_places
     sp = StatewideTestParser.new
     assert_equal 0.1, sp.truncate(0.1)
