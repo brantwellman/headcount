@@ -65,12 +65,12 @@ class HeadcountAnalystTest < Minitest::Test
 
   def test_it_computes_comparison_value_from_two_basic_averages_kind_enrollment
     expected = 0.766
-    assert_equal expected, @ha.kinder_part_rate_variation("Academy 20", :against => "Colorado")
+    assert_equal expected, @ha.kindergarten_participation_rate_variation("Academy 20", :against => "Colorado")
   end
 
   def test_it_computes_comparison_value_from_two_complex_averages_kind_enrollment
     expected = 1.885
-    assert_equal expected, @ha.kinder_part_rate_variation("AGATE 300", :against => "Colorado")
+    assert_equal expected, @ha.kindergarten_participation_rate_variation("AGATE 300", :against => "Colorado")
   end
 
   def test_it_finds_kindergarten_participation_by_district_with_bad_data

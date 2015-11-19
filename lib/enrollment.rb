@@ -10,22 +10,25 @@ class Enrollment
   end
 
   def kindergarten_participation_by_year
-    my_hash = {}
+    truncated_values_hash = {}
     kindergarten.each do |k, v|
-      my_hash[k] = truncate(v)
+      truncated_values_hash[k] = truncate(v)
     end
-    my_hash
+    truncated_values_hash
   end
 
   def kindergarten_participation_in_year(year)
-    # binding.pry
     if kindergarten.keys.include?(year)
       truncate(kindergarten[year])
     end
   end
 
   def graduation_rate_by_year
-    high_school_graduation
+    truncated_values_hash = {}
+    high_school_graduation.each do |k, v|
+      truncated_values_hash[k] = truncate(v)
+    end
+    truncated_values_hash
   end
 
   def graduation_rate_in_year(year)

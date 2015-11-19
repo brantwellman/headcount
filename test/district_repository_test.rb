@@ -84,7 +84,7 @@ class DistrictRepositoryTest < Minitest::Test
     result1 = result.name
     result2 = result.graduation_rate_by_year
     expected1 = "ADAMS COUNTY 14"
-    expected2 = {2010=>0.57, 2011=>0.608, 2012=>0.63372, 2013=>0.59351, 2014=>0.659}
+    expected2 = {2010=>0.57, 2011=>0.608, 2012=>0.633, 2013=>0.593, 2014=>0.659}
 
     assert_equal expected1, result1
     assert_equal expected2, result2

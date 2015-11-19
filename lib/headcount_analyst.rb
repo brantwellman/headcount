@@ -18,7 +18,7 @@ class HeadcountAnalyst
 
   end
 
-  def kinder_part_rate_variation(district, comparison)
+  def kindergarten_participation_rate_variation(district, comparison)
     comparison = comparison.values[0].upcase
     district_average = enrollment_average(district.upcase)
     comp_average = enrollment_average(comparison)
@@ -46,7 +46,7 @@ class HeadcountAnalyst
   end
 
   def kindergarten_participation_against_high_school_graduation(district)
-    kind_rate = kinder_part_rate_variation(district, :against => "Colorado")
+    kind_rate = kindergarten_participation_rate_variation(district, :against => "Colorado")
     hs_rate_var = high_school_graduation_rate_variation(district, "Colorado")
     return nil unless kind_rate && hs_rate_var
     truncate(kind_rate / hs_rate_var)

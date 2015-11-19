@@ -120,7 +120,7 @@ class DistrictTest < Minitest::Test
     })
     e_repo.add_records([e1, e2])
     d_repo.load_repos({:enrollment => e_repo})
-    expected = {2010=>0.392, 2011=>0.35356, 2012=>0.2677}
+    expected = {2010=>0.392, 2011=>0.353, 2012=>0.267}
 
     assert_equal expected, d_repo.districts[0].enrollment.graduation_rate_by_year
   end
