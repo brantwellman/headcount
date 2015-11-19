@@ -16,6 +16,15 @@ class StatewideTestRepositoryTest < Minitest::Test
       2010 => {:math => 0.849, :reading => 0.864, :writing => 0.662}
       }
     }
+
+    @sr = StatewideTestRepository.new
+    @sr.load_data(:statewide_testing => {
+      :third_grade =>  "./test/fixtures/3rd_grade_one_district.csv",
+      :eighth_grade => "./test/fixtures/eighth grade enrollment data.csv",
+      :math => "./test/fixtures/math.csv",
+      :reading => "./test/fixtures/reading.csv",
+      :writing => "./test/fixtures/writing.csv"
+    })
   end
 
   def test_it_initializes_with_an_empty_statewidetests_array
@@ -25,74 +34,51 @@ class StatewideTestRepositoryTest < Minitest::Test
     assert_equal expected, str.statewide_tests
   end
 
-  def test_it_returns_nil_if_statewide_tests_is_empty
-    str = StatewideTestRepository.new
+  def test_after_setup_it_has_statewide_test_objects
 
-    assert_equal nil, str.find_by_name("Zorg")
+    assert_equal 2, @sr.statewide_tests.count
   end
 
-  def test_it_returns_nil_if_statewide_test_doesnt_exist
-    skip
-    # need to figure out how to pass @key in to create new stw tests
-    str = StatewideTestRepository.new
-    str.create_statewide_tests(@hash_line)
+  def test_it_returns_nil_if_statewide_tests_is_empty
+  str = StatewideTestRepository.new
 
-    assert_equal nil, str.find_by_name("Zorg")
+  assert_equal [], str.statewide_tests
+  assert_equal nil, str.find_by_name("ACADEMY 20")
+  end
+
+  def test_it_returns_nil_if_statewide_tests_doesnt_exist
+
+    assert_equal nil, @sr.find_by_name("Zorg")
   end
 
   def test_it_returns_statewide_instance_by_name
-    skip
-    assert_equal expected, str.find_by_name("Zorg")
+    result = @sr.find_by_name("ACADEMY 20")
+    assert result.is_a?(StatewideTest)
+    assert_equal "ACADEMY 20", result.name
   end
 
-
-  def test_it_returns_statewide_test_name_for_statewide_test_in_statewide_tests
-    skip
-    # need to figure out how to pass @key in to create new stw tests
+  def test_it_returns_an_array_of_nested_arrays
     str = StatewideTestRepository.new
-    str.create_statewide_tests(@hash_line)
-    expected = "COLORADO"
+    result = str.peel_hash_to_key_file(:statewide_testing => {
+      :third_grade =>  "./test/fixtures/3rd_grade_one_district.csv",
+      :eighth_grade => "./test/fixtures/eighth grade enrollment data.csv",
+      :math => "./test/fixtures/math.csv",
+      :reading => "./test/fixtures/reading.csv",
+      :writing => "./test/fixtures/writing.csv"
+    })
+    expected = [[:third_grade, "./test/fixtures/3rd_grade_one_district.csv"],
+                [:eighth_grade, "./test/fixtures/eighth grade enrollment data.csv"],
+                [:math, "./test/fixtures/math.csv"],
+                [:reading, "./test/fixtures/reading.csv"],
+                [:writing, "./test/fixtures/writing.csv"]]
 
-    assert_equal expected, str.find_by_name("colorado").name
+    assert_equal expected, result
   end
 
 
-  def test_it_returns_an_array_with_two_arrays_nested_inside_it
-
-  #   def peel_hash_to_key_file(hash)
-  #     hash.values[0].to_a
-  end
-
-  def test_it_create_an_instance_of_statewide_test_from_hash_line
-    skip
-  # def create_statewide_test(hash_line)
-  #   method_name = ("set_" + @key.to_s).to_sym
-  #   if find_by_name(hash_line[:name])
-  #     find_by_name(hash_line[:name]).send(method_name, hash_line[@key])
-  #   else
-  #     @statewide_tests << StatewideTest.new(hash_line)
-  #   end
-  # end
-  end
-
-  def test_it_creates_statewide_test_objects_from_an_array_of_hash_lines
-    skip
-    # def create_statewide_tests(district_statewide_test_array)
-    #   district_statewide_test_array.each do |hash_line|
-    #     create_statewide_test(hash_line)
-    #   end
-    # end
-  end
-
-  def test_it_appends_an_instance_of_statewide_test_to_statewide_tests_array
-    skip
-    def add_records(records)
-      @statewide_tests += records
-    end
-  end
 
   def test_it_returns_proficiency_by_grade
-
+    skip
   end
 
 end
