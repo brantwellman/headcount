@@ -193,8 +193,12 @@ class HeadcountAnalystTest < Minitest::Test
 
 
   def test_it_sorts_array_collection_by_growth
-    districts_growth = [["COLORADO", 0.0030000000000000027], ["ACADEMY 20", -0.03300000000000003], ["ADAMS COUNTY 14", -0.008000000000000007]]
-    expected = [["ACADEMY 20", -0.03300000000000003], ["ADAMS COUNTY 14", -0.008000000000000007], ["COLORADO", 0.0030000000000000027]]
+    districts_growth = [["COLORADO", 0.0030000000000000027],
+                        ["ACADEMY 20", -0.03300000000000003],
+                        ["ADAMS COUNTY 14", -0.008000000000000007]]
+    expected =         [["ACADEMY 20", -0.03300000000000003],
+                        ["ADAMS COUNTY 14", -0.008000000000000007],
+                        ["COLORADO", 0.0030000000000000027]]
     assert_equal expected, @ha.sort_all_districts_growth_collection(districts_growth)
   end
 
@@ -323,5 +327,39 @@ class HeadcountAnalystTest < Minitest::Test
   def test_it_creates_array_with_all_districts_and_growths
     expected = [["COLORADO", 0.0030000000000000027], ["ACADEMY 20", -0.03300000000000003], ["ADAMS COUNTY 14", -0.008000000000000007]]
     assert_equal expected, @ha.collection_of_districts_and_growth({grade: 3, subject: :math})
+  end
+
+  def test_it_pulls_district_array_with_top_growth_rate_and_truncates_growth_rate
+    sorted_dists = [["ACADEMY 20", -0.03300000000000003],
+                    ["ADAMS COUNTY 14", -0.008000000000000007],
+                    ["COLORADO", 0.0030000000000000027]]
+    expected = ["COLORADO", 0.003]
+    assert_equal  expected, @ha.single_top_district_year_over_year(sorted_dists)
+  end
+
+  # def top_x_districts_year_over_year(num, sorted_dists_growth_array)
+  def test_it_returns_top_x_districts_year_over_year_from_sorted_array
+    sorted_dists = [["ACADEMY 20", -0.03300000000000003],
+                    ["ADAMS COUNTY 14", -0.008000000000000007],
+                    ["COLORADO", 0.0030000000000000027],
+                    ["AGATE", 0.0046000000000008],
+                    ["BOULDER VALLEY", 0.005678900]]
+    expected = [["BOULDER VALLEY", 0.005], ["AGATE", 0.004], ["COLORADO", 0.003]]
+    assert_equal expected, @ha.top_x_districts_year_over_year(3, sorted_dists)
+  end
+
+  def test_it_muliplies_each_growth_value_by_the_weight
+    subject_districts_growth = [["ACADEMY 20", -0.03300000000000003],
+                                ["ADAMS COUNTY 14", -0.008000000000000007],
+                                ["COLORADO", 0.0030000000000000027],
+                                ["AGATE", 0.0046000000000008],
+                                ["BOULDER VALLEY", 0.005678900]]
+    weight_value = 1/3.0
+    expected = [["ACADEMY 20", -0.01100000000000001],
+                ["ADAMS COUNTY 14", -0.0026666666666666687],
+                ["COLORADO", 0.0010000000000000009],
+                ["AGATE", 0.0015333333333335999],
+                ["BOULDER VALLEY", 0.0018929666666666666]]
+    assert_equal expected, @ha.multiply_growth_values_by_weight(weight_value, subject_districts_growth)
   end
 end

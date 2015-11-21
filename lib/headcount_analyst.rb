@@ -17,7 +17,6 @@ class HeadcountAnalyst
     enrollment_data = district.enrollment.kindergarten.values.compact
     return nil if enrollment_data.empty?
     enrollment_data.inject(:+)/enrollment_data.length
-
   end
 
   def kinder_part_rate_variation(district, comparison)
@@ -74,7 +73,7 @@ class HeadcountAnalyst
   def kindergarten_participation_correlates_with_high_school_graduation(comparison)
     if comparison.has_key?(:across)
       subset_of_districs_hs_kinder_across_districts(comparison)
-  elsif comparison.has_key?(:for) && comparison[:for] == "STATEWIDE" ||
+    elsif comparison.has_key?(:for) && comparison[:for] == "STATEWIDE" ||
     comparison.has_key?(:for) && comparison[:for] == "COLORADO" ||
       statewide_correlation_hs_kinder_across_districts
     elsif comparison.has_key?(:for)
@@ -110,76 +109,63 @@ class HeadcountAnalyst
     (true_count / districts_corellations.count) > 0.7 ? true : false
   end
 
+
+
+
   def top_statewide_test_year_over_year_growth(data_hash)
     raise InsufficientInformationError.new("A grade must be provided to answer this question") if !data_hash.has_key?(:grade)
     raise UnknownDataError.new("#{data_hash[:grade]} is not a known grade") if ![3, 8].include?(data_hash[:grade])
-#   call collection_of_districts_and_growth
+#   call collection_of_districts_and_growth - needs to be nested in branches
     all_districts_and_growth = collection_of_districts_and_growth(data_hash)
-    # sort all_districts_and_growth by second element
+    # sort all_districts_and_growth by second element - needs to be nedsted in branches
     sorted_dists_growth = sort_all_districts_growth_collection(all_districts_and_growth)
     # truncate return values
-    # if weighting
-    #   do something
-    # elsif top
-    #   do something
+    if data_hash.has_key?(:weighting)
+    # gather sorted arrays for all 3 subjects
+    weighting_across_all_subjects(data_hash)
+    elsif data_hash.has_key?(:top)
+      top_x_districts_year_over_year(data_hash[:top], sorted_dists_growth)
     elsif data_hash.has_key?(:grade) && data_hash.has_key?(:subject) && !data_hash.has_key?(:top)
-            #     ha.top_statewide_test_year_over_year_growth(grade: 3, subject: :math)
-            # => ['the top district name', 0.123]
-            max_growth = sorted_dists_growth[-1]
-            max_growth = [max_growth[0], truncate(max_growth[-1])
-    #  do something
-    # else (grade only)
-    #  do something
-    # end
-  end
+      single_top_district_year_over_year(data_hash, sorted_dists_growth)
 
-# tested(1)
-  def sort_all_districts_growth_collection(districts_growth)
-    districts_growth.sort_by {|district_growth| district_growth[1] }
-  end
-
-# tested(1)
-# iterate through every district in de_repo and collect districts and their growth
-  def collection_of_districts_and_growth(data_hash)
-    districts = @de_repo.districts.reject do |district|
-      district.statewide_test.nil?
-    end
-    all_districts_growth = districts.map do |district|
-      district_growth_for_subject(district.name, data_hash)
-    end
-    all_districts_growth
-  end
-# tested(1)
-  def district_growth_for_subject(name, data_hash)
-    array = [name]
-    no_nils = go_into_hash_and_eliminate_nils(name, data_hash)
-    if !count_key_value_pairs(no_nils)
-      array << nil
     else
-      array << district_growth_values(no_nils, data_hash)
+    # (grade only)
+    weighted_data_hash = data_hash.merge({:weighting => {:math => 1/3.0, :reading => 1/3.0, :writing => 1/3.0}})
+    weighting_across_all_subjects(weighted_data_hash)
     end
-    array
   end
-# tested(1)
-  def go_into_hash_and_eliminate_nils(name, data_hash)
-    grade_hash = grade_subject_converter(name)[data_hash[:grade]]
-    minus_nils = grade_hash.reject do |year, sub_data|
-      sub_data[data_hash[:subject]].nil?
-      end
-    minus_nils
+
+# needs testing
+  def weighting_across_all_subjects(data_hash)
+    math_all_districts_and_growth = collection_of_districts_and_growth(data_hash.merge({subject: :math}))
+    # iterate through single sub array and multiply each growth value by weighting value
+    math_weighted_growth_values = multiply_growth_values_by_weight(data_hash[:weighting][:math], math_all_districts_and_growth)
+    reading_all_districts_and_growth = collection_of_districts_and_growth(data_hash.merge({subject: :reading}))
+    reading_weighted_growth_values = multiply_growth_values_by_weight(data_hash[:weighting][:reading], reading_all_districts_and_growth)
+    writing_all_districts_and_growth = collection_of_districts_and_growth(data_hash.merge({subject: :writing}))
+    writing_weighted_growth_values = multiply_growth_values_by_weight(data_hash[:weighting][:writing], writing_all_districts_and_growth)
+
+
+    # need to add all values corresponding to district name combine into one array
+    add_weighted_values_for_each_subject(math_weighted_growth_values, reading_weighted_growth_values, writing_weighted_growth_values)
+    # sort the total weighted array
+    sort_all_districts_growth_collection(districts_growth)
+    # return top district by weighted average
+    single_top_district_year_over_year(sorted_dists_growth_array)
   end
-# test (3)
-  def count_key_value_pairs(hash_without_nils)
-    hash_without_nils.length >= 2
+
+  def add_weighted_values_for_each_subject(math_coll, reading_coll, writing_coll)
+
   end
-# test (1)
-  def district_growth_values(hash_without_nils, data_hash)
-    year1 = hash_without_nils.keys.min
-    year_last = hash_without_nils.keys.max
-    min_val = hash_without_nils[year1][data_hash[:subject]]
-    max_val = hash_without_nils[year_last][data_hash[:subject]]
-    (max_val - min_val) / (year_last - year1)
+
+# tested - 1
+  def multiply_growth_values_by_weight(weight_value, subject_districts_growth)
+    weighted_values = subject_districts_growth.map do |name, dist_growth|
+      [name, dist_growth * weight_value]
+    end
+    weighted_values
   end
+
 
   # :third_grade => {
   #   2012 => {:math => 0.830, :reading => 0.870, :writing => 0.655},
@@ -191,7 +177,85 @@ class HeadcountAnalyst
   #   2009 => {:math => 0.824, :reading => 0.862, :writing => 0.706},
   #   2010 => {:math => 0.849, :reading => 0.864, :writing => 0.662}
   # },
+
+# input - number of districts required, sorted districts_growth
+# tested - 1
+  def top_x_districts_year_over_year(num, sorted_dists_growth_array)
+    top_dists = sorted_dists_growth_array.last(num)
+    dists_trunced_growth = top_dists.map do |dist_growth|
+      [dist_growth[0], truncate(dist_growth[-1])]
+    end
+    dists_trunced_growth.reverse
+  end
+
+# output - finds last dist/growth in array. Should be max growth.
+# tested (1)
+  def single_top_district_year_over_year(sorted_dists_growth_array)
+    max_growth = sorted_dists_growth_array[-1]
+    max_growth = [max_growth.first, truncate(max_growth[-1])]
+  end
+
+# tested(1)
+  def sort_all_districts_growth_collection(districts_growth)
+    districts_growth.sort_by {|district_growth| district_growth[1] }
+  end
+
+# tested(1)
+# iterate through every district in de_repo and collect districts and their growth
+# input - data_hash, output - full array of nested arrs with dist and their growth
+  def collection_of_districts_and_growth(data_hash)
+    districts = @de_repo.districts.reject do |district|
+      district.statewide_test.nil?
+    end
+    all_districts_growth = districts.map do |district|
+      district_growth_for_subject(district.name, data_hash)
+    end
+    all_districts_growth
+  end
+
+
+# tested(1)
+#  input - district name string, data_hash. Output - district data has minus nil rows
+  def district_growth_for_subject(name, data_hash)
+    array = [name]
+    no_nils = go_into_hash_and_eliminate_nils(name, data_hash)
+    if !count_key_value_pairs(no_nils)
+      array << nil
+    else
+      array << district_growth_values(no_nils, data_hash)
+    end
+    array
+  end
+
+# tested(1)
+# input - district name string, data_hash. Output - district data has minus nil rows
+  def go_into_hash_and_eliminate_nils(name, data_hash)
+    grade_hash = grade_subject_converter(name)[data_hash[:grade]]
+    minus_nils = grade_hash.reject do |year, sub_data|
+      sub_data[data_hash[:subject]].nil?
+      end
+    minus_nils
+  end
+
+# test (3)
+  def count_key_value_pairs(hash_without_nils)
+    hash_without_nils.length >= 2
+  end
+
+# test (1)
+  def district_growth_values(hash_without_nils, data_hash)
+    year1 = hash_without_nils.keys.min
+    year_last = hash_without_nils.keys.max
+    min_val = hash_without_nils[year1][data_hash[:subject]]
+    max_val = hash_without_nils[year_last][data_hash[:subject]]
+    (max_val - min_val) / (year_last - year1)
+  end
+
+
+
+
 # test(1)
+# Input - district name string. Output -
   def grade_subject_converter(name)
     {
       3 => de_repo.find_by_name(name).statewide_test.third_grade,
