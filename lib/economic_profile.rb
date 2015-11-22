@@ -66,26 +66,26 @@ class EconomicProfile
     end
 
   end
-
-  def set_median_household_income(value)
-    @median_household_income = value
-  end
-
-  def set_children_in_poverty(value)
-    @children_in_poverty = value
-  end
-
-  def set_free_and_reduced_price_lunch(value)
-    @free_and_reduced_price_lunch = value
-  end
-
-  def set_free_and_reduced_price_lunch(value)
-    @free_and_reduced_price_lunch = value
-  end
-
-  def set_title_i(value)
-    @title_i = value
-  end
+  #
+  # def set_median_household_income(value)
+  #   @median_household_income = value
+  # end
+  #
+  # def set_children_in_poverty(value)
+  #   @children_in_poverty = value
+  # end
+  #
+  # def set_free_and_reduced_price_lunch(value)
+  #   @free_and_reduced_price_lunch = value
+  # end
+  #
+  # def set_free_and_reduced_price_lunch(value)
+  #   @free_and_reduced_price_lunch = value
+  # end
+  #
+  # def set_title_i(value)
+  #   @title_i = value
+  # end
 
   def truncate(float)
     (float * 1000).floor / 1000.to_f

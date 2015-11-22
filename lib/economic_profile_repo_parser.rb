@@ -6,18 +6,9 @@ class EconomicProfileRepoParser
 
 def initialize
   @formatted_hashes = []
-  @setup = {
-  :economic_profile => {
-    :median_household_income => "./data/Median household income.csv",
-    :children_in_poverty => "./data/School-aged children in poverty.csv",
-    :free_or_reduced_price_lunch => "./data/Students qualifying for free or reduced price lunch.csv",
-    :title_i => "./data/Title I students.csv"
-  }
-}
 end
 
 def pre_parsed(input_hash)
-  #binding.pry
   input_hash[:economic_profile]
 end
 
@@ -37,7 +28,6 @@ def method1(pre_parsed_hash, some_hash={})
     some_hash[school_title][:median_household_income][date_key] = row[3].to_i
     some_hash[school_title][:name] ||= row[0]
 
-    #binding.pry
   end
   some_hash
 end
@@ -60,7 +50,6 @@ def method2(pre_parsed_hash, some_hash={})
 
     some_hash[school_title][:name] ||= row[0]
 
-    #binding.pry
   end
   some_hash
 end
@@ -91,7 +80,6 @@ def method3(pre_parsed_hash, some_hash={})
 
     some_hash[school_title][:name] ||= row[0]
 
-    #binding.pry
   end
   some_hash
 end
@@ -113,7 +101,8 @@ def method4(pre_parsed_hash, some_hash={})
     some_hash[school_title][:name] ||= row[0]
 
   end
-  @formatted_hashes << some_hash
+  @formatted_hashes << some_hash.map{|hash| hash.to_a}
+  some_hash
 end
 
   def parse(input_hash)
@@ -121,8 +110,7 @@ end
     lev2 = method1(lev1)
     lev3 = method2(lev1, lev2)
     lev4 = method3(lev1, lev3)
-    final = method4(lev1, lev4)[0].map {|hash| hash.to_a}
-    #method4(method3(method2(method1(pre_parsed(input_hash)))))[0].map {|hash| hash.to_a}
+    final = method4(lev1, lev4)#[0]#.map {|hash| hash.to_a}
   end
 end
 
