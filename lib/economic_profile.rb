@@ -36,7 +36,7 @@ class EconomicProfile
 
   def children_in_poverty_in_year(year)
     if children_in_poverty.keys.include?(year)
-      children_in_poverty[year]
+      truncate(children_in_poverty[year])
     else
       raise UnknownDataError.new("Not a valid year")
     end
@@ -44,7 +44,7 @@ class EconomicProfile
 
   def free_or_reduced_price_lunch_percentage_in_year(year)
     if free_or_reduced_price_lunch.keys.include?(year)
-      free_or_reduced_price_lunch[year][:percentage]
+      truncate(free_or_reduced_price_lunch[year][:percentage])
     else
       raise UnknownDataError.new("Not a valid year")
     end
@@ -52,7 +52,7 @@ class EconomicProfile
 
   def free_or_reduced_price_lunch_number_in_year(year)
     if free_or_reduced_price_lunch.keys.include?(year)
-      free_or_reduced_price_lunch[year][:total]
+      truncate(free_or_reduced_price_lunch[year][:total])
     else
       raise UnknownDataError.new("Not a valid year")
     end
@@ -108,17 +108,17 @@ end
   # })
   # ep = epr.find_by_name("ACADEMY 20")
   # => <EconomicProfile>
-
-  data = {:median_household_income => {[2005, 2009] => 50000, [2008, 2014] => 60000},
-          :children_in_poverty => {2012 => 0.1845},
-          :free_or_reduced_price_lunch => {2014 => {:percentage => 0.023, :total => 100}},
-          :title_i => {2015 => 0.543},
-          :name => "ACADEMY 20"
-         }
-  economic_profile = EconomicProfile.new(data)
-
-  puts economic_profile.title_i_in_year(2015)
-  puts economic_profile.title_i_in_year(2010)
+  #
+  # data = {:median_household_income => {[2005, 2009] => 50000, [2008, 2014] => 60000},
+  #         :children_in_poverty => {2012 => 0.1845},
+  #         :free_or_reduced_price_lunch => {2014 => {:percentage => 0.023, :total => 100}},
+  #         :title_i => {2015 => 0.543},
+  #         :name => "ACADEMY 20"
+  #        }
+  # economic_profile = EconomicProfile.new(data)
+  #
+  # puts economic_profile.title_i_in_year(2015)
+  # puts economic_profile.title_i_in_year(2010)
 
   # puts economic_profile.free_or_reduced_price_lunch_percentage_in_year(2014)
   # puts economic_profile.free_or_reduced_price_lunch_number_in_year(2014)
