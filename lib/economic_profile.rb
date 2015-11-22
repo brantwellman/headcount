@@ -27,7 +27,6 @@ class EconomicProfile
     else
        raise UnknownDataError.new("Not a valid year")
     end
-
   end
 
   def median_household_income_average
@@ -36,15 +35,35 @@ class EconomicProfile
   end
 
   def children_in_poverty_in_year(year)
-    children_in_poverty[year]
-
+    if children_in_poverty.keys.include?(year)
+      children_in_poverty[year]
+    else
+      raise UnknownDataError.new("Not a valid year")
+    end
   end
 
   def free_or_reduced_price_lunch_percentage_in_year(year)
+    if free_or_reduced_price_lunch.keys.include?(year)
+      free_or_reduced_price_lunch[year][:percentage]
+    else
+      raise UnknownDataError.new("Not a valid year")
+    end
+  end
 
+  def free_or_reduced_price_lunch_number_in_year(year)
+    if free_or_reduced_price_lunch.keys.include?(year)
+      free_or_reduced_price_lunch[year][:total]
+    else
+      raise UnknownDataError.new("Not a valid year")
+    end
   end
 
   def title_i_in_year(year)
+    if title_i[year]
+      title_i[year]
+    else
+      raise UnknownDataError.new("Not a valid year")
+    end
 
   end
 
@@ -97,7 +116,15 @@ end
           :name => "ACADEMY 20"
          }
   economic_profile = EconomicProfile.new(data)
-  puts economic_profile.children_in_poverty_in_year(2012)
+
+  puts economic_profile.title_i_in_year(2015)
+  puts economic_profile.title_i_in_year(2010)
+
+  # puts economic_profile.free_or_reduced_price_lunch_percentage_in_year(2014)
+  # puts economic_profile.free_or_reduced_price_lunch_number_in_year(2014)
+  # puts free_or_reduced_price_lunch_percentage_in_year()
+    #puts economic_profile.children_in_poverty_in_year(2010)
+
   # p economic_profile.name
   # p economic_profile.median_household_income
   # p economic_profile.children_in_poverty
