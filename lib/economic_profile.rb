@@ -12,21 +12,21 @@ class EconomicProfile
     @title_i = data_hash[:title_i]
   end
 
-  def estimated_median_household_income_in_year(year)
+  def median_household_income_in_year(year)
     my_averagin_array = []
 
     median_household_income.keys.each do |year_range|
-      if year.between?(year_range[0], year_range[1])
+      if year_range.is_a?(Integer) && year_range == year
         my_averagin_array << median_household_income[year_range]
+      else
+        if year.between?(year_range[0], year_range[1])
+          my_averagin_array << median_household_income[year_range]
+        end
       end
     end
     foo = my_averagin_array.reduce(:+)
-
-    if  foo
-       foo / my_averagin_array.count
-    else
-       raise UnknownDataError.new("Not a valid year")
-    end
+    raise UnknownDataError.new("Not a valid year") unless foo
+    foo / my_averagin_array.count
   end
 
   def median_household_income_average
@@ -50,7 +50,7 @@ class EconomicProfile
     end
   end
 
-  def free_or_reduced_price_lunch_number_in_year(year)
+  def free_or_reduced_price_lunch_total_in_year(year)
     if free_or_reduced_price_lunch.keys.include?(year)
       truncate(free_or_reduced_price_lunch[year][:total])
     else
