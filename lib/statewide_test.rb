@@ -66,7 +66,16 @@ class StatewideTest
     raise UnknownDataError.new("Not a valid grade") if ![3, 8].include?(grade)
     raise UnknownDataError.new("Not a valid year") if !(2011..2014).cover?(year)
     grade_sym = grade_symbol_converter[grade]
-    truncate(send(grade_sym)[year][subject])
+    # binding.pry
+
+    if send(grade_sym)[year][subject].nil?
+      "N/A"
+    else
+      truncate(send(grade_sym)[year][subject])
+    end
+
+# truncate(send(grade_sym)[year][subject])
+
   end
 
   def set_third_grade(value)

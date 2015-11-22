@@ -109,9 +109,6 @@ class HeadcountAnalyst
     (true_count / districts_corellations.count) > 0.7 ? true : false
   end
 
-
-
-
   def top_statewide_test_year_over_year_growth(data_hash)
     raise InsufficientInformationError.new("A grade must be provided to answer this question") if !data_hash.has_key?(:grade)
     raise UnknownDataError.new("#{data_hash[:grade]} is not a known grade") if ![3, 8].include?(data_hash[:grade])
@@ -157,7 +154,7 @@ class HeadcountAnalyst
     # sort the total weighted array
     sorted_weighted = sort_all_districts_growth_collection(weighted_dist_scores)
     # return top district by weighted average
-    single_top_district_year_over_year(sorted_weighted)
+    district_with_max_growth(sorted_weighted)
   end
 
 # tested 1
@@ -213,7 +210,11 @@ class HeadcountAnalyst
   def single_top_district_year_over_year(data_hash)
     all_districts_and_growth = collection_of_districts_and_growth(data_hash)
     sorted_dists_growth = sort_all_districts_growth_collection(all_districts_and_growth)
-    max_growth = sorted_dists_growth[-1]
+    district_with_max_growth(sorted_dists_growth)
+  end
+
+  def district_with_max_growth(districts_growth_collection)
+    max_growth = districts_growth_collection[-1]
     max_growth = [max_growth.first, truncate(max_growth[-1])]
   end
 
@@ -231,6 +232,7 @@ class HeadcountAnalyst
     all_districts_growth = districts.map do |district|
       district_growth_for_subject(district.name, data_hash)
     end
+          # binding.pry
     all_districts_growth
   end
 
@@ -238,6 +240,7 @@ class HeadcountAnalyst
   # tested
     def district_growth_for_subject(name, data_hash)
       array = [name]
+      # binding.pry
       state_data = grade_subject_converter(name)[data_hash[:grade]]
       array << district_growth_values(state_data, data_hash)
     end
@@ -261,7 +264,15 @@ class HeadcountAnalyst
       end
     end
 
-
+    def grade_subject_converter(name)
+      {
+        3 => de_repo.find_by_name(name).statewide_test.third_grade,
+        8 => de_repo.find_by_name(name).statewide_test.eighth_grade,
+        # :math => @math,
+        # :reading => @reading,
+        # :writing => @writing
+      }
+    end
 
 
 # tested(1)
@@ -346,15 +357,7 @@ class HeadcountAnalyst
 
 # test(1)
 # Input - district name string. Output -
-  def grade_subject_converter(name)
-    {
-      3 => de_repo.find_by_name(name).statewide_test.third_grade,
-      8 => de_repo.find_by_name(name).statewide_test.eighth_grade,
-      # :math => @math,
-      # :reading => @reading,
-      # :writing => @writing
-    }
-  end
+
 
   def truncate(float)
     (float * 1000).floor / 1000.to_f
