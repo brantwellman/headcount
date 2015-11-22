@@ -11,7 +11,7 @@ class EconomicProfileRepository
 
   def load_data(hash)
     parser = EconomicProfileRepoParser.new
-    parser.parse.each do |arr|
+    parser.parse(hash).each do |arr|
       @economic_profile_repo << EconomicProfile.new(arr[1])
     end
   end
@@ -54,15 +54,16 @@ end
 
   #############    test code  ##############
 #
-# epr = EconomicProfileRepository.new
-# epr.load_data({
-#   :economic_profile => {
-#     :median_household_income => "./data/Median household income.csv",
-#     :children_in_poverty => "./data/School-aged children in poverty.csv",
-#     :free_or_reduced_price_lunch => "./data/Students qualifying for free or reduced price lunch.csv",
-#     :title_i => "./data/Title I students.csv"
-#   }
-# })
-# puts epr.find_by_name("AGATE 300").inspect
-# puts epr.economic_profiles.count
-# # # => <EconomicProfile>
+epr = EconomicProfileRepository.new
+epr.load_data({
+  :economic_profile => {
+    :median_household_income => "./data/Median household income.csv",
+    :children_in_poverty => "./data/School-aged children in poverty.csv",
+    :free_or_reduced_price_lunch => "./data/Students qualifying for free or reduced price lunch.csv",
+    :title_i => "./data/Title I students.csv"
+  }
+})
+puts epr.find_by_name("AGATE 300").inspect
+puts epr.find_by_name("ACADEMY 20").inspect
+puts epr.economic_profiles.count
+# # => <EconomicProfile>

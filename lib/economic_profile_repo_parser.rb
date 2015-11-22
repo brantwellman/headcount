@@ -2,14 +2,27 @@ require 'csv'
 require 'pry'
 
 class EconomicProfileRepoParser
-  attr_reader :formatted_hashes
+  attr_reader :formatted_hashes, :setup
 
 def initialize
   @formatted_hashes = []
+  @setup = {
+  :economic_profile => {
+    :median_household_income => "./data/Median household income.csv",
+    :children_in_poverty => "./data/School-aged children in poverty.csv",
+    :free_or_reduced_price_lunch => "./data/Students qualifying for free or reduced price lunch.csv",
+    :title_i => "./data/Title I students.csv"
+  }
+}
 end
 
-def method1(some_hash={})
-  CSV.foreach("data/Median household income.csv", headers: true) do |row|
+def pre_parsed(input_hash)
+  #binding.pry
+  input_hash[:economic_profile]
+end
+
+def method1(pre_parsed_hash, some_hash={})
+  CSV.foreach(pre_parsed_hash[:median_household_income], headers: true) do |row|
     school_title = row[0].gsub(" ", "_").to_sym
     date_key = row[1].split('-').map {|element| element.to_i}
 
@@ -29,8 +42,8 @@ def method1(some_hash={})
   some_hash
 end
 
-def method2(some_hash={})
-  CSV.foreach("data/School-aged children in poverty.csv", headers: true) do |row|
+def method2(pre_parsed_hash, some_hash={})
+  CSV.foreach(pre_parsed_hash[:children_in_poverty], headers: true) do |row|
     school_title = row[0].gsub(" ", "_").to_sym
     date_key = row[1].to_i
 
@@ -52,8 +65,8 @@ def method2(some_hash={})
   some_hash
 end
 
-def method3(some_hash={})
-  CSV.foreach("data/Students qualifying for free or reduced price lunch.csv", headers: true) do |row|
+def method3(pre_parsed_hash, some_hash={})
+  CSV.foreach(pre_parsed_hash[:free_or_reduced_price_lunch], headers: true) do |row|
     school_title = row[0].gsub(" ", "_").to_sym
     date_key = row[2].to_i
     unless some_hash[school_title]
@@ -83,8 +96,8 @@ def method3(some_hash={})
   some_hash
 end
 
-def method4(some_hash={})
-  CSV.foreach("data/Title I students.csv", headers: true) do |row|
+def method4(pre_parsed_hash, some_hash={})
+  CSV.foreach(pre_parsed_hash[:title_i], headers: true) do |row|
     school_title = row[0].gsub(" ", "_").to_sym
     date_key = row[1].to_i
 
@@ -103,18 +116,27 @@ def method4(some_hash={})
   @formatted_hashes << some_hash
 end
 
-  def parse
-    method4(method3(method2(method1)))[0].map {|hash| hash.to_a}
+  def parse(input_hash)
+    lev1 = pre_parsed(input_hash)
+    lev2 = method1(lev1)
+    lev3 = method2(lev1, lev2)
+    lev4 = method3(lev1, lev3)
+    final = method4(lev1, lev4)[0].map {|hash| hash.to_a}
+    #method4(method3(method2(method1(pre_parsed(input_hash)))))[0].map {|hash| hash.to_a}
   end
 end
 
 #
 # eprp = EconomicProfileRepoParser.new
-# # eprp.method4(eprp.method3(eprp.method2(eprp.method1)))
-# # puts eprp.formatted_hashes[0].values[0]
-# # p eprp.method3(method2(method1))
-# puts eprp.parse.inspect
-#
+# # # eprp.method4(eprp.method3(eprp.method2(eprp.method1)))
+# # # puts eprp.formatted_hashes[0].values[0]
+# # # p eprp.method3(method2(method1))
+# # binding.pry
+# # p eprp.pre_parsed(eprp.setup)
+# # p eprp.method1(eprp.pre_parsed(eprp.setup))
+# p eprp.parse(eprp.setup)
+# # p eprp.parse(eprp.setup)
+# #
 
 # csv 1
 # some_hash = some_method1
