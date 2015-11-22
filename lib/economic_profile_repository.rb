@@ -63,7 +63,9 @@ epr.load_data({
     :title_i => "./data/Title I students.csv"
   }
 })
-puts epr.find_by_name("AGATE 300").inspect
-puts epr.find_by_name("ACADEMY 20").inspect
-puts epr.economic_profiles.count
+# puts epr.find_by_name("AGATE 300").inspect
+# puts epr.find_by_name("ACADEMY 20").inspect
+
+p epr.economic_profile_repo
 # # => <EconomicProfile>
+p epr.economic_profiles.count
