@@ -49,3 +49,39 @@ class DistrictRepository
     @districts.select { |district| district.name.include?(str_fragment.upcase)}
   end
 end
+
+
+
+# dr = DistrictRepository.new
+# dr.load_data({
+#   :enrollment => {
+#     :kindergarten => "./data/Kindergartners in full-day program.csv",
+#     :high_school_graduation => "./data/High school graduation rates.csv",
+#   },
+#   :statewide_testing => {
+#     :third_grade => "./data/3rd grade students scoring proficient or above on the CSAP_TCAP.csv",
+#     :eighth_grade => "./data/8th grade students scoring proficient or above on the CSAP_TCAP.csv",
+#     :math => "./data/Average proficiency on the CSAP_TCAP by race_ethnicity_ Math.csv",
+#     :reading => "./data/Average proficiency on the CSAP_TCAP by race_ethnicity_ Reading.csv",
+#     :writing => "./data/Average proficiency on the CSAP_TCAP by race_ethnicity_ Writing.csv"
+#   }
+# })
+
+# p district = dr.find_by_name("ACADEMY 20")
+# statewide_test = district.statewide_test
+# p dr.districts.count
+# p dr.districts.count
+# p statewide_test
+# p enrollment = dr.find_by_name("ACADEMY 20")
+# p dr.districts[50].enrollment.name
+# p district = dr.find_by_name("Academy 20")
+# p district.enrollment.kindergarten_participation_by_year
+# p dr.districts
+
+# p dr.find_by_name("ACADEMY 20")
+# district = dr.find_by_name("GUNNISON WATERSHED RE1J")
+# p dr.districts[50].enrollment.name
+# district.enrollment.kindergarten_participation_by_year
+# p district.enrollment.kindergarten_participation_in_year(2010)
+# p dr.districts.count
+ # p district.enrollment.kindergarten_participation_in_year(2004)

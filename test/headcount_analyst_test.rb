@@ -3,6 +3,8 @@ require 'minitest/autorun'
 require_relative '../lib/headcount_analyst'
 require_relative '../lib/district_repository'
 require_relative '../lib/enrollment_repository'
+require_relative '../lib/insufficient_information_error'
+require_relative '../lib/unknown_data_error'
 require 'pry'
 
 class HeadcountAnalystTest < Minitest::Test
@@ -12,8 +14,11 @@ class HeadcountAnalystTest < Minitest::Test
     @ha = HeadcountAnalyst.new(@d_repo)
     @d_repo.load_data({
       :enrollment => {
-      :kindergarten => "./test/fixtures/kinder_enrollment_fixture.csv",
-      :high_school_graduation => "./test/fixtures/hs_grad_rates_fixture.csv" }
+        :kindergarten => "./test/fixtures/kinder_enrollment_fixture.csv",
+        :high_school_graduation => "./test/fixtures/hs_grad_rates_fixture.csv" },
+      :statewide_testing => {
+        :third_grade => "./test/fixtures/3rd_grade_nil_fixture.csv"
+      }
     })
   end
 
@@ -183,5 +188,187 @@ class HeadcountAnalystTest < Minitest::Test
   def test_feature_participation_feature_false_key_for_and_not_colorado
     districts_array_hash = {:for => "AGATE 300"}
     refute @ha.kindergarten_participation_correlates_with_high_school_graduation(districts_array_hash)
+  end
+
+
+
+  def test_it_sorts_array_collection_by_growth
+    districts_growth = [["COLORADO", 0.0030000000000000027],
+                        ["ACADEMY 20", -0.03300000000000003],
+                        ["ADAMS COUNTY 14", -0.008000000000000007]]
+    expected =         [["ACADEMY 20", -0.03300000000000003],
+                        ["ADAMS COUNTY 14", -0.008000000000000007],
+                        ["COLORADO", 0.0030000000000000027]]
+    assert_equal expected, @ha.sort_all_districts_growth_collection(districts_growth)
+  end
+
+  def test_is_throws_error_if_unknown_grade_is_provided
+    assert_raises(UnknownDataError) { @ha.top_statewide_test_year_over_year_growth(grade: 9, subject: :math) }
+  end
+
+  def test_it_throws_error_if_grade_key_is_not_included_for_growth_rates
+    assert_raises(InsufficientInformationError) { @ha.top_statewide_test_year_over_year_growth(subject: :math) }
+  end
+
+  def test_returns_true_for_hash_with_greater_than_2_key_value_pairs
+    no_nils_hash = {
+      2008 => {
+        :math => 0.857,
+        :reading => 0.866,
+        :writing => 0.671
+      },
+      2009 => {
+        :math => 0.824,
+        :reading => 0.862,
+        :writing => 0.706
+      },
+      2010 => {
+        :math => 0.877,
+        :reading => 0.862,
+        :writing => 0.706
+        }
+      }
+    assert @ha.count_key_value_pairs(no_nils_hash)
+  end
+
+  def test_returns_true_for_hash_with_2_key_value_pairs
+    no_nils_hash = {
+      2008 => {
+        :math => 0.857,
+        :reading => 0.866,
+        :writing => 0.671
+      },
+      2009 => {
+        :math => 0.824,
+        :reading => 0.862,
+        :writing => 0.706
+      }
+    }
+    assert @ha.count_key_value_pairs(no_nils_hash)
+  end
+
+  def test_returns_false_for_hash_with_less_than_2_key_value_pairs
+    no_nils_hash = {
+      2008 => {
+        :math => 0.857,
+        :reading => 0.866,
+        :writing => 0.671
+      }
+    }
+    refute @ha.count_key_value_pairs(no_nils_hash)
+  end
+
+  # def test_it_removes_nils_from_grade_data
+  #   expected = {
+  #     2008 => {
+  #       :math => 0.857,
+  #       :reading => 0.866,
+  #       :writing => 0.671
+  #     },
+  #     2009 => {
+  #       :math => 0.824,
+  #       :reading => 0.862,
+  #       :writing => 0.706
+  #       }
+  #     }
+  #   assert_equal expected, @ha.go_into_hash_and_eliminate_nils("ACADEMY 20", {grade: 3, subject: :math})
+  # end
+
+  def test_it_returns_value_from_grade_subject_converter
+    expected = {
+      3 => {
+        2008 => {
+          :math => 0.857,
+          :reading => 0.866,
+          :writing => 0.671
+          },
+        2009 => {
+          :math => 0.824,
+          :reading => 0.862,
+          :writing => 0.706
+          },
+        2010 => {
+          :math => nil,
+          :reading => 0.864,
+          :writing => 0.662
+          },
+        2011 => {
+          :math => nil
+          }
+        },
+        8 => nil}
+
+    assert_equal expected, @ha.grade_subject_converter("ACADEMY 20")
+  end
+
+  def test_it_returns_a_growth_value_for_district
+    hash = {
+      2008 => {
+        :math => 0.857,
+        :reading => 0.866,
+        :writing => 0.671
+      },
+      2009 => {
+        :math => 0.824,
+        :reading => 0.862,
+        :writing => 0.706
+        }
+      }
+    data_hash = { grade: 3, subject: :math }
+    expected = -0.03300000000000003
+    assert_equal expected, @ha.district_growth_values(hash, data_hash)
+  end
+
+  def test_it_creates_growth_district_array
+    expected = ["ACADEMY 20", -0.03300000000000003]
+    assert_equal expected, @ha.district_growth_for_subject("ACADEMY 20", {grade: 3, subject: :math})
+  end
+
+  def test_it_creates_array_with_all_districts_and_growths
+    expected = [["COLORADO", 0.0030000000000000027], ["ACADEMY 20", -0.03300000000000003], ["ADAMS COUNTY 14", -0.008000000000000007]]
+    assert_equal expected, @ha.collection_of_districts_and_growth({grade: 3, subject: :math})
+  end
+
+  def test_it_pulls_district_array_with_top_growth_rate_and_truncates_growth_rate
+    data_hash = {grade: 3, subject: :math}
+    expected = ["COLORADO", 0.003]
+    assert_equal  expected, @ha.single_top_district_year_over_year(data_hash)
+  end
+
+  # def top_x_districts_year_over_year(num, sorted_dists_growth_array)
+  def test_it_returns_top_x_districts_year_over_year_from_sorted_array
+    data_hash = {grade: 3, subject: :math, top: 2}
+
+    expected = [["COLORADO", 0.003], ["ADAMS COUNTY 14", -0.009]]
+    assert_equal expected, @ha.top_x_districts_year_over_year(data_hash)
+  end
+
+  def test_it_muliplies_each_growth_value_by_the_weight
+    subject_districts_growth = [["ACADEMY 20", -0.03300000000000003],
+                                ["ADAMS COUNTY 14", -0.008000000000000007],
+                                ["COLORADO", 0.0030000000000000027],
+                                ["AGATE", 0.0046000000000008],
+                                ["BOULDER VALLEY", 0.005678900]]
+    weight_value = 1/3.0
+    expected =                 [["ACADEMY 20", -0.01100000000000001],
+                                ["ADAMS COUNTY 14", -0.0026666666666666687],
+                                ["COLORADO", 0.0010000000000000009],
+                                ["AGATE", 0.0015333333333335999],
+                                ["BOULDER VALLEY", 0.0018929666666666666]]
+    assert_equal expected, @ha.multiply_growth_values_by_weight(weight_value, subject_districts_growth)
+  end
+
+  def test_it_adds_weighted_values_from_three_subject_collections_into_one_collection
+    math_coll =    [["ACADEMY 20", 0.011],
+                    ["ADAMS COUNTY 14", 0.022]]
+    reading_coll = [["ACADEMY 20", 0.033],
+                    ["ADAMS COUNTY 14", 0.044]]
+    writing_coll = [["ACADEMY 20", 0.055],
+                    ["ADAMS COUNTY 14", 0.011],
+                    ["COLORADO", 0.088]]
+    expected =     [["ACADEMY 20", 0.099],
+                    ["ADAMS COUNTY 14", 0.077],
+                    ["COLORADO", 0.088]]
+    assert_equal expected, @ha.add_weighted_values_for_each_subject(math_coll, reading_coll, writing_coll)
   end
 end

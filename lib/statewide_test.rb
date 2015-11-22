@@ -1,5 +1,6 @@
 require_relative 'unknown_data_error'
 
+
 class StatewideTest
   attr_reader :name
   attr_accessor :data
@@ -41,7 +42,11 @@ class StatewideTest
     raise UnknownDataError.new("Not a valid subject") if ![:math, :reading, :writing].include?(subject)
     raise UnknownDataError.new("Not a valid race") if !val_races.include?(race)
     raise UnknownDataError.new("Not a valid year") if !(2011..2014).cover?(year)
-    truncate(send(subject)[year][race])
+    if send(subject)[year][race].nil?
+      "N/A"
+    else
+      truncate(send(subject)[year][race])
+    end
   end
 
   def proficient_by_race_or_ethnicity(race)
@@ -61,7 +66,16 @@ class StatewideTest
     raise UnknownDataError.new("Not a valid grade") if ![3, 8].include?(grade)
     raise UnknownDataError.new("Not a valid year") if !(2008..2014).cover?(year)
     grade_sym = grade_symbol_converter[grade]
-    truncate(send(grade_sym)[year][subject])
+    # binding.pry
+
+    if send(grade_sym)[year][subject].nil?
+      "N/A"
+    else
+      truncate(send(grade_sym)[year][subject])
+    end
+
+# truncate(send(grade_sym)[year][subject])
+
   end
 
   def set_third_grade(value)

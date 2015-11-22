@@ -17,7 +17,12 @@ class EnrollmentParser
   end
 
   def file_converter
-    {:kindergarten => :kindergarten_participation, :high_school_graduation => :high_school_graduation}
+    {
+      :kindergarten =>
+      :kindergarten_participation,
+      :high_school_graduation =>
+      :high_school_graduation
+    }
   end
 
   def convert_nil(value)
