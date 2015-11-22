@@ -84,5 +84,3 @@ p dr.districts.count
 # p district.enrollment.kindergarten_participation_in_year(2010)
 # p dr.districts.count
  # p district.enrollment.kindergarten_participation_in_year(2004)
-
-#<District:0x007fe32491f5a0 @name="YUMA SCHOOL DISTRICT 1", @enrollment=#<Enrollment:0x007fe324944b98 @name="YUMA SCHOOL DISTRICT 1", @kindergarten_participation={"2007"=>"1", "2006"=>"1", "2005"=>"1", "2004"=>"0", "2008"=>"1", "2009"=>"1", "2010"=>"1", "2011"=>"1", "2012"=>"1", "2013"=>"1", "2014"=>"1"}>>]
