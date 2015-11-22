@@ -1,5 +1,5 @@
 require 'pry'
-require_relative 'statewidetest'
+require_relative 'statewide_test'
 require_relative 'statewidetest_parser'
 
 class StatewideTestRepository
