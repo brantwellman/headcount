@@ -330,22 +330,17 @@ class HeadcountAnalystTest < Minitest::Test
   end
 
   def test_it_pulls_district_array_with_top_growth_rate_and_truncates_growth_rate
-    sorted_dists = [["ACADEMY 20", -0.03300000000000003],
-                    ["ADAMS COUNTY 14", -0.008000000000000007],
-                    ["COLORADO", 0.0030000000000000027]]
+    data_hash = {grade: 3, subject: :math}
     expected = ["COLORADO", 0.003]
-    assert_equal  expected, @ha.single_top_district_year_over_year(sorted_dists)
+    assert_equal  expected, @ha.single_top_district_year_over_year(data_hash)
   end
 
   # def top_x_districts_year_over_year(num, sorted_dists_growth_array)
   def test_it_returns_top_x_districts_year_over_year_from_sorted_array
-    sorted_dists = [["ACADEMY 20", -0.03300000000000003],
-                    ["ADAMS COUNTY 14", -0.008000000000000007],
-                    ["COLORADO", 0.0030000000000000027],
-                    ["AGATE", 0.0046000000000008],
-                    ["BOULDER VALLEY", 0.005678900]]
-    expected = [["BOULDER VALLEY", 0.005], ["AGATE", 0.004], ["COLORADO", 0.003]]
-    assert_equal expected, @ha.top_x_districts_year_over_year(3, sorted_dists)
+    data_hash = {grade: 3, subject: :math, top: 2}
+
+    expected = [["COLORADO", 0.003], ["ADAMS COUNTY 14", -0.009]]
+    assert_equal expected, @ha.top_x_districts_year_over_year(data_hash)
   end
 
   def test_it_muliplies_each_growth_value_by_the_weight

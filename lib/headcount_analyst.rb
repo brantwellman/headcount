@@ -115,32 +115,42 @@ class HeadcountAnalyst
   def top_statewide_test_year_over_year_growth(data_hash)
     raise InsufficientInformationError.new("A grade must be provided to answer this question") if !data_hash.has_key?(:grade)
     raise UnknownDataError.new("#{data_hash[:grade]} is not a known grade") if ![3, 8].include?(data_hash[:grade])
-#   call collection_of_districts_and_growth - needs to be nested in branches
-    all_districts_and_growth = collection_of_districts_and_growth(data_hash)
-    # sort all_districts_and_growth by second element - needs to be nedsted in branches
-    sorted_dists_growth = sort_all_districts_growth_collection(all_districts_and_growth)
-    # truncate return values
-    if data_hash.has_key?(:weighting)
-    # gather sorted arrays for all 3 subjects
-    weighting_across_all_subjects(data_hash)
-    elsif data_hash.has_key?(:top)
-      top_x_districts_year_over_year(data_hash[:top], sorted_dists_growth)
+    # top key. Return top x# of districts. This should work.
+    if data_hash.has_key?(:top)
+      top_x_districts_year_over_year(data_hash)
+    # grade, subject keys...no top. This should work. - Find single top district for a subject
     elsif data_hash.has_key?(:grade) && data_hash.has_key?(:subject) && !data_hash.has_key?(:top)
-      single_top_district_year_over_year(data_hash, sorted_dists_growth)
+      single_top_district_year_over_year(data_hash)
+    # weighting key. Add weighting for objects.
+    elsif data_hash.has_key?(:weighting)
+      # gather sorted arrays for all 3 subjects
+      weighting_across_all_subjects(data_hash)
+    # grade only key. Add weighting at 1/3.0 for objects.
     else
       weighted_data_hash = data_hash.merge({:weighting => {:math => 1/3.0, :reading => 1/3.0, :writing => 1/3.0}})
       weighting_across_all_subjects(weighted_data_hash)
     end
   end
+    # :third_grade => {
+    #   2012 => {:math => 0.830, :reading => 0.870, :writing => 0.655},
+    #   2013 => {:math => 0.855, :reading => 0.859, :writing => 0.6689},
+    #   2014 => {:math => 0.834, :reading => 0.831, :writing => 0.639}
+    # },
+    # :eighth_grade => {
+    #   2008 => {:math => 0.857, :reading => 0.866, :writing => 0.671},
+    #   2009 => {:math => 0.824, :reading => 0.862, :writing => 0.706},
+    #   2010 => {:math => 0.849, :reading => 0.864, :writing => 0.662}
+    # },
 
-# needs lots of help
+# data_hash = (grade: 8, :weighting => {:math => 0.5, :reading => 0.5, :writing => 0.0})
+
   def weighting_across_all_subjects(data_hash)
-    math_all_districts_and_growth = collection_of_districts_and_growth(data_hash.merge({subject: :math}))
+    math_all_districts_and_growth = collection_of_districts_and_growth(data_hash.merge({subject: :math})) # this could be nil?
     # iterate through single sub array and multiply each growth value by weighting value
     math_weighted_growth_values = multiply_growth_values_by_weight(data_hash[:weighting][:math], math_all_districts_and_growth)
-    reading_all_districts_and_growth = collection_of_districts_and_growth(data_hash.merge({subject: :reading}))
+    reading_all_districts_and_growth = collection_of_districts_and_growth(data_hash.merge({subject: :reading})) # this could be nil?
     reading_weighted_growth_values = multiply_growth_values_by_weight(data_hash[:weighting][:reading], reading_all_districts_and_growth)
-    writing_all_districts_and_growth = collection_of_districts_and_growth(data_hash.merge({subject: :writing}))
+    writing_all_districts_and_growth = collection_of_districts_and_growth(data_hash.merge({subject: :writing})) # this could be nil?
     writing_weighted_growth_values = multiply_growth_values_by_weight(data_hash[:weighting][:writing], writing_all_districts_and_growth)
     # need to add all values corresponding to district name combine into one array
     weighted_dist_scores = add_weighted_values_for_each_subject(math_weighted_growth_values, reading_weighted_growth_values, writing_weighted_growth_values)
@@ -175,24 +185,35 @@ class HeadcountAnalyst
     weighted_values
   end
 
-
-
-
-
-# input - number of districts required, sorted districts_growth
 # tested - 1
-  def top_x_districts_year_over_year(num, sorted_dists_growth_array)
-    top_dists = sorted_dists_growth_array.last(num)
+  def top_x_districts_year_over_year(data_hash)
+    all_districts_and_growth = collection_of_districts_and_growth(data_hash)
+    sorted_dists_growth = sort_all_districts_growth_collection(all_districts_and_growth)
+    number = data_hash[:top]
+    top_dists = sorted_dists_growth.last(number)
     dists_trunced_growth = top_dists.map do |dist_growth|
       [dist_growth[0], truncate(dist_growth[-1])]
     end
     dists_trunced_growth.reverse
   end
 
+
+# input - number of districts required, sorted districts_growth
+# tested - 1
+  # def top_x_districts_year_over_year(num, sorted_dists_growth_array)
+  #   top_dists = sorted_dists_growth_array.last(num)
+  #   dists_trunced_growth = top_dists.map do |dist_growth|
+  #     [dist_growth[0], truncate(dist_growth[-1])]
+  #   end
+  #   dists_trunced_growth.reverse
+  # end
+
 # output - finds last dist/growth in array. Should be max growth.
 # tested (1)
-  def single_top_district_year_over_year(sorted_dists_growth_array)
-    max_growth = sorted_dists_growth_array[-1]
+  def single_top_district_year_over_year(data_hash)
+    all_districts_and_growth = collection_of_districts_and_growth(data_hash)
+    sorted_dists_growth = sort_all_districts_growth_collection(all_districts_and_growth)
+    max_growth = sorted_dists_growth[-1]
     max_growth = [max_growth.first, truncate(max_growth[-1])]
   end
 
@@ -201,7 +222,7 @@ class HeadcountAnalyst
     districts_growth.sort_by {|district_growth| district_growth[1] }
   end
 
-  # builds collection of arrays containing districts and its growth value
+  # builds collection of arrays containing districts and its growth value for one subject
   # tested
   def collection_of_districts_and_growth(data_hash)
     districts = @de_repo.districts.reject do |district|
@@ -321,19 +342,6 @@ class HeadcountAnalyst
   #   end
   #   (max_val - min_val) / (year_last - year1)
   # end
-
-
-
-  # :third_grade => {
-  #   2012 => {:math => 0.830, :reading => 0.870, :writing => 0.655},
-  #   2013 => {:math => 0.855, :reading => 0.859, :writing => 0.6689},
-  #   2014 => {:math => 0.834, :reading => 0.831, :writing => 0.639}
-  # },
-  # :eighth_grade => {
-  #   2008 => {:math => 0.857, :reading => 0.866, :writing => 0.671},
-  #   2009 => {:math => 0.824, :reading => 0.862, :writing => 0.706},
-  #   2010 => {:math => 0.849, :reading => 0.864, :writing => 0.662}
-  # },
 
 
 # test(1)
