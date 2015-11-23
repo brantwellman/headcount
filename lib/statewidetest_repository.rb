@@ -43,11 +43,6 @@ class StatewideTestRepository
     statewide_tests
   end
 
-#################### to be removed prior to submission
-  # def add_records(records)
-  #   @statewide_tests += records
-  # end
-
   def find_by_name(test_name)
      @statewide_tests.find {|statetest| statetest.name == test_name.upcase }
   end

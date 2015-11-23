@@ -40,10 +40,10 @@ class StatewideTestRepositoryTest < Minitest::Test
   end
 
   def test_it_returns_nil_if_statewide_tests_is_empty
-  str = StatewideTestRepository.new
+    str = StatewideTestRepository.new
 
-  assert_equal [], str.statewide_tests
-  assert_equal nil, str.find_by_name("ACADEMY 20")
+    assert_equal [], str.statewide_tests
+    assert_equal nil, str.find_by_name("ACADEMY 20")
   end
 
   def test_it_returns_nil_if_statewide_tests_doesnt_exist
@@ -74,5 +74,4 @@ class StatewideTestRepositoryTest < Minitest::Test
 
     assert_equal expected, result
   end
-
 end

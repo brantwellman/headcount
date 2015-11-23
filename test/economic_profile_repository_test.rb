@@ -45,9 +45,6 @@ class EconomicProfileRepositoryTest < Minitest::Test
     epr.load_data(@big_data_hash)
 
     assert_equal "ACADEMY 20", epr.find_by_name("ACADEMY 20").name
-    assert_equal "AGATE 300", epr.find_by_name("AGATE 300").name 
+    assert_equal "AGATE 300", epr.find_by_name("AGATE 300").name
   end
-
-
-
 end

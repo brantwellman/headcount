@@ -196,8 +196,6 @@ class HeadcountAnalystTest < Minitest::Test
     refute @ha.kindergarten_participation_correlates_with_high_school_graduation(districts_array_hash)
   end
 
-
-
   def test_it_sorts_array_collection_by_growth
     districts_growth = [["COLORADO", 0.0030000000000000027],
                         ["ACADEMY 20", -0.03300000000000003],
@@ -264,22 +262,6 @@ class HeadcountAnalystTest < Minitest::Test
     refute @ha.count_key_value_pairs(no_nils_hash)
   end
 
-  # def test_it_removes_nils_from_grade_data
-  #   expected = {
-  #     2008 => {
-  #       :math => 0.857,
-  #       :reading => 0.866,
-  #       :writing => 0.671
-  #     },
-  #     2009 => {
-  #       :math => 0.824,
-  #       :reading => 0.862,
-  #       :writing => 0.706
-  #       }
-  #     }
-  #   assert_equal expected, @ha.go_into_hash_and_eliminate_nils("ACADEMY 20", {grade: 3, subject: :math})
-  # end
-
   def test_it_returns_value_from_grade_subject_converter
     expected = {
       3 => {
@@ -341,7 +323,6 @@ class HeadcountAnalystTest < Minitest::Test
     assert_equal  expected, @ha.single_top_district_year_over_year(data_hash)
   end
 
-  # def top_x_districts_year_over_year(num, sorted_dists_growth_array)
   def test_it_returns_top_x_districts_year_over_year_from_sorted_array
     data_hash = {grade: 3, subject: :math, top: 2}
 

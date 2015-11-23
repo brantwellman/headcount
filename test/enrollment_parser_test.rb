@@ -29,10 +29,31 @@ class EnrollmentParserTest < Minitest::Test
     assert_equal result, expected
   end
 
-  def def_group_to_nested_hash_takes_a_larger_array_of_hashes test_group_to_nested_hash_takes_an_array_of_hashes_and_merges_them
-    group = [{:name=>"COLROADO", :kindergarten_participation => {2011 =>0.672}},{:name=>"COLROADO", :kindergarten_participation => {2012 =>0.601}},{:name=>"COLROADO", :kindergarten_participation => {2013 =>0.602}},{:name=>"COLROADO", :kindergarten_participation => {2014 =>0.603}},{:name=>"COLROADO", :kindergarten_participation => {2015 =>0.695}}]
+  def test_group_to_nested_hash_takes_an_array_of_hashes_and_merges_them
+    group = [{
+              :name => "COLROADO",
+              :kindergarten_participation => {
+                2011 => 0.672}}, {
+              :name => "COLROADO",
+              :kindergarten_participation => {
+                2012 => 0.601}},{
+              :name => "COLROADO",
+              :kindergarten_participation => {
+                2013 => 0.602}}, {
+              :name => "COLROADO",
+              :kindergarten_participation => {
+                2014 =>0.603}}, {
+              :name => "COLROADO",
+              :kindergarten_participation => {
+                2015 =>0.695}
+              }]
     ep = EnrollmentParser.new
-    expected = {:name=>"COLROADO", :kindergarten_participation => {2011 =>0.672, 2012 => 0.695, 2013 =>0.602, 2014 => 0.603, 2015 => 0.695}}
+    expected = {
+                :name => "COLROADO",
+                :kindergarten_participation => {
+                  2011 =>0.672, 2012 => 0.601, 2013 =>0.602, 2014 => 0.603, 2015 => 0.695
+                  }
+                }
     result = ep.group_to_nested_hash(group, :kindergarten_participation)
     assert_equal result, expected
   end

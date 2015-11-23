@@ -65,11 +65,11 @@ class EnrollmentRepositoryTest < Minitest::Test
   def test_it_splits_file_hash_into_key_file_array
     e_repo = EnrollmentRepository.new
     hash = {
-    :enrollment => {
-    :kindergarten => "./data/Kindergartners in full-day program.csv",
-    :high_school_graduation => "./data/High school graduation rates.csv"
-  }
-}
+            :enrollment => {
+            :kindergarten => "./data/Kindergartners in full-day program.csv",
+            :high_school_graduation => "./data/High school graduation rates.csv"
+                            }
+            }
     expected = [[:kindergarten, "./data/Kindergartners in full-day program.csv"],
                [:high_school_graduation, "./data/High school graduation rates.csv"]]
 

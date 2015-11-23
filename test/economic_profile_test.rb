@@ -64,28 +64,27 @@ class EconomicProfileTest < Minitest::Test
       assert_raises(UnknownDataError) {ep.children_in_poverty_in_year(2000)}
     end
 
-    def test_free_or_reduced_price_lunch_percentage
-      ep = EconomicProfile.new(@data)
-      result = ep.free_or_reduced_price_lunch_percentage_in_year(2014)
+  def test_free_or_reduced_price_lunch_percentage
+    ep = EconomicProfile.new(@data)
+    result = ep.free_or_reduced_price_lunch_percentage_in_year(2014)
 
-      assert_equal 0.023, result
-      assert_raises(UnknownDataError) { ep.free_or_reduced_price_lunch_number_in_year(2000)}
-    end
+    assert_equal 0.023, result
+    assert_raises(UnknownDataError) { ep.free_or_reduced_price_lunch_number_in_year(2000)}
+  end
 
-    def test_free_or_reduced_price_lunch_by_number
-      ep = EconomicProfile.new(@data)
-      result = ep.free_or_reduced_price_lunch_number_in_year(2014)
+  def test_free_or_reduced_price_lunch_by_number
+    ep = EconomicProfile.new(@data)
+    result = ep.free_or_reduced_price_lunch_number_in_year(2014)
 
-      assert_equal 100, result
-      assert_raises(UnknownDataError) { ep.free_or_reduced_price_lunch_number_in_year(2000)}
-    end
+    assert_equal 100, result
+    assert_raises(UnknownDataError) { ep.free_or_reduced_price_lunch_number_in_year(2000)}
+  end
 
-    def test_it_returns_title_i_in_year
-      ep = EconomicProfile.new(@data)
-      result = ep.title_i_in_year(2015)
+  def test_it_returns_title_i_in_year
+    ep = EconomicProfile.new(@data)
+    result = ep.title_i_in_year(2015)
 
-      assert_equal 0.543, result
-      assert_raises(UnknownDataError) { ep.title_i_in_year(2012) }
-    end
-
+    assert_equal 0.543, result
+    assert_raises(UnknownDataError) { ep.title_i_in_year(2012) }
+  end
 end

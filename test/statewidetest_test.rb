@@ -280,5 +280,4 @@ class StatewideTestTest < Minitest::Test
 
     assert_equal expected, statey.proficient_by_grade(3)
   end
-
 end

@@ -106,7 +106,6 @@ class EconomicProfileRepoParser
   end
 
   def parse(input_hash)
-    # binding.pry
     if input_hash[:economic_profile].nil?
       []
     end
@@ -114,24 +113,6 @@ class EconomicProfileRepoParser
     lev2 = method1(lev1)
     lev3 = method2(lev1, lev2)
     lev4 = method3(lev1, lev3)
-    final = method4(lev1, lev4)#[0]#.map {|hash| hash.to_a}
+    final = method4(lev1, lev4)
   end
 end
-
-#
-# eprp = EconomicProfileRepoParser.new
-# # # eprp.method4(eprp.method3(eprp.method2(eprp.method1)))
-# # # puts eprp.formatted_hashes[0].values[0]
-# # # p eprp.method3(method2(method1))
-# # binding.pry
-# # p eprp.pre_parsed(eprp.setup)
-# # p eprp.method1(eprp.pre_parsed(eprp.setup))
-# p eprp.parse(eprp.setup)
-# # p eprp.parse(eprp.setup)
-# #
-
-# csv 1
-# some_hash = some_method1
-#
-# #csv 3
-# some_hash = some_method3(some_hash)
