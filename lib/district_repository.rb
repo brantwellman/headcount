@@ -1,23 +1,31 @@
 require_relative "district"
 require_relative 'enrollment_repository'
 require_relative 'statewidetest_repository'
+require_relative 'economic_profile_repository'
 require 'pry'
 
 class DistrictRepository
-  attr_accessor :districts, :enrollment_repository, :statewidetest_repository
+  attr_accessor :districts, :enrollment_repository, :statewidetest_repository, :economic_profile_repository
 
   def initialize
     @districts = []
     @enrollment_repository = EnrollmentRepository.new
     @statewidetest_repository = StatewideTestRepository.new
+    @economic_profile_repository = EconomicProfileRepository.new
   end
 
   def load_data(hash)
+    # binding.pry
     @enrollment_repository.load_data(:enrollment => hash[:enrollment])
+    # binding.pry
     @statewidetest_repository.load_data(:statewide_testing => hash[:statewide_testing])
+    if !hash[:economic_profile].nil?
+      @economic_profile_repository.load_data(:economic_profile => hash[:economic_profile])
+    end
     load_repos({
       :enrollment => @enrollment_repository,
-      :statewide_testing => @statewidetest_repository
+      :statewide_testing => @statewidetest_repository,
+      :economic_profile => @economic_profile_repository
     })
   end
 
@@ -64,6 +72,12 @@ end
 #     :math => "./data/Average proficiency on the CSAP_TCAP by race_ethnicity_ Math.csv",
 #     :reading => "./data/Average proficiency on the CSAP_TCAP by race_ethnicity_ Reading.csv",
 #     :writing => "./data/Average proficiency on the CSAP_TCAP by race_ethnicity_ Writing.csv"
+#   },
+#   :economic_profile => {
+#     :median_household_income => "./data/Median household income.csv",
+#     :children_in_poverty => "./data/School-aged children in poverty.csv",
+#     :free_or_reduced_price_lunch => "./data/Students qualifying for free or reduced price lunch.csv",
+#     :title_i => "./data/Title I students.csv"
 #   }
 # })
 

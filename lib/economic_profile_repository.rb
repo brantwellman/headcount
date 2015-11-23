@@ -1,27 +1,24 @@
 require 'pry'
-require_relative 'economic_profile' #does not yet exist
-require_relative 'economic_profile_repo_parser' #does not yet exist
+require_relative 'economic_profile'
+require_relative 'economic_profile_repo_parser'
 
 class EconomicProfileRepository
-  attr_reader :economic_profile_repo, :key
+  attr_reader :economic_profiles
+  attr_accessor :key
 
   def initialize
-    @economic_profile_repo =  []
+    @economic_profiles =  []
   end
 
   def load_data(hash)
     parser = EconomicProfileRepoParser.new
     parser.parse(hash).each do |arr|
-      @economic_profile_repo << EconomicProfile.new(arr[1])
+      @economic_profiles << EconomicProfile.new(arr[1])
     end
   end
 
-  def economic_profiles
-    economic_profile_repo
-  end
-
   def find_by_name(test_name)
-    @economic_profile_repo.find {|profile| profile.name == test_name.upcase }
+    @economic_profiles.find {|profile| profile.name == test_name.upcase }
   end
 end
 
@@ -48,7 +45,7 @@ end
   #   if find_by_name(hash_line[:name])
   #     find_by_name(hash_line[:name]).send(method_name, hash_line[@key])
   #   else
-  #     @economic_profile_repo << EconomicProfile.new(hash_line)
+  #     @economic_profiles << EconomicProfile.new(hash_line)
   #   end
   # end
 
@@ -68,7 +65,18 @@ end
 # puts epr.find_by_name("academy 20").inspect
 # puts epr.economic_profiles.count
 #
-#
+# epr = EconomicProfileRepository.new
+# epr.load_data({
+#   :economic_profile => {
+#     :median_household_income => "./data/Median household income.csv",
+#     :children_in_poverty => "./data/School-aged children in poverty.csv",
+#     :free_or_reduced_price_lunch => "./data/Students qualifying for free or reduced price lunch.csv",
+#     :title_i => "./data/Title I students.csv"
+#   }
+# })
+# puts epr.find_by_name("AGATE 300").inspect
+# puts epr.find_by_name("ACADEMY 20").inspect
+
 # p epr.economic_profile_repo
 # # # => <EconomicProfile>
 # p epr.economic_profiles.count
