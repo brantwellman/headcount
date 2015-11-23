@@ -124,6 +124,4 @@ class DistrictTest < Minitest::Test
 
     assert_equal expected, d_repo.districts[0].enrollment.graduation_rate_by_year
   end
-
-
 end

@@ -18,6 +18,12 @@ class HeadcountAnalystTest < Minitest::Test
         :high_school_graduation => "./test/fixtures/hs_grad_rates_fixture.csv" },
       :statewide_testing => {
         :third_grade => "./test/fixtures/3rd_grade_nil_fixture.csv"
+      },
+      :economic_profile =>{
+        :median_household_income =>'./test/fixtures/median_fix.csv',
+        :children_in_poverty => './test/fixtures/child_pov_fix.csv',
+        :free_or_reduced_price_lunch => './test/fixtures/free_lunch_fix.csv',
+        :title_i => './test/fixtures/title_i_fix.csv'
       }
     })
   end

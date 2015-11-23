@@ -2,7 +2,8 @@ require_relative 'unknown_data_error'
 require 'pry'
 
 class EconomicProfile
-  attr_reader :name, :median_household_income, :children_in_poverty, :free_or_reduced_price_lunch, :title_i
+  attr_reader :name
+  attr_accessor :median_household_income, :children_in_poverty, :free_or_reduced_price_lunch, :title_i
 
   def initialize(data_hash)
     @name = data_hash[:name]
@@ -14,14 +15,12 @@ class EconomicProfile
 
   def estimated_median_household_income_in_year(year)
     my_averagin_array = []
-
     median_household_income.keys.each do |year_range|
       if year.between?(year_range[0], year_range[1])
         my_averagin_array << median_household_income[year_range]
       end
     end
     foo = my_averagin_array.reduce(:+)
-
     if  foo
        foo / my_averagin_array.count
     else
@@ -64,28 +63,23 @@ class EconomicProfile
     else
       raise UnknownDataError.new("Not a valid year")
     end
-
   end
-  #
-  # def set_median_household_income(value)
-  #   @median_household_income = value
-  # end
-  #
-  # def set_children_in_poverty(value)
-  #   @children_in_poverty = value
-  # end
-  #
-  # def set_free_and_reduced_price_lunch(value)
-  #   @free_and_reduced_price_lunch = value
-  # end
-  #
-  # def set_free_and_reduced_price_lunch(value)
-  #   @free_and_reduced_price_lunch = value
-  # end
-  #
-  # def set_title_i(value)
-  #   @title_i = value
-  # end
+
+  def set_median_household_income(value)
+    @median_household_income = value
+  end
+
+  def set_children_in_poverty(value)
+    @children_in_poverty = value
+  end
+
+  def set_free_or_reduced_price_lunch(value)
+    @free_or_reduced_price_lunch = value
+  end
+
+  def set_title_i(value)
+    @title_i = value
+  end
 
   def truncate(float)
     (float * 1000).floor / 1000.to_f

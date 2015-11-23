@@ -16,6 +16,12 @@ class DistrictRepositoryTest < Minitest::Test
         :math => "./test/fixtures/math.csv",
         :reading => "./test/fixtures/reading.csv",
         :writing => "./test/fixtures/writing.csv"
+      },
+      :economic_profile => {
+        :median_household_income =>'./test/fixtures/median_fix_2_districts.csv',
+        :children_in_poverty => './test/fixtures/child_pov_fix.csv',
+        :free_or_reduced_price_lunch => './test/fixtures/free_lunch_fix.csv',
+        :title_i => './test/fixtures/title_i_fix.csv'
       }
     }
   end
@@ -41,6 +47,13 @@ class DistrictRepositoryTest < Minitest::Test
     assert_equal [], result
   end
 
+  def test_it_initializes_with_an_empty_eco_profile_repo
+    d_repo = DistrictRepository.new
+    result = d_repo.economic_profile_repository.economic_profiles
+
+    assert_equal [], result
+  end
+
   def test_its_loads_repositories
     dr = DistrictRepository.new
     dr.load_data(@input_hash)
@@ -62,6 +75,14 @@ class DistrictRepositoryTest < Minitest::Test
     result = dr.statewidetest_repository.statewide_tests.count
 
     assert_equal  2, result
+  end
+
+  def test_it_creates_eco_profile_objects_through_load_data
+    dr = DistrictRepository.new
+    dr.load_data(@input_hash)
+    result = dr.economic_profile_repository.economic_profiles.count
+
+    assert_equal 2, result
   end
 
   def test_it_has_access_to_enrollment_repo_objects_after_data_load_kinder_data
@@ -97,6 +118,19 @@ class DistrictRepositoryTest < Minitest::Test
     result1 = result.class
     result2 = result.name
     expected1 = StatewideTest
+    expected2 = "ACADEMY 20"
+
+    assert_equal expected1, result1
+    assert_equal expected2, result2
+  end
+
+  def test_it_has_access_to_eco_profile_objects_after_data_load
+    dr = DistrictRepository.new
+    dr.load_data(@input_hash)
+    result = dr.economic_profile_repository.find_by_name("ACADEMY 20")
+    result1 = result.class
+    result2 = result.name
+    expected1 = EconomicProfile
     expected2 = "ACADEMY 20"
 
     assert_equal expected1, result1

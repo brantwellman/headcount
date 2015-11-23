@@ -3,7 +3,8 @@ require_relative 'statewide_test'
 require_relative 'statewidetest_parser'
 
 class StatewideTestRepository
-  attr_reader :statewide_tests, :key
+  attr_reader :statewide_tests
+  attr_accessor :key
 
   def initialize
     @statewide_tests = []
